@@ -1,0 +1,94 @@
+---
+title: "Functional Rarity and Diversity in Ecology"
+description: "FRB-CESAB & FREE Working Group Workshop"
+author:
+  - name: "Nicolas Casajus"
+    url: https://nicolascasajus.fr
+    affiliation: FRB-CESAB
+    affiliation_url: https://www.fondationbiodiversite.fr/la-fondation/le-cesab/
+    orcid_id: 0000-0002-5537-5294
+  - name: "Mathias Grénié"
+    url: https://rekyt.github.io/
+    affiliation: iDiv
+    affiliation_url: https://www.idiv.de/en/sdiv
+    orcid_id: 0000-0002-4659-7522
+  - name: "Camille Magneville"
+    url: https://umr-marbec.fr/membre/camille-magneville/
+    affiliation: University of Montpellier
+    affiliation_url: https://www.umontpellier.fr/
+    orcid_id: 0000-0003-0489-3822
+  - name: "Sébastien Villéger"
+    url: https://umr-marbec.fr/membre/sebastien-villeger/
+    affiliation: CNRS (UMR MARBEC)
+    affiliation_url: https://umr-marbec.fr
+    orcid_id: 0000-0002-2362-7178
+date: "`r format(Sys.Date(), '%m-%d-%Y')`"
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+[banner]
+
+<br />
+
+
+
+The objective of this three-hours workshop, co-organized by ...
+
+
+<br />
+
+
+
+## Program
+
+
+
+Coming soon...
+
+
+
+
+<br/>
+
+
+
+## Prerequisites
+
+
+The following software must be installed before the workshop:
+[R](https://cran.r-project.org/) (latest version), 
+[RStudio](https://rstudio.com/products/rstudio/download/) et 
+[git](https://git-scm.com/downloads).
+Follow this [tutorial](instructions.html) to install your working environment.
+
+
+
+## Corrections {.appendix}
+
+
+If you see mistakes or want to suggest changes, please 
+[Create an issue](https://github.com/frbcesab/workshop-free/issues)
+on the source repository.
+
+
+
+## Reuse {.appendix}
+
+
+
+The material of this website is licensed under Creative Commons Attribution 
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Source code is available at https://github.com/frbcesab/workshop-free/.
+
+
+## Citation {.appendix}
+
+
+
+Casajus N, Grénié M, Magneville C & Villéger S (2022) 
+Workshop FRB-CESAB & FREE Working Group: Functional Rarity and Diversity in Ecology. 
