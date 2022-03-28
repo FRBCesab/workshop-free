@@ -4,6 +4,7 @@ description: |
   Functional Rarity and Diversity Workshop
 base_url: https://frbcesab.github.io/workshop-free/
 #favicon: img/favicon.png
+exclude: ["LICENSE.md"]
 output_dir: "."
 navbar:
   #logo:
@@ -17,8 +18,8 @@ navbar:
       href: instructions.html
     - text: "Courses"
       href: ""
-    - text: "Exercises"
-      href: ""
+    - text: "Practice"
+      href: oractice.html
     - text: "Resources"
       href: ""
     - icon: fab fa-github

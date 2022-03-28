@@ -17,7 +17,7 @@ and is available at: **https://frbcesab.github.io/workshop-free/**
 
 1. Clone the repository
 2. Run `remotes::install_deps()` to install required packages
-3. Add content
+3. Add content (create new `*.Rmd` or edit existing one)
 4. Update website with `rmarkdown::render_site()`
 
 
