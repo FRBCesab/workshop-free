@@ -1,6 +1,5 @@
 ## Functional Rarity and Diversity Workshop
 
-![](https://raw.githubusercontent.com/rdatatoolbox/rdatatoolbox.github.io/main/img/banner-rdatatoolbox_150dpi.png)
 
 Website of the workshop **_Functional Rarity and Diversity in Ecology_**
 co-organized by the
