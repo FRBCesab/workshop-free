@@ -1,0 +1,40 @@
+Package: workshop.free
+Type: Package
+Title: Functional Rarity and Diversity in Ecology Workshop
+Version: 0.0.0.9000
+Authors@R: c(
+    person(given   = "Nicolas",
+           family  = "Casajus",
+           role    = c("aut", "cre", "cph"),
+           email   = "nicolas.casajus@fondationbiodiversite.fr",
+           comment = c(ORCID = "0000-0002-5537-5294")),
+    person(given   = "Matthias",
+           family  = "Grenie",
+           role    = "aut",
+           email   = "matthias.grenie@idiv.de",
+           comment = c(ORCID = "0000-0002-4659-7522")),
+    person(given   = "Camille",
+           family  = "Magneville",
+           role    = "aut",
+           email   = "camille.magneville@gmail.com",
+           comment = c(ORCID = "0000-0003-0489-3822")),
+    person(given   = "Sebastien",
+           family  = "Villeger",
+           role    = "aut",
+           email   = "sebastien.villeger@cnrs.fr",
+           comment = c(ORCID = "0000-0002-2362-7178")))
+Description: Content of the website of the workshop 'Functional Rarity and 
+    Diversity in Ecology' co-organized by the FRB-CESAB and the Working group
+    FREE.
+URL: https://github.com/FRBCesab/workshop-free
+BugReports: https://github.com/FRBCesab/workshop-free/issues
+License: CC BY 4.0
+Encoding: UTF-8
+SystemRequirements: pandoc (>= 1.14) - http://pandoc.org
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports:
+    distill,
+    knitr,
+    rmarkdown
