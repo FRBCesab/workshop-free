@@ -1,5 +1,5 @@
 ---
-title: "Practice"
+title: "Practice - FREE Workshop"
 output: 
   distill::distill_article:
     toc: true
@@ -7,8 +7,22 @@ output:
     toc_float: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+# About this practice
 
-[Content]
+
+<br />
+
+This tutorial describes the basic workflow showing how to compute step by step
+functional diversity (FD) indices in a multidimensional space. It is divided in 
+four parts:
+
+* 1 - Compute trait-based distances & the multidimensional functional space 
+
+* 2 - Using the `mFD` package to compute FD alpha and beta indices and plot them ([Magneville _et al._ 2021](https://onlinelibrary.wiley.com/doi/full/10.1111/ecog.05904))
+
+* 3 - Using the `funrar` package to compute Functional Rarity indices ([Violle _et al._ 2017](https://www.cell.com/trends/ecology-evolution/fulltext/S0169-5347(17)30038-1?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0169534717300381%3Fshowall%3Dtrue))
+
+* 4 - Using the `funbiogeo` package to computes analyses in functional biogeography ([Violle _et al._ 2014](https://www.pnas.org/doi/full/10.1073/pnas.1415442111))
+
+
+
