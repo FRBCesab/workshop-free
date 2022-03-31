@@ -19,7 +19,7 @@ navbar:
     - text: "Courses"
       href: ""
     - text: "Practice"
-      href: oractice.html
+      href: practice.html
     - text: "Resources"
       href: ""
     - icon: fab fa-github
