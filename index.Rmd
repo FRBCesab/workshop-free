@@ -60,10 +60,9 @@ Coming soon...
 ## Prerequisites
 
 
-The following software must be installed before the workshop:
+The following softwares must be installed before the workshop:
 [R](https://cran.r-project.org/) (latest version), 
-[RStudio](https://rstudio.com/products/rstudio/download/) et 
-[git](https://git-scm.com/downloads).
+[RStudio](https://rstudio.com/products/rstudio/download/).
 Follow this [tutorial](instructions.html) to install your working environment.
 
 
