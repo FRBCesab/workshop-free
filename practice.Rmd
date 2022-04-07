@@ -7,10 +7,11 @@ output:
     toc_float: true
 ---
 
-# About this practice
+# About
 
 
 <br />
+
 
 This tutorial describes the basic workflow showing how to compute step by step
 functional diversity (FD) indices in a multidimensional space. It is divided in 
@@ -28,44 +29,50 @@ compute analyses in functional biogeography
 ([Violle _et al._ 2014](https://doi.org/10.1073/pnas.1415442111))
 
 
-You can chose to do Part 2, Part 3 and Part 4 in the order that you want but Part 1 has to be realised first.
+<br />
+
+
+**N.B.** You can chose to do Part 2, Part 3 and Part 4 in the order that you want but 
+Part 1 has to be realized first.
 
 
 <br />
   
   
-# 0 - Packages and Data
-  
-  
-## Install packages
-  
-<br /> 
-  
-Please be sure that you have a **R version >= 3.5** and install the `mFD`, `funrar` and `funbiogeo`packages:
-  
+# Prerequisites
 
-<span style="color: skyblue2;">Packages installation</span>
-```{r, eval = FALSE}
-install.packages(c("mFD", "funrar"))
+Be sure you have followed the [**instructions**](https://frbcesab.github.io/workshop-free/instructions.html)
+to set up your system (e.g. `R version >= 3.5`).
+
+If not already done, please install the following R packages: 
+
+
+
+```{r echo=TRUE, eval=FALSE}
+## CRAN packages ----
+pkgs <- c("funrar", "mFD", "remotes", "sf", "terra")
+install.packages(pkgs)
+
+## GitHub packages ----
+remotes::install_github("frbcesab/funbiogeo")
 ```
 
+
 <br /> 
   
   
-## Data and question
+# Data description
   
-<br /> 
-  
-**Data:** The dataset used to illustrate this tutorial is a **fruits dataset** based on
-... types of fruits (*i.e.* species) distributed in 10 fruits baskets (*i.e.* assemblages). 
-Each fruit is characterized by ... traits values summarized in the following table:
+The dataset used as study case all along this workshop is the **Fruits dataset** based on
+`...` types of fruits (i.e. species) distributed in 10 fruits baskets (i.e. assemblages). 
+Each fruit is characterized by `...` traits values summarized in the following table:
   
 <br />
   
 | Trait name   | Trait measurement  | Trait type    | Number of classes   | Classes code                       | Unit   |
 |:------------:|:------------------:|:-------------:|:-------------------:|:----------------------------------:|:------:|
 | Size         | Maximal diameter   | Ordinal       | 5                   | 0-1 ; 1-3 ; 3-5 ; 5-10 ; 10-20     | cm     |
-| Plant        | Growth form        | Categorical   | 4                   | tree; shrub; vine; forb            | NA     |
+| Plant        | Growth form        | Categorical   | 4                   | tree ; shrub ; vine ; forb         | NA     |
 | Climate      | Climatic niche     | Ordinal       | 3                   | temperate ; subtropical ; tropical | NA     |
 | Seed         | Seed type          | Ordinal       | 3                   | none ; pip ; pit                   | NA     |
 | Sugar        | Sugar              | Continuous    | NA                  | NA                                 | g/kg   |
@@ -73,5 +80,9 @@ Each fruit is characterized by ... traits values summarized in the following tab
   
 <br /> 
   
-**Define the study question:** ...
+
+## Questions
+
+...
+
 

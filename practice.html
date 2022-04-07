@@ -2096,20 +2096,18 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#about-this-practice" id="toc-about-this-practice">About
-this practice</a></li>
-<li><a href="#packages-and-data" id="toc-packages-and-data">0 - Packages
-and Data</a>
+<li><a href="#about" id="toc-about">About</a></li>
+<li><a href="#prerequisites"
+id="toc-prerequisites">Prerequisites</a></li>
+<li><a href="#data-description" id="toc-data-description">Data
+description</a>
 <ul>
-<li><a href="#install-packages" id="toc-install-packages">Install
-packages</a></li>
-<li><a href="#data-and-question" id="toc-data-and-question">Data and
-question</a></li>
+<li><a href="#questions" id="toc-questions">Questions</a></li>
 </ul></li>
 </ul>
 </nav>
 </div>
-<h1 id="about-this-practice">About this practice</h1>
+<h1 id="about">About</h1>
 <p><br /></p>
 <p>This tutorial describes the basic workflow showing how to compute
 step by step functional diversity (FD) indices in a multidimensional
@@ -2133,30 +2131,33 @@ package to compute analyses in functional biogeography (<a
 href="https://doi.org/10.1073/pnas.1415442111">Violle <em>et al.</em>
 2014</a>)</li>
 </ol>
-<p>You can chose to do Part 2, Part 3 and Part 4 in the order that you
-want but Part 1 has to be realised first.</p>
 <p><br /></p>
-<h1 id="packages-and-data">0 - Packages and Data</h1>
-<h2 id="install-packages">Install packages</h2>
+<p><strong>N.B.</strong> You can chose to do Part 2, Part 3 and Part 4
+in the order that you want but Part 1 has to be realized first.</p>
 <p><br /></p>
-<p>Please be sure that you have a <strong>R version &gt;= 3.5</strong>
-and install the <code>mFD</code>, <code>funrar</code> and
-<code>funbiogeo</code>packages:</p>
-<span style="color: skyblue2;">Packages installation</span>
+<h1 id="prerequisites">Prerequisites</h1>
+<p>Be sure you have followed the <a
+href="https://frbcesab.github.io/workshop-free/instructions.html"><strong>instructions</strong></a>
+to set up your system (e.g. <code>R version &gt;= 3.5</code>).</p>
+<p>If not already done, please install the following R packages:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mFD"</span>, <span class='st'>"funrar"</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>## CRAN packages ----</span>
+<span class='va'>pkgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"funrar"</span>, <span class='st'>"mFD"</span>, <span class='st'>"remotes"</span>, <span class='st'>"sf"</span>, <span class='st'>"terra"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='va'>pkgs</span><span class='op'>)</span>
+
+<span class='co'>## GitHub packages ----</span>
+<span class='fu'>remotes</span><span class='fu'>::</span><span class='fu'><a href='https://remotes.r-lib.org/reference/install_github.html'>install_github</a></span><span class='op'>(</span><span class='st'>"frbcesab/funbiogeo"</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
 <p><br /></p>
-<h2 id="data-and-question">Data and question</h2>
-<p><br /></p>
-<p><strong>Data:</strong> The dataset used to illustrate this tutorial
-is a <strong>fruits dataset</strong> based on … types of fruits
-(<em>i.e.</em> species) distributed in 10 fruits baskets (<em>i.e.</em>
-assemblages). Each fruit is characterized by … traits values summarized
-in the following table:</p>
+<h1 id="data-description">Data description</h1>
+<p>The dataset used as study case all along this workshop is the
+<strong>Fruits dataset</strong> based on <code>...</code> types of
+fruits (i.e. species) distributed in 10 fruits baskets
+(i.e. assemblages). Each fruit is characterized by <code>...</code>
+traits values summarized in the following table:</p>
 <p><br /></p>
 <table>
 <colgroup>
@@ -2191,7 +2192,7 @@ in the following table:</p>
 <td style="text-align: center;">Growth form</td>
 <td style="text-align: center;">Categorical</td>
 <td style="text-align: center;">4</td>
-<td style="text-align: center;">tree; shrub; vine; forb</td>
+<td style="text-align: center;">tree ; shrub ; vine ; forb</td>
 <td style="text-align: center;">NA</td>
 </tr>
 <tr class="odd">
@@ -2221,7 +2222,8 @@ in the following table:</p>
 </tbody>
 </table>
 <p><br /></p>
-<p><strong>Define the study question:</strong> …</p>
+<h2 id="questions">Questions</h2>
+<p>…</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
