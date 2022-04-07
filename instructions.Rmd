@@ -572,10 +572,10 @@ use the SSH URL when connecting a new GitHub project (named `remote`).
 
 ```sh
 ## URL HTTPS ----
-https://github.com/rdatatoolbox/rdatatoolbox.github.io.git
+https://github.com/frbcesab/workshop-free.git
 
 ## URL SSH (use this one) ----
-git@github.com:rdatatoolbox/rdatatoolbox.github.io.git
+git@github.com:frbcesab/workshop-free.git
 ```
 
 <br />
