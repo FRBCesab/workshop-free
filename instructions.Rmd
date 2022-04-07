@@ -626,9 +626,6 @@ Do not forget to restart `r fontawesome::fa_i("r-project")`.
 Finally let's tell `usethis` to use the SSH protocol. Open **RStudio** and run:
 
 ```{r echo = TRUE, eval = FALSE}
-## Install usethis package ----
-install.packages("usethis")
-
 ## Open ~/.Rprofile file ----
 usethis::edit_r_profile()
 ## • Modify '~/.Rprofile'
