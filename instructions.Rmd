@@ -458,6 +458,27 @@ sudo apt update && sudo apt upgrade
 ```
 
 
+
+<br/>
+
+
+
+## R packages
+
+For the workshop, you will need to install the following R packages:
+
+
+```{r echo=TRUE, eval=FALSE}
+## CRAN packages ----
+pkgs <- c("funrar", "mFD", "remotes", "sf", "terra")
+install.packages(pkgs)
+
+## GitHub packages ----
+remotes::install_github("frbcesab/funbiogeo")
+```
+
+
+
 <br/>
 
 

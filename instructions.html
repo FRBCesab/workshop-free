@@ -2109,6 +2109,7 @@ id="toc-macos"><i class="fab fa-apple" role="presentation" aria-label="apple ico
 <li><a href="#ubuntu"
 id="toc-ubuntu"><i class="fab fa-ubuntu" role="presentation" aria-label="ubuntu icon"></i> Ubuntu</a></li>
 </ul></li>
+<li><a href="#r-packages" id="toc-r-packages">R packages</a></li>
 <li><a href="#configuration" id="toc-configuration">Configuration</a>
 <ul>
 <li><a href="#git" id="toc-git"><code>git</code></a></li>
@@ -2558,6 +2559,21 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Update system ----</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt upgrade</span></code></pre></div>
+<p><br/></p>
+<h2 id="r-packages">R packages</h2>
+<p>For the workshop, you will need to install the following R
+packages:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>## CRAN packages ----</span>
+<span class='va'>pkgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"funrar"</span>, <span class='st'>"mFD"</span>, <span class='st'>"remotes"</span>, <span class='st'>"sf"</span>, <span class='st'>"terra"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='va'>pkgs</span><span class='op'>)</span>
+
+<span class='co'>## GitHub packages ----</span>
+<span class='fu'>remotes</span><span class='fu'>::</span><span class='fu'><a href='https://remotes.r-lib.org/reference/install_github.html'>install_github</a></span><span class='op'>(</span><span class='st'>"frbcesab/funbiogeo"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
 <p><br/></p>
 <h2 id="configuration">Configuration</h2>
 <h3 id="git"><code>git</code></h3>
