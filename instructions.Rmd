@@ -12,11 +12,14 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
+<br/>
+
+
+
+`r fontawesome::fa_i("hand-point-right")`&nbsp;
 **Please install the latest versions of `r fontawesome::fa_i("r-project")`,
 RStudio, and `git`.**
 
-`r fontawesome::fa_i("lightbulb")`
-**Having an up-to-date environment is the first good practice.**
 
 
 <br/>
@@ -106,7 +109,7 @@ to install packages (from sources) containing compiled code (C/C++/Fortran).
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Once **`Rtools4.0`** is installed, you need to tell `r fontawesome::fa_i("r-project")` 
 where to find **`Rtools4.0`** utilities.
-Open **`RStudio`** et run:
+Open **`RStudio`** and run:
 
 
 ```{r echo=TRUE, eval=FALSE}
@@ -114,10 +117,10 @@ cat("PATH='${RTOOLS40_HOME}\\usr\\bin;${PATH}'\r\n", file = "~/.Renviron", appen
 ```
 
 An hidden file `.Renviron` has been created (or modified) in you personal folder
-and contains the line `PATH='${RTOOLS40_HOME}\\usr\\bin;${PATH}'` (the path to **`Rtools4`**). 
+and contains the line `PATH='${RTOOLS40_HOME}\usr\bin;${PATH}'` (the path to **`Rtools4`**). 
 At each start `r fontawesome::fa_i("r-project")` will read this file.
 
-Restart **`RStudio`** and check that `r fontawesome::fa_i("r-project")` find `make`:
+Restart **`RStudio`** and check that `r fontawesome::fa_i("r-project")` find the utility `make`:
 
 ```{r echo=TRUE, eval=FALSE}
 Sys.which("make")
@@ -136,13 +139,13 @@ install.packages("jsonlite", type = "source")
 
 
 
-5. Install **`pandoc`**
+5. Install **`pandoc`** (optional)
 
 The package **`rmarkdown`** requires the software **`pandoc`** to convert document
 from one format (e.g. `.Rmd`) to another (e.g. `.html`).
 
-Download **`pandoc`** at:
-[https://github.com/jgm/pandoc/releases/tag/2.16.1](https://github.com/jgm/pandoc/releases/tag/2.16.1),
+Download the latest version of **`pandoc`** at:
+[https://github.com/jgm/pandoc/releases](https://github.com/jgm/pandoc/releases),
 and follow instructions.
 
 
@@ -150,7 +153,7 @@ and follow instructions.
 
 
 
-6. Install a **`LaTeX`** distribution
+6. Install a **`LaTeX`** distribution (optional)
 
 If you want to convert documents from `.Rmd` to `.pdf`, you will need **`LaTeX`**. 
 You can install a lightened distribution using the `r fontawesome::fa_i("r-project")`
@@ -195,7 +198,7 @@ Then you can install **`Homebrew`**:
 
 ## Check installation ----
 brew --version
-## Homebrew 3.4.5
+## Homebrew 3.4.7
 
 ## Update repositories (list of available software) ----
 brew update
@@ -275,7 +278,7 @@ brew install poppler
 brew install geos gdal netcdf proj udunits
 ```
 
-To keep your system up-to-date run frequently:
+To keep your system up-to-date, run regularly:
 
 
 ```sh
@@ -291,19 +294,7 @@ brew update && brew upgrade --greedy
 ### `r fontawesome::fa_i("ubuntu")`&nbsp;Ubuntu
 
 
-
-To keep your system up-to-date, do not forget to frequently run:
-
-```sh
-## System update ----
-sudo apt update && sudo apt upgrade
-```
-
-
-<br/>
-
-
-Then check your version of Ubuntu:
+First check your version of Ubuntu in a terminal:
 
 
 ```sh
@@ -314,13 +305,14 @@ cat /etc/issue
 
 <br/>
 
-| Release   | Release name   | Repository URL                                               |
-|:---------:|:---------------|:-------------------------------------------------------------|
-| 21.04     | Hirsute Hippo  | https://cloud.r-project.org/bin/linux/ubuntu hirsute-cran40/ |
-| 20.10     | Groovy Gorilla | https://cloud.r-project.org/bin/linux/ubuntu groovy-cran40/  |
-| 20.04 LTS | Focal Fossa    | https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/   |
-| 18.04 LTS | Bionic Beaver  | https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/  |
-| 16.04 LTS | Xenial Xerus   | https://cloud.r-project.org/bin/linux/ubuntu xenial-cran40/  |
+| Release   | Release name    | Repository URL                                               |
+|:---------:|:----------------|:-------------------------------------------------------------|
+| 22.04 LTS | Jammy Jellyfish | https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/   |
+| 21.10     | Impish Indri    | https://cloud.r-project.org/bin/linux/ubuntu impish-cran40/  |
+| 21.04     | Hirsute Hippo   | https://cloud.r-project.org/bin/linux/ubuntu hirsute-cran40/ |
+| 20.04 LTS | Focal Fossa     | https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/   |
+| 18.04 LTS | Bionic Beaver   | https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/  |
+| 16.04 LTS | Xenial Xerus    | https://cloud.r-project.org/bin/linux/ubuntu xenial-cran40/  |
 : Table 1. List of CRAN repositories for different versions of Ubuntu
 
 <br/>
@@ -355,7 +347,7 @@ sudo apt install r-base-dev
 
 To install **`RStudio Desktop`** visit this page: 
 https://www.rstudio.com/products/rstudio/download/#download, download the
-`.deb` file for Ubuntu 18+/Debian 10+ et install it. If you have an older version 
+`.deb` file for Ubuntu 18+/Debian 10+ and install it. If you have an older version 
 of Ubuntu (16.04), visit this page: https://www.rstudio.com/products/rstudio/older-versions/
 
 Alternatively, you can install **`RStudio Desktop`** from the terminal: 
@@ -463,26 +455,6 @@ sudo apt update && sudo apt upgrade
 
 
 
-## R packages
-
-For the workshop, you will need to install the following R packages:
-
-
-```{r echo=TRUE, eval=FALSE}
-## CRAN packages ----
-pkgs <- c("funrar", "mFD", "remotes", "sf", "terra")
-install.packages(pkgs)
-
-## GitHub packages ----
-remotes::install_github("frbcesab/funbiogeo")
-```
-
-
-
-<br/>
-
-
-
 ## Configuration
 
 
@@ -528,6 +500,7 @@ To generate a new SSH keys pair proceed as follow:
 
 &nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Create an account on **GitHub** at [https://github.com/signup](https://github.com/signup)
+(if not already done)
 <br/>&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Open **`RStudio`** and click on: `Tools > Global options > Git/SVN`
 <br/>&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
@@ -539,7 +512,7 @@ Click on **View public key** and copy it
 Go to the page [https://github.com/settings/keys](https://github.com/settings/keys)
 and click on **New SSH key**
 <br/>&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Choose a name for your key (e.g. your laptop name) and paste your public key.
+Choose a name for your key (e.g. your laptop name) and paste your public key
 <br/>&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Finally click on **Add SSH key**
 
@@ -555,7 +528,7 @@ sudo apt install ssh-askpass
 
 <br />
 
-Let's test the SSH connection with GitHub. Open a terminal and run (you need to accept
+Let's test the SSH connection to GitHub. Open a terminal and run (you need to accept
 the fingerprint, just enter `yes`):
 
 ```sh
@@ -634,6 +607,59 @@ usethis::edit_r_profile()
 
 In the `~/.Rprofile` file, add this new line: `options(usethis.protocol = "ssh")`.
 Do not forget to restart `r fontawesome::fa_i("r-project")`.
+
+
+
+<br/>
+
+
+
+## For the workshop
+
+You will need to install the following R packages:
+
+
+```{r echo=TRUE, eval=FALSE}
+## CRAN packages ----
+pkgs <- c("funrar", "mFD", "remotes", "sf", "terra")
+install.packages(pkgs)
+
+## GitHub packages ----
+remotes::install_github("frbcesab/funbiogeo")
+```
+
+
+<br />
+
+
+In addition, you must download a copy of the content of the workshop. We recommend
+that you create a copy (fork) of the GitHub repository of the workshop on your
+GitHub space. Then, using RStudio you will clone (download) your fork.
+
+Go to the GitHub URL of the workshop repository: https://github.com/frbcesab/workshop-free.
+Then follow these instructions to fork the repository.
+
+![`r fontawesome::fa_i("caret-right")` &nbsp;Fork the repository (1)](img/github-1.png)
+
+![`r fontawesome::fa_i("caret-right")` &nbsp;Fork the repository (2)](img/github-2.png)
+
+![`r fontawesome::fa_i("caret-right")` &nbsp;Get the SSH URL of your fork (1)](img/github-3.png)
+
+![`r fontawesome::fa_i("caret-right")` &nbsp;Get the SSH URL of your fork (2)](img/github-4.png)
+
+Then open **RStudio Desktop** and follow these instructions to create a new project
+from your GitHub repository (fork of the original repository)
+
+
+![`r fontawesome::fa_i("caret-right")` &nbsp;Clone your fork (1)](img/rstudio-1.png)
+
+![`r fontawesome::fa_i("caret-right")` &nbsp;Clone your fork (2)](img/rstudio-2.png)
+
+![`r fontawesome::fa_i("caret-right")` &nbsp;Clone your fork (3)](img/rstudio-3.png)
+
+Congrats! You have your own copy of the workshop content (data, instructions and courses).
+If you want you can use **`git`** to commit changes during the workshop and send these modifications
+to your GitHub repository.
 
 
 

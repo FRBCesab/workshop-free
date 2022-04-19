@@ -30,14 +30,21 @@ site: distill::distill_website
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+<img src="https://www.r-project.org/logo/Rlogo.png" style="height:120px; width:160px; padding:20px;"/>
+<img src="https://raw.githubusercontent.com/FRBCesab/funbiogeo/main/man/figures/funbiogeo-sticker.png" style="height:120px; width:120px; padding:20px;"/>
+<img src="https://raw.githubusercontent.com/CmlMagneville/mFD/main/man/figures/hexasticker_mFD.png" style="height:124px; width:124px; padding:20px;"/>
 
-[banner]
 
 <br />
 
 
 
-The objective of this three-hours workshop, co-organized by ...
+The objective of this workshop, co-organized by the
+[FRB-CESAB](https://www.fondationbiodiversite.fr/en/about-the-foundation/le-cesab/)
+and the working group
+[FREE](https://www.fondationbiodiversite.fr/en/the-frb-in-action/programs-and-projects/le-cesab/free/) 
+is to give a general introduction to functional ecology. During the practice session,
+participants will learn to calculate various functional rarity and diversity index and to map them
 
 
 <br />
@@ -47,8 +54,30 @@ The objective of this three-hours workshop, co-organized by ...
 ## Program
 
 
+**08:30 – 09:00**
 
-Coming soon...
+&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
+Welcome coffee and icebreaker
+
+**09:00 – 12:30**
+
+&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
+Introduction to functional ecology (~ 30 min)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
+Type of traits, distance metrics, functional space, etc. (~ 30 min)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
+Practice using the R packages [mFD](https://github.com/CmlMagneville/mFD), 
+[funrar](https://github.com/rekyt/funrar), and [funbiogeo](https://github.com/frbcesab/funbiogeo) (~ 2h30)
+
+**12:30 – 14:00**
+
+&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
+Lunch break 
+
+**14:00 – 18:00**
+
+&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
+Conference - More info [here](https://www.fondationbiodiversite.fr/en/evenement/frb-cesab-des-especes-aux-fonctions/)
 
 
 
@@ -59,11 +88,7 @@ Coming soon...
 
 ## Prerequisites
 
-
-The following softwares must be installed before the workshop:
-[R](https://cran.r-project.org/) (latest version), 
-[RStudio](https://rstudio.com/products/rstudio/download/).
-Follow this [tutorial](instructions.html) to install your working environment.
+Please follow this [tutorial](instructions.html) to correctly install your working environment (R, RStudio, git, etc.).
 
 
 

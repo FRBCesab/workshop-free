@@ -2109,7 +2109,6 @@ id="toc-macos"><i class="fab fa-apple" role="presentation" aria-label="apple ico
 <li><a href="#ubuntu"
 id="toc-ubuntu"><i class="fab fa-ubuntu" role="presentation" aria-label="ubuntu icon"></i> Ubuntu</a></li>
 </ul></li>
-<li><a href="#r-packages" id="toc-r-packages">R packages</a></li>
 <li><a href="#configuration" id="toc-configuration">Configuration</a>
 <ul>
 <li><a href="#git" id="toc-git"><code>git</code></a></li>
@@ -2120,18 +2119,19 @@ SSH keys</a></li>
 id="toc-github-pat"><i class="fab fa-github" role="presentation" aria-label="github icon"></i> GitHub
 PAT</a></li>
 </ul></li>
+<li><a href="#for-the-workshop" id="toc-for-the-workshop">For the
+workshop</a></li>
 <li><a href="#corrections" id="toc-corrections">Corrections</a></li>
 <li><a href="#reuse" id="toc-reuse">Reuse</a></li>
 <li><a href="#citation" id="toc-citation">Citation</a></li>
 </ul>
 </nav>
 </div>
-<p><strong>Please install the latest versions of
+<p><br/></p>
+<p><i class="fa fa-hand-point-right" role="presentation" aria-label="hand-point-right icon"></i> 
+<strong>Please install the latest versions of
 <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>,
 RStudio, and <code>git</code>.</strong></p>
-<p><i class="fa fa-lightbulb" role="presentation" aria-label="lightbulb icon"></i>
-<strong>Having an up-to-date environment is the first good
-practice.</strong></p>
 <p><br/></p>
 <h2 id="installation">Installation</h2>
 <h3
@@ -2211,7 +2211,7 @@ utility <code>make</code>.</p>
 tell
 <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>
 where to find <strong><code>Rtools4.0</code></strong> utilities. Open
-<strong><code>RStudio</code></strong> et run:</p>
+<strong><code>RStudio</code></strong> and run:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"PATH='${RTOOLS40_HOME}\\usr\\bin;${PATH}'\r\n"</span>, file <span class='op'>=</span> <span class='st'>"~/.Renviron"</span>, append <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
@@ -2220,13 +2220,13 @@ where to find <strong><code>Rtools4.0</code></strong> utilities. Open
 </div>
 <p>An hidden file <code>.Renviron</code> has been created (or modified)
 in you personal folder and contains the line
-<code>PATH='${RTOOLS40_HOME}\\usr\\bin;${PATH}'</code> (the path to
+<code>PATH='${RTOOLS40_HOME}\usr\bin;${PATH}'</code> (the path to
 <strong><code>Rtools4</code></strong>). At each start
 <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>
 will read this file.</p>
 <p>Restart <strong><code>RStudio</code></strong> and check that
 <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>
-find <code>make</code>:</p>
+find the utility <code>make</code>:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Sys.which.html'>Sys.which</a></span><span class='op'>(</span><span class='st'>"make"</span><span class='op'>)</span>
@@ -2243,18 +2243,20 @@ find <code>make</code>:</p>
 </div>
 <p><br/></p>
 <ol start="5" type="1">
-<li>Install <strong><code>pandoc</code></strong></li>
+<li>Install <strong><code>pandoc</code></strong> (optional)</li>
 </ol>
 <p>The package <strong><code>rmarkdown</code></strong> requires the
 software <strong><code>pandoc</code></strong> to convert document from
 one format (e.g. <code>.Rmd</code>) to another
 (e.g. <code>.html</code>).</p>
-<p>Download <strong><code>pandoc</code></strong> at: <a
-href="https://github.com/jgm/pandoc/releases/tag/2.16.1">https://github.com/jgm/pandoc/releases/tag/2.16.1</a>,
+<p>Download the latest version of <strong><code>pandoc</code></strong>
+at: <a
+href="https://github.com/jgm/pandoc/releases">https://github.com/jgm/pandoc/releases</a>,
 and follow instructions.</p>
 <p><br/></p>
 <ol start="6" type="1">
-<li>Install a <strong><code>LaTeX</code></strong> distribution</li>
+<li>Install a <strong><code>LaTeX</code></strong> distribution
+(optional)</li>
 </ol>
 <p>If you want to convert documents from <code>.Rmd</code> to
 <code>.pdf</code>, you will need <strong><code>LaTeX</code></strong>.
@@ -2297,7 +2299,7 @@ run this line and accept the license:</p>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Check installation ----</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> <span class="at">--version</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">## Homebrew 3.4.5</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">## Homebrew 3.4.7</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Update repositories (list of available software) ----</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> update</span></code></pre></div>
@@ -2370,28 +2372,24 @@ packages (<code>sf</code>, <code>sp</code>, <code>rgdal</code>,
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install libxml2 </span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install poppler </span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install geos gdal netcdf proj udunits</span></code></pre></div>
-<p>To keep your system up-to-date run frequently:</p>
+<p>To keep your system up-to-date, run regularly:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Update environment ----</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> update <span class="kw">&amp;&amp;</span> <span class="ex">brew</span> upgrade <span class="at">--greedy</span></span></code></pre></div>
 <p><br/></p>
 <h3
 id="ubuntu"><i class="fab fa-ubuntu" role="presentation" aria-label="ubuntu icon"></i> Ubuntu</h3>
-<p>To keep your system up-to-date, do not forget to frequently run:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">## System update ----</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt upgrade</span></code></pre></div>
-<p><br/></p>
-<p>Then check your version of Ubuntu:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Check Ubuntu version ----</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /etc/issue</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Ubuntu 20.04 LTS</span></span></code></pre></div>
+<p>First check your version of Ubuntu in a terminal:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Check Ubuntu version ----</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /etc/issue</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Ubuntu 20.04 LTS</span></span></code></pre></div>
 <p><br/></p>
 <table>
 <caption>Table 1. List of CRAN repositories for different versions of
 Ubuntu</caption>
 <colgroup>
 <col style="width: 12%" />
-<col style="width: 17%" />
-<col style="width: 69%" />
+<col style="width: 18%" />
+<col style="width: 68%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -2402,6 +2400,22 @@ Ubuntu</caption>
 </thead>
 <tbody>
 <tr class="odd">
+<td style="text-align: center;">22.04 LTS</td>
+<td style="text-align: left;">Jammy Jellyfish</td>
+<td style="text-align: left;"><a
+href="https://cloud.r-project.org/bin/linux/ubuntu"
+class="uri">https://cloud.r-project.org/bin/linux/ubuntu</a>
+jammy-cran40/</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">21.10</td>
+<td style="text-align: left;">Impish Indri</td>
+<td style="text-align: left;"><a
+href="https://cloud.r-project.org/bin/linux/ubuntu"
+class="uri">https://cloud.r-project.org/bin/linux/ubuntu</a>
+impish-cran40/</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;">21.04</td>
 <td style="text-align: left;">Hirsute Hippo</td>
 <td style="text-align: left;"><a
@@ -2410,14 +2424,6 @@ class="uri">https://cloud.r-project.org/bin/linux/ubuntu</a>
 hirsute-cran40/</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">20.10</td>
-<td style="text-align: left;">Groovy Gorilla</td>
-<td style="text-align: left;"><a
-href="https://cloud.r-project.org/bin/linux/ubuntu"
-class="uri">https://cloud.r-project.org/bin/linux/ubuntu</a>
-groovy-cran40/</td>
-</tr>
-<tr class="odd">
 <td style="text-align: center;">20.04 LTS</td>
 <td style="text-align: left;">Focal Fossa</td>
 <td style="text-align: left;"><a
@@ -2425,7 +2431,7 @@ href="https://cloud.r-project.org/bin/linux/ubuntu"
 class="uri">https://cloud.r-project.org/bin/linux/ubuntu</a>
 focal-cran40/</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: center;">18.04 LTS</td>
 <td style="text-align: left;">Bionic Beaver</td>
 <td style="text-align: left;"><a
@@ -2433,7 +2439,7 @@ href="https://cloud.r-project.org/bin/linux/ubuntu"
 class="uri">https://cloud.r-project.org/bin/linux/ubuntu</a>
 bionic-cran40/</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: center;">16.04 LTS</td>
 <td style="text-align: left;">Xenial Xerus</td>
 <td style="text-align: left;"><a
@@ -2448,59 +2454,58 @@ xenial-cran40/</td>
 <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>
 by following these steps (change the URL below by the one specific to
 your version of Ubuntu, cf. Table 1) :</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Install APT utilities ----</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install software-properties-common</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Add CRAN GPG key ----</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-key adv <span class="at">--keyserver</span> keyserver.ubuntu.com <span class="at">--recv-keys</span> E298A3A825C0D65DFD57CBB651716619E084DAB9</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Add CRAN repository to APT repositories list ----</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository <span class="st">&#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">## Update packages list ----</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">## Install R ----</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">## Install R (for development, recommended) ----</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install build-essential</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base-dev</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Install APT utilities ----</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install software-properties-common</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Add CRAN GPG key ----</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-key adv <span class="at">--keyserver</span> keyserver.ubuntu.com <span class="at">--recv-keys</span> E298A3A825C0D65DFD57CBB651716619E084DAB9</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Add CRAN repository to APT repositories list ----</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository <span class="st">&#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">## Update packages list ----</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">## Install R ----</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">## Install R (for development, recommended) ----</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install build-essential</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base-dev</span></code></pre></div>
 <p><br/></p>
 <p>To install <strong><code>RStudio Desktop</code></strong> visit this
 page: <a
 href="https://www.rstudio.com/products/rstudio/download/#download"
 class="uri">https://www.rstudio.com/products/rstudio/download/#download</a>,
-download the <code>.deb</code> file for Ubuntu 18+/Debian 10+ et install
-it. If you have an older version of Ubuntu (16.04), visit this page: <a
-href="https://www.rstudio.com/products/rstudio/older-versions/"
+download the <code>.deb</code> file for Ubuntu 18+/Debian 10+ and
+install it. If you have an older version of Ubuntu (16.04), visit this
+page: <a href="https://www.rstudio.com/products/rstudio/older-versions/"
 class="uri">https://www.rstudio.com/products/rstudio/older-versions/</a></p>
 <p>Alternatively, you can install
 <strong><code>RStudio Desktop</code></strong> from the terminal:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Install wget utility ----</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install wget</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Download RStudio Desktop installer (Ubuntu &gt;= 18.04) ----</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2022.02.1-461-amd64.deb</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Download RStudio Desktop installer (Ubuntu 16.04 only) ----</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># wget https://download1.rstudio.org/desktop/xenial/amd64/rstudio-1.4.1106-amd64.deb</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">## Install RStudio Desktop ----</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dpkg <span class="at">-i</span> rstudio-2022.02.1-461-amd64.deb</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># sudo dpkg -i rstudio-1.4.1106-amd64.deb</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">## Remove installer ----</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> rstudio-2022.02.1-461-amd64.deb</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># rm rstudio-1.4.1106-amd64.deb</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Install wget utility ----</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install wget</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Download RStudio Desktop installer (Ubuntu &gt;= 18.04) ----</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2022.02.1-461-amd64.deb</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Download RStudio Desktop installer (Ubuntu 16.04 only) ----</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># wget https://download1.rstudio.org/desktop/xenial/amd64/rstudio-1.4.1106-amd64.deb</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">## Install RStudio Desktop ----</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dpkg <span class="at">-i</span> rstudio-2022.02.1-461-amd64.deb</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># sudo dpkg -i rstudio-1.4.1106-amd64.deb</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">## Remove installer ----</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> rstudio-2022.02.1-461-amd64.deb</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># rm rstudio-1.4.1106-amd64.deb</span></span></code></pre></div>
 <p><br/></p>
 <p>Now let’s install <strong><code>git</code></strong>:</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install git</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install git</span></code></pre></div>
 <p>Finally, install <strong><code>pandoc</code></strong> (to convert
 documents using <code>rmarkdown</code>):</p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install pandoc</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install pandoc</span></code></pre></div>
 <p><br/></p>
 <p>Open <strong><code>RStudio</code></strong> and check your
 installation:</p>
@@ -2550,30 +2555,15 @@ some
 packages (<code>sf</code>, <code>sp</code>, <code>rgdal</code>,
 <code>rgeos</code>, <code>raster</code>, <code>terra</code>,
 <code>xml</code>, etc.).</p>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Install other utilities for R (spatial and others) ----</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install libgdal-dev libproj-dev libgeos-dev libudunits2-dev libnetcdf-dev</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install libcairo2-dev libmagick++-dev</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install libpoppler-cpp-dev</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Install other utilities for R (spatial and others) ----</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install libgdal-dev libproj-dev libgeos-dev libudunits2-dev libnetcdf-dev</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install libcairo2-dev libmagick++-dev</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install libpoppler-cpp-dev</span></code></pre></div>
 <p>To keep your system up-to-date, do not forget to frequently run:</p>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Update system ----</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt upgrade</span></code></pre></div>
-<p><br/></p>
-<h2 id="r-packages">R packages</h2>
-<p>For the workshop, you will need to install the following R
-packages:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>## CRAN packages ----</span>
-<span class='va'>pkgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"funrar"</span>, <span class='st'>"mFD"</span>, <span class='st'>"remotes"</span>, <span class='st'>"sf"</span>, <span class='st'>"terra"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='va'>pkgs</span><span class='op'>)</span>
-
-<span class='co'>## GitHub packages ----</span>
-<span class='fu'>remotes</span><span class='fu'>::</span><span class='fu'><a href='https://remotes.r-lib.org/reference/install_github.html'>install_github</a></span><span class='op'>(</span><span class='st'>"frbcesab/funbiogeo"</span><span class='op'>)</span>
-</code></pre>
-</div>
-</div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Update system ----</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt upgrade</span></code></pre></div>
 <p><br/></p>
 <h2 id="configuration">Configuration</h2>
 <h3 id="git"><code>git</code></h3>
@@ -2581,16 +2571,16 @@ packages:</p>
 credentials (user name and email) that will be added to all your
 commits. Open a terminal (you can use the terminal of
 <strong>RStudio</strong>) and run:</p>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name  <span class="st">&quot;Jane Doe&quot;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">&quot;jane.doe@mail.com&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name  <span class="st">&quot;Jane Doe&quot;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">&quot;jane.doe@mail.com&quot;</span></span></code></pre></div>
 <p>When you create a new git project the default branch will be named
 <em>master</em>. It’s recommended to replace <em>master</em> by
 <em>main</em> (for more information read this <a
 href="https://www.zdnet.com/article/github-to-replace-master-with-alternative-term-to-avoid-slavery-references/">article</a>).</p>
 <p>On a terminal, run:</p>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> init.defaultBranch <span class="st">&quot;main&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> init.defaultBranch <span class="st">&quot;main&quot;</span></span></code></pre></div>
 <p>From now when you will initialize <code>git</code> in a new project
 the default branch will be <strong>main</strong>.</p>
 <p><br/></p>
@@ -2609,7 +2599,8 @@ the private key.</p>
 <p>To generate a new SSH keys pair proceed as follow:</p>
 <p>  <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
   Create an account on <strong>GitHub</strong> at <a
-href="https://github.com/signup">https://github.com/signup</a>
+href="https://github.com/signup">https://github.com/signup</a> (if not
+already done)
 <br/>  <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
   Open <strong><code>RStudio</code></strong> and click on:
 <code>Tools &gt; Global options &gt; Git/SVN</code>
@@ -2625,31 +2616,31 @@ href="https://github.com/settings/keys">https://github.com/settings/keys</a>
 and click on <strong>New SSH key</strong>
 <br/>  <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
   Choose a name for your key (e.g. your laptop name) and paste your
-public key.
+public key
 <br/>  <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
   Finally click on <strong>Add SSH key</strong></p>
 <p><br /></p>
 <p><i class="fab fa-ubuntu" role="presentation" aria-label="ubuntu icon"></i>
   If you are on Ubuntu you need to install the following utility:</p>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install ssh-askpass</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install ssh-askpass</span></code></pre></div>
 <p><br /></p>
-<p>Let’s test the SSH connection with GitHub. Open a terminal and run
-(you need to accept the fingerprint, just enter <code>yes</code>):</p>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-T</span> git@github.com</span></code></pre></div>
+<p>Let’s test the SSH connection to GitHub. Open a terminal and run (you
+need to accept the fingerprint, just enter <code>yes</code>):</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-T</span> git@github.com</span></code></pre></div>
 <p>Congrats! You can now communicate with GitHub using the SSH
 protocol.</p>
 <p><br /></p>
 <p><i class="fa fa-exclamation-triangle" role="presentation" aria-label="exclamation-triangle icon"></i>
   From now, you need to use the SSH URL when connecting a new GitHub
 project (named <code>remote</code>).</p>
-<div class="sourceCode" id="cb18"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">## URL HTTPS ----</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">https://github.com/frbcesab/workshop-free.git</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">## URL SSH (use this one) ----</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">git@github.com:frbcesab/workshop-free.git</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">## URL HTTPS ----</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">https://github.com/frbcesab/workshop-free.git</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">## URL SSH (use this one) ----</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">git@github.com:frbcesab/workshop-free.git</span></span></code></pre></div>
 <p><br /></p>
 <p><i class="fa fa-exclamation-triangle" role="presentation" aria-label="exclamation-triangle icon"></i>
   If you lose your private SSH key you won’t be able to establish a
@@ -2706,6 +2697,78 @@ not forget to restart
 <p>In the <code>~/.Rprofile</code> file, add this new line:
 <code>options(usethis.protocol = "ssh")</code>. Do not forget to restart
 <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>.</p>
+<p><br/></p>
+<h2 id="for-the-workshop">For the workshop</h2>
+<p>You will need to install the following R packages:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>## CRAN packages ----</span>
+<span class='va'>pkgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"funrar"</span>, <span class='st'>"mFD"</span>, <span class='st'>"remotes"</span>, <span class='st'>"sf"</span>, <span class='st'>"terra"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='va'>pkgs</span><span class='op'>)</span>
+
+<span class='co'>## GitHub packages ----</span>
+<span class='fu'>remotes</span><span class='fu'>::</span><span class='fu'><a href='https://remotes.r-lib.org/reference/install_github.html'>install_github</a></span><span class='op'>(</span><span class='st'>"frbcesab/funbiogeo"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p><br /></p>
+<p>In addition, you must download a copy of the content of the workshop.
+We recommend that you create a copy (fork) of the GitHub repository of
+the workshop on your GitHub space. Then, using RStudio you will clone
+(download) your fork.</p>
+<p>Go to the GitHub URL of the workshop repository: <a
+href="https://github.com/frbcesab/workshop-free"
+class="uri">https://github.com/frbcesab/workshop-free</a>. Then follow
+these instructions to fork the repository.</p>
+<figure>
+<img src="img/github-1.png" alt="  Fork the repository (1)" />
+<figcaption
+aria-hidden="true"><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
+ Fork the repository (1)</figcaption>
+</figure>
+<figure>
+<img src="img/github-2.png" alt="  Fork the repository (2)" />
+<figcaption
+aria-hidden="true"><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
+ Fork the repository (2)</figcaption>
+</figure>
+<figure>
+<img src="img/github-3.png" alt="  Get the SSH URL of your fork (1)" />
+<figcaption
+aria-hidden="true"><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
+ Get the SSH URL of your fork (1)</figcaption>
+</figure>
+<figure>
+<img src="img/github-4.png" alt="  Get the SSH URL of your fork (2)" />
+<figcaption
+aria-hidden="true"><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
+ Get the SSH URL of your fork (2)</figcaption>
+</figure>
+<p>Then open <strong>RStudio Desktop</strong> and follow these
+instructions to create a new project from your GitHub repository (fork
+of the original repository)</p>
+<figure>
+<img src="img/rstudio-1.png" alt="  Clone your fork (1)" />
+<figcaption
+aria-hidden="true"><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
+ Clone your fork (1)</figcaption>
+</figure>
+<figure>
+<img src="img/rstudio-2.png" alt="  Clone your fork (2)" />
+<figcaption
+aria-hidden="true"><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
+ Clone your fork (2)</figcaption>
+</figure>
+<figure>
+<img src="img/rstudio-3.png" alt="  Clone your fork (3)" />
+<figcaption
+aria-hidden="true"><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
+ Clone your fork (3)</figcaption>
+</figure>
+<p>Congrats! You have your own copy of the workshop content (data,
+instructions and courses). If you want you can use
+<strong><code>git</code></strong> to commit changes during the workshop
+and send these modifications to your GitHub repository.</p>
 <h2 class="appendix" id="corrections">Corrections</h2>
 <p>If you see mistakes or want to suggest changes, please <a
 href="https://github.com/frbcesab/workshop-free/issues">Create an
@@ -2720,7 +2783,7 @@ class="uri">https://github.com/frbcesab/workshop-free/</a>.</p>
 <p>Casajus N, Grénié M, Magneville C &amp; Villéger S (2022) Workshop
 FRB-CESAB &amp; FREE Working Group: Functional Rarity and Diversity in
 Ecology.</p>
-<div class="sourceCode" id="cb19"><pre
+<div class="sourceCode" id="cb18"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
