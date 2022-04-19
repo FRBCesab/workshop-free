@@ -13,7 +13,7 @@ This website is built with the R package [`distill`](https://rstudio.github.io/d
 and is available at: **https://frbcesab.github.io/workshop-free/**
 
 
-### Usage
+### How to contribute?
 
 1. Clone the repository
 2. Run `remotes::install_deps()` to install required packages
