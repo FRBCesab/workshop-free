@@ -1,0 +1,72 @@
+---
+title: "Resources"
+output: 
+  distill::distill_article:
+    toc: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+<br/>
+
+
+
+**Recommended papers**
+
+- Grenié M, Denelle P, Tucker CM, Munoz F & Violle C (2017) funrar: An R package 
+to characterize functional rarity. **_Diversity and Distributions_**, 23, 1365-1371.
+<br/>DOI: [10.1111/ddi.12629](https://doi.org/10.1111/ddi.12629)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/grenie-2017.pdf)
+  
+- Magneville C, Loiseau N, Albouy C, Casajus N, Claverie T, Escalas A, 
+Leprieur F, Maire E, Mouillot D & Villéger S (2022) mFD: an R package to 
+compute and illustrate the multiple facets of functional diversity. 
+**_Ecography_**.
+<br/>DOI: [10.1111/ecog.05904](https://doi.org/10.1111/ecog.05904)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/magneville-2022.pdf)
+
+- Maire E, Grenouillet G, Brosse S & Villéger S (2015) Assessing functional 
+space quality. **_Global Ecology and Biogeography_**, 24, 728-740. 
+<br/>DOI: [10.1111/geb.12299](https://doi.org/10.1111/geb.12299)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/maire-2015.pdf)
+
+- Mouillot D, Graham NAJ, Villéger S, Mason NWH & Bellwood DR (2013) 
+A functional approach reveals community responses to disturbances.
+**_Trends in Ecology & Evolution_**, 28, 167-177.
+<br/>DOI: [10.1016/j.tree.2012.10.004](https://doi.org/10.1016/j.tree.2012.10.004)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/mouillot-2013.pdf)
+
+- Villéger S, Mason NWH & Mouillot D (2008) New multidimensional functional 
+diversity indices for a multifaceted framework in functional ecology.
+**_Ecology_**, 89, 2290-2301.
+<br/>DOI: [10.1890/07-1206.1](https://doi.org/10.1890/07-1206.1)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/villeger-2008.pdf)
+
+
+## Corrections {.appendix}
+
+
+If you see mistakes or want to suggest changes, please 
+[Create an issue](https://github.com/frbcesab/workshop-free/issues)
+on the source repository.
+
+
+
+## Reuse {.appendix}
+
+
+
+The material of this website is licensed under Creative Commons Attribution 
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Source code is available at https://github.com/frbcesab/workshop-free/.
+
+
+## Citation {.appendix}
+
+
+
+Casajus N, Grénié M, Magneville C & Villéger S (2022) 
+Workshop FRB-CESAB & FREE Working Group: Functional Rarity and Diversity in Ecology. 

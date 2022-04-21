@@ -1,0 +1,44 @@
+---
+title: "Courses"
+output: 
+  distill::distill_article:
+    toc: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+<br/>
+
+
+
+Coming soon...
+
+
+
+## Corrections {.appendix}
+
+
+If you see mistakes or want to suggest changes, please 
+[Create an issue](https://github.com/frbcesab/workshop-free/issues)
+on the source repository.
+
+
+
+## Reuse {.appendix}
+
+
+
+The material of this website is licensed under Creative Commons Attribution 
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Source code is available at https://github.com/frbcesab/workshop-free/.
+
+
+## Citation {.appendix}
+
+
+
+Casajus N, Grénié M, Magneville C & Villéger S (2022) 
+Workshop FRB-CESAB & FREE Working Group: Functional Rarity and Diversity in Ecology. 

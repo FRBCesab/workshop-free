@@ -3,13 +3,13 @@ title: "Functional Rarity and Diversity in Ecology"
 description: |
   Functional Rarity and Diversity Workshop
 base_url: https://frbcesab.github.io/workshop-free/
-#favicon: img/favicon.png
+favicon: img/favicon.ico
 exclude: ["LICENSE.md"]
 output_dir: "."
 navbar:
-  #logo:
-  #  image: img/logo-rdatatoolbox_150dpi.png
-  #  href: https://frbcesab.github.io/workshop-free/
+  logo:
+    image: img/Rlogo.png
+    href: https://frbcesab.github.io/workshop-free/
   source_url: true
   right:
     - icon: fa fa-home
@@ -17,11 +17,11 @@ navbar:
     - text: "Instructions"
       href: instructions.html
     - text: "Courses"
-      href: ""
+      href: courses.html
     - text: "Practice"
       href: practice.html
     - text: "Resources"
-      href: ""
+      href: resources.html
     - icon: fab fa-github
       href: https://github.com/frbcesab/workshop-free/
 output: distill::distill_article

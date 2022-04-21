@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" version="1.0">
   <url>
+    <loc>https://frbcesab.github.io/workshop-free/courses.html</loc>
+    <lastmod>2022-04-21T11:32:18+02:00</lastmod>
+  </url>
+  <url>
     <loc>https://frbcesab.github.io/workshop-free/</loc>
     <lastmod>2022-04-20T11:18:50+02:00</lastmod>
   </url>
@@ -11,5 +15,9 @@
   <url>
     <loc>https://frbcesab.github.io/workshop-free/practice.html</loc>
     <lastmod>2022-04-07T11:01:39+02:00</lastmod>
+  </url>
+  <url>
+    <loc>https://frbcesab.github.io/workshop-free/resources.html</loc>
+    <lastmod>2022-04-21T11:31:04+02:00</lastmod>
   </url>
 </urlset>
