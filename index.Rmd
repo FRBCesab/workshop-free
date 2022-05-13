@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 <img src="https://www.r-project.org/logo/Rlogo.png" style="height:120px; width:160px; padding:20px;"/>
 <img src="https://raw.githubusercontent.com/FRBCesab/funbiogeo/main/man/figures/funbiogeo-sticker.png" style="height:120px; width:110px; padding:20px;"/>
-<img src="https://raw.githubusercontent.com/CmlMagneville/mFD/main/man/figures/hexasticker_mFD.png" style="height:124px; width:110px; padding:20px;"/>
+<img src="https://raw.githubusercontent.com/CmlMagneville/mFD/main/man/figures/hexasticker_mFD.png" style="height:120px; width:110px; padding:20px;"/>
 
 
 <br />

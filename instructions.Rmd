@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 `r fontawesome::fa_i("hand-point-right")`&nbsp;
-**Please install the latest versions of `r fontawesome::fa_i("r-project")`,
+**Please install the latest versions of `r fontawesome::fa_i("r-project")`
 RStudio, and `git`.**
 
 
