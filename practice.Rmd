@@ -81,8 +81,548 @@ Each fruit is characterized by `...` traits values summarized in the following t
 <br /> 
   
 
+The use of the `mFD` and `funrar` packages is based on two datasets:
+
+* a **data frame** summarizing traits values for each species called
+`fruits_traits` in this tutorial
+
+
+*Code*
+```{r}
+# Load data:
+data("fruits_traits", package = "mFD")
+# Remove fuzzy traits in this tutorial:
+fruits_traits <- fruits_traits[ , -c(6:8)]
+# Display the table:
+knitr::kable(head(fruits_traits),
+             caption = "Species x traits data frame")
+```
+
+<br />
+
+* a **matrix** summarizing species assemblages called `baskets_fruits_weights`
+in this tutorial. Weights in this matrix can be occurrence data, abundance,
+biomass, coverage, etc. The studied example works with biomass (*i.e.* grams of
+a fruit in a basket) and this matrix looks as follows:
+
+
+*Code*
+```{r}
+# Load data:
+data("baskets_fruits_weights", package = "mFD")
+# Display the table:
+knitr::kable(as.data.frame(baskets_fruits_weights[1:6, 1:6]), 
+      centering = TRUE,
+      caption = "Species x assemblages matrix based on the **fruits** dataset")
+```
+
+
 ## Questions
 
-...
+Using this Practice, we ask the following questions:
 
+* How different are the fruits baskets based on their functional traits?
+* Question functional rarity
+* Question funbiogeo
+
+To answer these three questions, the first step is to **build a functional space based on species traits** on which functional diversity and functional rarity indices will be then computed.
+
+
+## Part 1 - Build a functional space using the `mFD` package
+
+
+### 1.1 - What about the traits?
+
+
+The first thing to do before starting analyses is to know your data. To do so,
+you must be able to characterize the traits you are using (*i.e.* tell the
+package what type of traits you are using). That is why `mFD` package needs a
+data frame summarizing the type of each trait (*i.e.* each column of the
+`fruits_traits` data frame).
+
+*Code*
+```{r}
+# Load data:
+data("fruits_traits_cat", package = "mFD")
+
+# Remove fuzzy traits in this tutorial:
+fruits_traits_cat <- fruits_traits_cat[-c(6:8), ]
+# Thus remove the "fuzzy_name" column:
+fruits_traits_cat <- fruits_traits_cat[ , -3]
+
+# Display the table:
+knitr::kable(head(fruits_traits_cat), 
+             caption = "Traits types based on **fruits & baskets** dataset")
+```
+
+
+The **first column** contains **traits name**. The **second column** contains
+**traits type** following this code:
+
+* **N**: nominal trait (factor variable)
+* **O**: ordinal traits (ordered variable)
+* **C**: circular traits (integer values) (**NB** circular traits can not be used in
+`mFD` function used to compute functional distance but ok for summary function
+and function to group species into Functional Entities)
+* **Q**: quantitative traits (numeric values)
+* **F**: fuzzy traits (described with several values defined in several columns
+in the `fruits_traits` data frame)
+
+
+### 1.2 - Computing distances between species based on functional traits
+
+
+The next step toward the computation of functional diversity indices is to
+estimate functional traits-based distances between species in order to build the
+functional space in which indices will be computed.
+
+
+To compute trait-based distances, we will use the `mFD::funct.dist()` function
+which includes the following arguments:
+
+
+*Code*
+```{r, results = "hide"}
+sp_dist_fruits <- mFD::funct.dist(
+  sp_tr         = fruits_traits,
+  tr_cat        = fruits_traits_cat,
+  metric        = "gower",
+  scale_euclid  = "scale_center",
+  ordinal_var   = "classic",
+  weight_type   = "equal",
+  stop_if_NA    = TRUE)
+```
+
+
+* `sp_tr` is the species x trait data frame
+
+* `tr_cat` is the data frame summarizing trait type for each trait
+
+* `metric` is a character string referring to the metric used to compute
+distances. Two metrics are available and **the choice depends on your traits
+data**:
+
+  * if **all traits are continuous** use the **Euclidean distance** (`metric =
+  "euclidean"`) and check the [Compute Functional Diversity Indices based on
+  Only Continuous
+  Traits](https://cmlmagneville.github.io/mFD/articles/Continuous_traits_framework.html)
+  tutorial which explains how to build a multidimensional space from traits
+  through PCA analysis or considering directly each trait as a dimension.
+
+  * if you have **non-continuous traits** use the **Gower distance** (`metric =
+  "gower"`) as this method allows traits weighting. This method can also deal
+  with fuzzy traits.
+
+* `scale_euclid` is a character string referring to the way the user wants to
+scale **euclidean** traits. You can either chose to scale by range `range`, use
+the center transformation `center`, use the scale transformation `scale`, use
+the scale-center transformation `scale_center` or you can chose not to scale
+`noscale`.
+
+* `ordinal_var` is a character string specifying the method to be used for
+ordinal variables (*i.e.* ordered). You can either chose to treat ordinal
+variables as continuous variables (with `"classic"` option) or to treat ordinal
+variables as ranks (with `metric` or `podani` options, see `mFD::funct.dist()`
+help file for details).
+
+* `weight_type` is a character string referring to the type of method to weight
+traits. You can either chose to define weights using the `tr_cat` dataframe (cf
+**step 1.1**) (`user` option) or you can chose to give the same weight to all
+traits (`equal` option). (**NB** Using `mFD`, you can not define weights for fuzzy
+traits, use
+[`gawdis`](https://cran.r-project.org/package=gawdis) package
+instead)
+
+* `stop_if_NA` is a logical value  to stop or not the process if the `sp_tr`
+data frame contains NA. If the `sp_tr` data frame contains `NA` you can either
+chose to compute anyway functional distances (but keep in mind that **Functional
+measures are sensitive to missing traits!**) or you can delete species with
+missing or extrapolate missing traits (see [Johnson _et al._
+(2020)](https://onlinelibrary.wiley.com/doi/full/10.1111/geb.13185)).
+
+
+This function returns a `dist` object with traits-based distances between all
+pairs of species:
+
+*Code*
+```{r}
+round(sp_dist_fruits, 3)                 # Output of the function mFD::funct.dist()
+```
+
+
+### 1.3 - Building functional spaces and chosing the best one
+
+
+#### 1.3.1 - Computing several multimensional functional spaces and assessing their quality
+
+In order to generate a multidimensional space in which functional diversity
+indices
+are computed ([Mouillot _et al._ 2013](https://www.sciencedirect.com/science/article/pii/S0169534712002650), 
+we will perform a PCoA using the trait-based distances (and if
+required a functional dendrogram).
+`mFD` evaluates the quality of PCoA-based multidimensional spaces according
+to the deviation between trait-based distances and distances in the functional
+space (extension of [Maire _et al._ (2015)](https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12299) framework).
+For that, we will use the `mFD::quality.fspaces()` function:
+
+<br />
+
+*Code*
+```{r, results = "hide"}
+fspaces_quality_fruits <- mFD::quality.fspaces(
+  sp_dist             = sp_dist_fruits,
+  maxdim_pcoa         = 10,
+  deviation_weighting = "absolute",
+  fdist_scaling       = FALSE,
+  fdendro             = "average")
+```
+
+
+* `sp_dist` is the `dist` object with pairwise trait-based distance between
+species as computed in **step 3**
+
+* `maxdim_pcoa` is the maximum number of PCoA axes to consider to build
+multidimensional spaces. Actually, the maximum number of dimensions considered
+depends on the number of PCoA axes with positive eigenvalues.
+
+* `deviation_weighting` refers to the method(s) used to weight the difference
+between species pairwise distances in the functional space and trait-based
+distances.
+**You can chose between**:
+  * `absolute`: absolute differences are used to compute the **mean absolute
+  deviation (mad)** . It reflects the actual magnitude of errors that will
+  affect FD metrics.
+  * `squared`: squared differences are used to compute the **root of mean square
+  deviation (rmsd)**. This weighting puts more weight to the large deviations
+  between trait-based distances and distances in the functional space.
+  misplaced in the functional space. 
+  * Both quality metrics can be used with `deviation_weighting = c("absolute",
+  "squared")`.
+
+* `fdist_scaling` specifies whether distances in the functional space should be
+scaled before computing differences with trait-based distances. Scaling ensures
+that trait-based distances and distances in the functional space have the same
+maximum. Scaling distances implies that the quality of the functional space
+accounts for congruence in distances rather than their equality.
+
+**NOTE** The combination of `deviation_weighting` and `fdist_scaling` arguments leads
+to **four possible quality metrics**: `mad`, `rmsd`, `mad_scaled` and
+`rmsd_scaled`
+
+* `fdendro` specifies the clustering algorithm to compute a functional
+dendrogram. `NULL` means no dendrogram computed. The chosen algorithm must be one
+of the method recognized by the `stats::hclust()` function from the
+[`stats`](https://www.rdocumentation.org/packages/stats) package.
+
+
+This function returns a list various objects:
+
+<br />
+
+* a data frame gathering for each space (in rows), values of quality metric(s)
+(in columns)
+
+*Code*
+```{r}
+round(fspaces_quality_fruits$"quality_fspaces", 3)            # Quality metrics of spaces
+```
+
+<br />
+
+* lists with details required for other tasks in **step 4** to plot functional
+space quality and in **step 5** to plot functional space.
+
+<br />
+
+**NOTE** The space with the best quality has the lowest quality metric. Here, thanks
+to mad values, we can see that the 4D space is the best one. That is why the
+following of this Practice will use this multidimensional space.
+
+
+#### 1.3.2 - Illustrating the quality of the functional spaces
+
+
+With the `mFD` package, it is possible to illustrate the quality of PCoA-based
+multidimensional spaces according to deviation between trait-based distances and
+distances in the functional space. For that, we use the
+`mFD::quality.fspace.plot()` function with the following arguments:
+
+<br />
+
+*Code*
+```{r,  fig.show = 'hide', results = "hide"}
+mFD::quality.fspaces.plot(
+  fspaces_quality            = fspaces_quality_fruits,
+  quality_metric             = "mad",
+  fspaces_plot               = c("tree_average", "pcoa_2d", "pcoa_3d", 
+                                 "pcoa_4d", "pcoa_5d", "pcoa_6d"),
+  name_file                  = NULL,
+  range_dist                 = NULL,
+  range_dev                  = NULL,
+  range_qdev                 = NULL,
+  gradient_deviation         = c(neg = "darkblue", nul = "grey80", pos = "darkred"),
+  gradient_deviation_quality = c(low = "yellow", high = "red"),
+  x_lab                      = "Trait-based distance")
+```
+
+* `fspaces_quality` is the output of the `mFD::quality.fspaces()` function
+(**step 4.1**).
+
+* `quality_metric` refers to the quality metric used. It should be one of the
+column name(s) of the table gathering quality metric values (output of
+`mFD::quality.fspaces()` called `quality_fspaces`) (here:
+`fspaces_quality_fruits$quality_fspaces`) Thus it can be: `mad`, `rmsd`,
+`mad_scaled` or `rmsd_scaled` (see **step 4.1**)
+
+* `fspaces_plot` refers to the names of spaces for which quality has to be
+illustrated (up to 10). Names are those used in the output of
+`mFD::quality.fspaces()` function showing the values of the quality metric.
+
+* `name_file` refers to the name of file to save (without extension) if the user
+wants to save the figure. If the user only wants the plot to be displayed,
+then `name_file = NULL`.
+
+* `range_dist`, `range_dev`, `range_qdev` are arguments to set ranges of panel
+axes (check function help for further information).
+
+* `gradient_deviation` and `gradient_deviation_quality` are arguments to set
+points colors (check function help for further information).
+
+* `xlab` is a parameter to set x-axis label.
+
+<br />
+
+This function generates a figure with three panels (in rows) for each selected
+functional space (in columns). Each column represents a functional space, the
+value of the quality metric is written on the top of each column. The x-axis of
+all panels represents trait-based distances. The y-axis is different for each
+row:
+
+* on the first (top) row, the y-axis represents species functional distances in
+the multidimensional space. Thus, the closer species are to the 1:1 line,
+the better distances in the functional space fit trait-based ones.
+* on the second row, the y-axis shows the raw deviation of species distances in
+the functional space compared to trait-based distances. Thus, the raw deviation
+reflects the distance to the 1:1 line.
+* on the third row, the y-axis shows the absolute or squared deviation of the
+("scaled") distance in the functional space. It is the deviation that is taken
+into account for computing the quality metric.
+
+
+*Code*
+```{r, fig.height = 7, fig.width = 12, fig.align = "center"}
+mFD::quality.fspaces.plot(
+  fspaces_quality            = fspaces_quality_fruits,
+  quality_metric             = "mad",
+  fspaces_plot               = c("tree_average", "pcoa_2d", "pcoa_3d",
+                                 "pcoa_4d", "pcoa_5d", "pcoa_6d"),
+  name_file                  = NULL,
+  range_dist                 = NULL,
+  range_dev                  = NULL,
+  range_qdev                 = NULL,
+  gradient_deviation         = c(neg = "darkblue", nul = "grey80", pos = "darkred"),
+  gradient_deviation_quality = c(low = "yellow", high = "red"),
+  x_lab                      = "Trait-based distance")
+```
+
+<br />
+
+
+For the 2D space, on the top row there are a lot of points below the 1:1 lines,
+meaning that distances are overestimated in this multidimensional space. Looking
+at panels, we can see that the 4D space is the one in which points are the
+closest to the 1:1 line on the top row,and the closest to the x-axis for the two
+bottom rows, which reflects a better quality compared to other functional spaces
+/ dendrogram. For the dendrogram, we can see on the top row that species pairs
+arrange in horizontal lines, meaning that different trait-based distances have
+then the same cophenetic distance on the dendrogram.
+
+
+#### 1.3.3 -Testing the correlation between functional axes and traits
+
+<br />
+
+
+`mFD` allows to test for correlations between traits and functional axes and
+then illustrate possible correlations (continuous traits = linear model is
+computed and r2 and associated p-value are returned ; non-continuous traits =
+Kruskal-Wallis test is computed and eta2 statistic is returned). The function
+`mFD::traits.faxes.cor()` allows to test and plot correlation and needs the
+following arguments:
+
+* `sp_tr` is the species x traits data frame
+* `sp_faxes_coord` is a matrix of species coordinates taken from the outputs of
+the `mFD::quality.fspaces()` function **with columns representing axes on which
+functional space must be computed**. For instance, in this tutorial, we will
+plot the functional space for 4 and 10 dimensions (*cf.* the two examples
+below). The whole `sp_faxes_coord` can be retrieved through the output of the
+`mFD::quality.fspaces()` function:
+
+
+*Code*
+```{r, results = "hide"}
+sp_faxes_coord_fruits <- fspaces_quality_fruits$"details_fspaces"$"sp_pc_coord"
+```
+
+
+* `plot` is a logical value indicating whether correlations should be
+illustrated or not. If this option is set to `TRUE`, traits-axis relationships
+are plotted through scatterplot for continuous traits and boxplot for
+non-continuous traits.
+
+
+`mFD::traits.faxes.cor` works as follows:
+
+<br />
+
+*Code*
+```{r, results = "hide"}
+fruits_tr_faxes <- mFD::traits.faxes.cor(
+  sp_tr          = fruits_traits, 
+  sp_faxes_coord = sp_faxes_coord_fruits[ , c("PC1", "PC2", "PC3", "PC4")], 
+  plot           = TRUE)
+```
+
+We can print only traits with significant effect on position along one of the
+axis and look at the plots:
+
+
+*Code*
+```{r, fig.height = 7, fig.width = 12, fig.align = "center"}
+# Print traits with significant effect:
+fruits_tr_faxes$"tr_faxes_stat"[which(fruits_tr_faxes$"tr_faxes_stat"$"p.value" < 0.05), ]
+# Return plots:
+fruits_tr_faxes$"tr_faxes_plot"
+```
+
+<br />
+
+We can thus see that **PC1** is mostly driven by *Climate* (temperate on the
+left and tropical on the right) and *Plant Type* (forb & shrub on the left vs
+tree & vine on the right) and *Size* (large fruits on the right) with weaker
+influence of *Seed* (eta2 < 0.25).
+Then, **PC2** is mostly driven by *Seed* (no seed on the left and pit seed on
+the right) with weaker influence of *Plant Type*. **PC3** is driven by only one
+trait, *Size*. And finally **PC4** is mostly driven by *Sugar* (high sugar
+content on the right and low sugar content on the left) with a weaker influence
+of *Plant Type*.
+
+<br />
+
+
+### 1.4 - Plotting the selected functional space and position of species
+
+
+
+Once the user has selected the dimensionality of the functional space, `mFD`
+allows you to plot the given multidimensional functional space and the position
+of species in all 2-dimensions spaces made by pairs of axes.
+
+<br />
+
+The `mFD::funct.space.plot()` function allows to illustrate the position of all
+species along pairs of space axes.
+
+<br />
+
+This function allows to plot with many possibilities to change colors/shapes of
+each plotted element. Here are listed the main arguments:
+
+* `sp_faxes_coord` is a matrix of species coordinates taken from the outputs of
+the `mFD::quality.fspaces()` function **with columns representing axes on which
+functional space must be computed**. For instance, in this tutorial, we will
+plot the functional space for 4 and 10 dimensions (*cf.* the two examples
+below). The whole `sp_faxes_coord` can be retrieved through the output of the
+`mFD::quality.fspaces()` function:
+
+<br />
+
+*Code*
+```{r, results = "hide"}
+sp_faxes_coord_fruits <- fspaces_quality_fruits$"details_fspaces"$"sp_pc_coord"
+```
+
+<br />
+
+
+* `faxes` is a vector containing names of axes to plot. If set to `NULL`, the
+first four functional axes will be plotted.
+
+* `faxes_nm` is a vector containing labels of `faxes` (following faxes vector
+rank). If `NULL`, labels follow `faxes` vector names.
+
+* `range_faxes` is a vector to complete if the user wants to set specific
+limits for functional axes. If `range_faxes = c(NA, NA)`, the range is
+computed according to the range of values among all axes.
+
+* `plot_ch` is a logical value used to draw or not the 2D convex-hull filled
+by the global pool of species. Color, fill and opacity of the convex hull
+can be chosen through other inputs , please refer to the function's help.
+
+* `plot_sp_nm` is a vector containing species names to plot. If `NULL`, no
+species names plotted. Name size, color and font can be chosen through other 
+inputs, please refer to the function's help.
+
+* `plot_vertices` is a logical value used to plot or not vertices with a
+different shape than other species. **Be careful:** these representations are
+2D representations, thus vertices of the convex-hull in the n-multidimensional
+space can be close to the center of the hull projected in 2D. Color, fill, 
+shape and size of vertices can be chosen through other inputs, please refer to 
+the function's help.
+
+* `color_bg` is a R color or an hexadecimal color code referring to the 
+color of the background of the plot.
+
+* other inputs are used to chose color, fill, size, and shape of species from
+the global pool, please refer to the function's help.
+
+* `check_input` is a recurrent argument in the `mFD` package. It defines
+whether inputs should be checked before computation or not. Possible error
+messages will thus be more understandable for the user than R error messages
+(**Recommendation:** set it as `TRUE`).
+
+<br />
+
+
+Here are the plots for the *fruits & baskets* dataset for the **first four PCoA
+axis**:
+
+<br />
+
+*Code*
+```{r}
+big_plot <- mFD::funct.space.plot(
+  sp_faxes_coord  = sp_faxes_coord_fruits[ , c("PC1", "PC2", "PC3", "PC4")],
+  faxes           = c("PC1", "PC2", "PC3", "PC4"),
+  name_file       = NULL,
+  faxes_nm        = NULL,
+  range_faxes     = c(NA, NA),
+  color_bg        = "grey95",
+  color_pool      = "darkgreen",
+  fill_pool       = "white",
+  shape_pool      = 21,
+  size_pool       = 1,
+  plot_ch         = TRUE,
+  color_ch        = "black",
+  fill_ch         = "white",
+  alpha_ch        = 0.5,
+  plot_vertices   = TRUE,
+  color_vert      = "blueviolet",
+  fill_vert       = "blueviolet",
+  shape_vert      = 23,
+  size_vert       = 1,
+  plot_sp_nm      = NULL,
+  nm_size         = 3,
+  nm_color        = "black",
+  nm_fontface     = "plain",
+  check_input     = TRUE)
+
+big_plot$patchwork
+```
+
+<br />
+
+Here, the convex-hull of the species pool is plotted in white and axis have the
+same range to get rid of bias based on different axis scales. Species being
+vertices of the 4D convex hull are in purple.
 

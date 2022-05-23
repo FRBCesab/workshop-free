@@ -50,17 +50,16 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { color: #00769e; background-color: #f1f3f5; }
+  {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { color: #657422; } /* Attribute */
+code span.at { } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #00769e; } /* ControlFlow */
+code span.cf { color: #007ba5; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -74,9 +73,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #00769e; } /* Keyword */
+code span.kw { color: #007ba5; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #00769e; } /* Other */
+code span.ot { color: #007ba5; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -1029,6 +1028,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     margin-top: 1.5em;
   }
 
+  .figure img {
+    width: 100%;
+  }
+
   .figure .caption {
     color: rgba(0, 0, 0, 0.6);
     font-size: 12px;
@@ -1858,12 +1861,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
-          var fn = $(this).children()[0]
-          $(this).html(fn.shadowRoot.querySelector("sup"))
-          $(this).id = fn.id
-          fn.remove()
-        }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
           return "<p>" + $('#ref-' + ref).html() + "</p>";
@@ -1878,31 +1875,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
-
-      // fix footnotes in tables (#411)
-      // replacing broken distill.pub feature
-      $('table d-footnote').each(function() {
-        // we replace internal showAtNode methode which is triggered when hovering a footnote
-        this.hoverBox.showAtNode = function(node) {
-          // ported from https://github.com/distillpub/template/pull/105/files
-          calcOffset = function(elem) {
-              let x = elem.offsetLeft;
-              let y = elem.offsetTop;
-              // Traverse upwards until an `absolute` element is found or `elem`
-              // becomes null.
-              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
-                  x += elem.offsetLeft;
-                  y += elem.offsetTop;
-              }
-
-              return { left: x, top: y };
-          }
-          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
-          const bbox = node.getBoundingClientRect();
-          const offset = calcOffset(node);
-          this.show([offset.left + bbox.width, offset.top + bbox.height]);
-        }
-      })
 
       // clear polling timer
       clearInterval(tid);
@@ -2002,8 +1974,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
-      // ignore leaflet img layers (#106)
-      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -2026,7 +1996,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
       });
     }
 
@@ -2065,7 +2035,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2130,49 +2100,36 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#about" id="toc-about">About</a></li>
-<li><a href="#prerequisites"
-id="toc-prerequisites">Prerequisites</a></li>
-<li><a href="#data-description" id="toc-data-description">Data
-description</a>
+<li><a href="#about">About</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#data-description">Data description</a>
 <ul>
-<li><a href="#questions" id="toc-questions">Questions</a></li>
+<li><a href="#questions">Questions</a></li>
+<li><a href="#part-1---build-a-functional-space-using-the-mfd-package">Part 1 - Build a functional space using the <code>mFD</code> package</a>
+<ul>
+<li><a href="#what-about-the-traits">1.1 - What about the traits?</a></li>
+<li><a href="#computing-distances-between-species-based-on-functional-traits">1.2 - Computing distances between species based on functional traits</a></li>
+<li><a href="#building-functional-spaces-and-chosing-the-best-one">1.3 - Building functional spaces and chosing the best one</a></li>
+<li><a href="#plotting-the-selected-functional-space-and-position-of-species">1.4 - Plotting the selected functional space and position of species</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
 </div>
 <h1 id="about">About</h1>
 <p><br /></p>
-<p>This tutorial describes the basic workflow showing how to compute
-step by step functional diversity (FD) indices in a multidimensional
-space. It is divided in four parts:</p>
+<p>This tutorial describes the basic workflow showing how to compute step by step functional diversity (FD) indices in a multidimensional space. It is divided in four parts:</p>
 <ol type="1">
-<li>Computing trait-based distances and the multidimensional functional
-space</li>
-<li>Using the <a
-href="https://github.com/CmlMagneville/mFD"><code>mFD</code></a> package
-to compute FD alpha and beta indices and plot them (<a
-href="https://doi.org/10.1111/ecog.05904">Magneville <em>et al.</em>
-2021</a>)</li>
-<li>Using the <a
-href="https://github.com/rekyt/funrar"><code>funrar</code></a> package
-to compute Functional Rarity indices (<a
-href="https://doi.org/10.1016/j.tree.2017.02.002">Violle <em>et al.</em>
-2017</a>)</li>
-<li>Using the <a
-href="https://github.com/frbcesab/funbiogeo"><code>funbiogeo</code></a>
-package to compute analyses in functional biogeography (<a
-href="https://doi.org/10.1073/pnas.1415442111">Violle <em>et al.</em>
-2014</a>)</li>
+<li>Computing trait-based distances and the multidimensional functional space</li>
+<li>Using the <a href="https://github.com/CmlMagneville/mFD"><code>mFD</code></a> package to compute FD alpha and beta indices and plot them (<a href="https://doi.org/10.1111/ecog.05904">Magneville <em>et al.</em> 2021</a>)</li>
+<li>Using the <a href="https://github.com/rekyt/funrar"><code>funrar</code></a> package to compute Functional Rarity indices (<a href="https://doi.org/10.1016/j.tree.2017.02.002">Violle <em>et al.</em> 2017</a>)</li>
+<li>Using the <a href="https://github.com/frbcesab/funbiogeo"><code>funbiogeo</code></a> package to compute analyses in functional biogeography (<a href="https://doi.org/10.1073/pnas.1415442111">Violle <em>et al.</em> 2014</a>)</li>
 </ol>
 <p><br /></p>
-<p><strong>N.B.</strong> You can chose to do Part 2, Part 3 and Part 4
-in the order that you want but Part 1 has to be realized first.</p>
+<p><strong>N.B.</strong> You can chose to do Part 2, Part 3 and Part 4 in the order that you want but Part 1 has to be realized first.</p>
 <p><br /></p>
 <h1 id="prerequisites">Prerequisites</h1>
-<p>Be sure you have followed the <a
-href="https://frbcesab.github.io/workshop-free/instructions.html"><strong>instructions</strong></a>
-to set up your system (e.g. <code>R version &gt;= 3.5</code>).</p>
+<p>Be sure you have followed the <a href="https://frbcesab.github.io/workshop-free/instructions.html"><strong>instructions</strong></a> to set up your system (e.g. <code>R version &gt;= 3.5</code>).</p>
 <p>If not already done, please install the following R packages:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2187,21 +2144,9 @@ to set up your system (e.g. <code>R version &gt;= 3.5</code>).</p>
 </div>
 <p><br /></p>
 <h1 id="data-description">Data description</h1>
-<p>The dataset used as study case all along this workshop is the
-<strong>Fruits dataset</strong> based on <code>...</code> types of
-fruits (i.e. species) distributed in 10 fruits baskets
-(i.e. assemblages). Each fruit is characterized by <code>...</code>
-traits values summarized in the following table:</p>
+<p>The dataset used as study case all along this workshop is the <strong>Fruits dataset</strong> based on <code>...</code> types of fruits (i.e. species) distributed in 10 fruits baskets (i.e. assemblages). Each fruit is characterized by <code>...</code> traits values summarized in the following table:</p>
 <p><br /></p>
 <table>
-<colgroup>
-<col style="width: 12%" />
-<col style="width: 17%" />
-<col style="width: 13%" />
-<col style="width: 18%" />
-<col style="width: 31%" />
-<col style="width: 7%" />
-</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: center;">Trait name</th>
@@ -2256,10 +2201,622 @@ traits values summarized in the following table:</p>
 </tbody>
 </table>
 <p><br /></p>
+<p>The use of the <code>mFD</code> and <code>funrar</code> packages is based on two datasets:</p>
+<ul>
+<li>a <strong>data frame</strong> summarizing traits values for each species called <code>fruits_traits</code> in this tutorial</li>
+</ul>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Load data:</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"fruits_traits"</span>, package <span class='op'>=</span> <span class='st'>"mFD"</span><span class='op'>)</span>
+<span class='co'># Remove fuzzy traits in this tutorial:</span>
+<span class='va'>fruits_traits</span> <span class='op'>&lt;-</span> <span class='va'>fruits_traits</span><span class='op'>[</span> , <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span><span class='op'>:</span><span class='fl'>8</span><span class='op'>)</span><span class='op'>]</span>
+<span class='co'># Display the table:</span>
+<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>fruits_traits</span><span class='op'>)</span>,
+             caption <span class='op'>=</span> <span class='st'>"Species x traits data frame"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<caption><span id="tab:unnamed-chunk-2">Table 1: </span>Species x traits data frame</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Size</th>
+<th style="text-align: left;">Plant</th>
+<th style="text-align: left;">Climate</th>
+<th style="text-align: left;">Seed</th>
+<th style="text-align: right;">Sugar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">apple</td>
+<td style="text-align: left;">5-10cm</td>
+<td style="text-align: left;">tree</td>
+<td style="text-align: left;">temperate</td>
+<td style="text-align: left;">pip</td>
+<td style="text-align: right;">103.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">apricot</td>
+<td style="text-align: left;">3-5cm</td>
+<td style="text-align: left;">tree</td>
+<td style="text-align: left;">temperate</td>
+<td style="text-align: left;">pit</td>
+<td style="text-align: right;">92.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">banana</td>
+<td style="text-align: left;">10-20cm</td>
+<td style="text-align: left;">tree</td>
+<td style="text-align: left;">tropical</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: right;">122.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">currant</td>
+<td style="text-align: left;">0-1cm</td>
+<td style="text-align: left;">shrub</td>
+<td style="text-align: left;">temperate</td>
+<td style="text-align: left;">pip</td>
+<td style="text-align: right;">73.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blackberry</td>
+<td style="text-align: left;">1-3cm</td>
+<td style="text-align: left;">shrub</td>
+<td style="text-align: left;">temperate</td>
+<td style="text-align: left;">pip</td>
+<td style="text-align: right;">48.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blueberry</td>
+<td style="text-align: left;">0-1cm</td>
+<td style="text-align: left;">forb</td>
+<td style="text-align: left;">temperate</td>
+<td style="text-align: left;">pip</td>
+<td style="text-align: right;">100.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br /></p>
+<ul>
+<li>a <strong>matrix</strong> summarizing species assemblages called <code>baskets_fruits_weights</code> in this tutorial. Weights in this matrix can be occurrence data, abundance, biomass, coverage, etc. The studied example works with biomass (<em>i.e.</em> grams of a fruit in a basket) and this matrix looks as follows:</li>
+</ul>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Load data:</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"baskets_fruits_weights"</span>, package <span class='op'>=</span> <span class='st'>"mFD"</span><span class='op'>)</span>
+<span class='co'># Display the table:</span>
+<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>baskets_fruits_weights</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>]</span><span class='op'>)</span>, 
+      centering <span class='op'>=</span> <span class='cn'>TRUE</span>,
+      caption <span class='op'>=</span> <span class='st'>"Species x assemblages matrix based on the **fruits** dataset"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<caption><span id="tab:unnamed-chunk-3">Table 2: </span>Species x assemblages matrix based on the <strong>fruits</strong> dataset</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">apple</th>
+<th style="text-align: right;">apricot</th>
+<th style="text-align: right;">banana</th>
+<th style="text-align: right;">currant</th>
+<th style="text-align: right;">blackberry</th>
+<th style="text-align: right;">blueberry</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">basket_1</td>
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">basket_2</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">basket_3</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">500</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">basket_4</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">basket_5</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">basket_6</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h2 id="questions">Questions</h2>
-<p>…</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>Using this Practice, we ask the following questions:</p>
+<ul>
+<li>How different are the fruits baskets based on their functional traits?</li>
+<li>Question functional rarity</li>
+<li>Question funbiogeo</li>
+</ul>
+<p>To answer these three questions, the first step is to <strong>build a functional space based on species traits</strong> on which functional diversity and functional rarity indices will be then computed.</p>
+<h2 id="part-1---build-a-functional-space-using-the-mfd-package">Part 1 - Build a functional space using the <code>mFD</code> package</h2>
+<h3 id="what-about-the-traits">1.1 - What about the traits?</h3>
+<p>The first thing to do before starting analyses is to know your data. To do so, you must be able to characterize the traits you are using (<em>i.e.</em> tell the package what type of traits you are using). That is why <code>mFD</code> package needs a data frame summarizing the type of each trait (<em>i.e.</em> each column of the <code>fruits_traits</code> data frame).</p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Load data:</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"fruits_traits_cat"</span>, package <span class='op'>=</span> <span class='st'>"mFD"</span><span class='op'>)</span>
+
+<span class='co'># Remove fuzzy traits in this tutorial:</span>
+<span class='va'>fruits_traits_cat</span> <span class='op'>&lt;-</span> <span class='va'>fruits_traits_cat</span><span class='op'>[</span><span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span><span class='op'>:</span><span class='fl'>8</span><span class='op'>)</span>, <span class='op'>]</span>
+<span class='co'># Thus remove the "fuzzy_name" column:</span>
+<span class='va'>fruits_traits_cat</span> <span class='op'>&lt;-</span> <span class='va'>fruits_traits_cat</span><span class='op'>[</span> , <span class='op'>-</span><span class='fl'>3</span><span class='op'>]</span>
+
+<span class='co'># Display the table:</span>
+<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>fruits_traits_cat</span><span class='op'>)</span>, 
+             caption <span class='op'>=</span> <span class='st'>"Traits types based on **fruits &amp; baskets** dataset"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 3: </span>Traits types based on <strong>fruits &amp; baskets</strong> dataset</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">trait_name</th>
+<th style="text-align: left;">trait_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Size</td>
+<td style="text-align: left;">O</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Plant</td>
+<td style="text-align: left;">N</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Climate</td>
+<td style="text-align: left;">O</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Seed</td>
+<td style="text-align: left;">O</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sugar</td>
+<td style="text-align: left;">Q</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <strong>first column</strong> contains <strong>traits name</strong>. The <strong>second column</strong> contains <strong>traits type</strong> following this code:</p>
+<ul>
+<li><strong>N</strong>: nominal trait (factor variable)</li>
+<li><strong>O</strong>: ordinal traits (ordered variable)</li>
+<li><strong>C</strong>: circular traits (integer values) (<strong>NB</strong> circular traits can not be used in <code>mFD</code> function used to compute functional distance but ok for summary function and function to group species into Functional Entities)</li>
+<li><strong>Q</strong>: quantitative traits (numeric values)</li>
+<li><strong>F</strong>: fuzzy traits (described with several values defined in several columns in the <code>fruits_traits</code> data frame)</li>
+</ul>
+<h3 id="computing-distances-between-species-based-on-functional-traits">1.2 - Computing distances between species based on functional traits</h3>
+<p>The next step toward the computation of functional diversity indices is to estimate functional traits-based distances between species in order to build the functional space in which indices will be computed.</p>
+<p>To compute trait-based distances, we will use the <code>mFD::funct.dist()</code> function which includes the following arguments:</p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_dist_fruits</span> <span class='op'>&lt;-</span> <span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/funct.dist.html'>funct.dist</a></span><span class='op'>(</span>
+  sp_tr         <span class='op'>=</span> <span class='va'>fruits_traits</span>,
+  tr_cat        <span class='op'>=</span> <span class='va'>fruits_traits_cat</span>,
+  metric        <span class='op'>=</span> <span class='st'>"gower"</span>,
+  scale_euclid  <span class='op'>=</span> <span class='st'>"scale_center"</span>,
+  ordinal_var   <span class='op'>=</span> <span class='st'>"classic"</span>,
+  weight_type   <span class='op'>=</span> <span class='st'>"equal"</span>,
+  stop_if_NA    <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>sp_tr</code> is the species x trait data frame</p></li>
+<li><p><code>tr_cat</code> is the data frame summarizing trait type for each trait</p></li>
+<li><p><code>metric</code> is a character string referring to the metric used to compute distances. Two metrics are available and <strong>the choice depends on your traits data</strong>:</p>
+<ul>
+<li><p>if <strong>all traits are continuous</strong> use the <strong>Euclidean distance</strong> (<code>metric = "euclidean"</code>) and check the <a href="https://cmlmagneville.github.io/mFD/articles/Continuous_traits_framework.html">Compute Functional Diversity Indices based on Only Continuous Traits</a> tutorial which explains how to build a multidimensional space from traits through PCA analysis or considering directly each trait as a dimension.</p></li>
+<li><p>if you have <strong>non-continuous traits</strong> use the <strong>Gower distance</strong> (<code>metric = "gower"</code>) as this method allows traits weighting. This method can also deal with fuzzy traits.</p></li>
+</ul></li>
+<li><p><code>scale_euclid</code> is a character string referring to the way the user wants to scale <strong>euclidean</strong> traits. You can either chose to scale by range <code>range</code>, use the center transformation <code>center</code>, use the scale transformation <code>scale</code>, use the scale-center transformation <code>scale_center</code> or you can chose not to scale <code>noscale</code>.</p></li>
+<li><p><code>ordinal_var</code> is a character string specifying the method to be used for ordinal variables (<em>i.e.</em> ordered). You can either chose to treat ordinal variables as continuous variables (with <code>"classic"</code> option) or to treat ordinal variables as ranks (with <code>metric</code> or <code>podani</code> options, see <code>mFD::funct.dist()</code> help file for details).</p></li>
+<li><p><code>weight_type</code> is a character string referring to the type of method to weight traits. You can either chose to define weights using the <code>tr_cat</code> dataframe (cf <strong>step 1.1</strong>) (<code>user</code> option) or you can chose to give the same weight to all traits (<code>equal</code> option). (<strong>NB</strong> Using <code>mFD</code>, you can not define weights for fuzzy traits, use <a href="https://cran.r-project.org/package=gawdis"><code>gawdis</code></a> package instead)</p></li>
+<li><p><code>stop_if_NA</code> is a logical value to stop or not the process if the <code>sp_tr</code> data frame contains NA. If the <code>sp_tr</code> data frame contains <code>NA</code> you can either chose to compute anyway functional distances (but keep in mind that <strong>Functional measures are sensitive to missing traits!</strong>) or you can delete species with missing or extrapolate missing traits (see <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.13185">Johnson <em>et al.</em> (2020)</a>).</p></li>
+</ul>
+<p>This function returns a <code>dist</code> object with traits-based distances between all pairs of species:</p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>sp_dist_fruits</span>, <span class='fl'>3</span><span class='op'>)</span>                 <span class='co'># Output of the function mFD::funct.dist()</span>
+</code></pre>
+</div>
+<pre><code>              apple apricot banana currant blackberry blueberry
+apricot       0.166                                            
+banana        0.375   0.541                                    
+currant       0.391   0.426  0.767                             
+blackberry    0.376   0.410  0.751   0.084                     
+blueberry     0.355   0.410  0.731   0.236      0.320          
+cherry        0.233   0.099  0.558   0.425      0.409     0.389
+grape         0.380   0.446  0.705   0.372      0.356     0.336
+grapefruit    0.192   0.327  0.268   0.501      0.483     0.537
+kiwifruit     0.219   0.353  0.595   0.372      0.356     0.364
+lemon         0.208   0.343  0.384   0.517      0.433     0.553
+lime          0.370   0.404  0.345   0.578      0.494     0.614
+litchi        0.466   0.332  0.391   0.658      0.642     0.622
+mango         0.395   0.361  0.220   0.786      0.771     0.750
+melon         0.285   0.419  0.560   0.407      0.391     0.229
+orange        0.117   0.251  0.292   0.474      0.459     0.462
+passion_fruit 0.461   0.527  0.414   0.553      0.537     0.516
+peach         0.127   0.062  0.503   0.464      0.448     0.472
+pear          0.009   0.157  0.384   0.383      0.367     0.353
+pineapple     0.557   0.708  0.233   0.734      0.718     0.502
+plum          0.156   0.009  0.532   0.435      0.419     0.401
+raspberry     0.382   0.416  0.758   0.091      0.007     0.327
+strawberry    0.376   0.410  0.751   0.284      0.200     0.120
+tangerine     0.153   0.218  0.323   0.444      0.428     0.408
+water_melon   0.281   0.415  0.556   0.410      0.395     0.226
+              cherry grape grapefruit kiwifruit lemon  lime litchi
+apricot                                                           
+banana                                                            
+currant                                                           
+blackberry                                                        
+blueberry                                                         
+cherry                                                            
+grape          0.347                                              
+grapefruit     0.426 0.573                                        
+kiwifruit      0.453 0.200      0.373                             
+lemon          0.442 0.589      0.116     0.389                   
+lime           0.503 0.650      0.277     0.550 0.161             
+litchi         0.233 0.514      0.459     0.686 0.475 0.336       
+mango          0.362 0.686      0.287     0.614 0.403 0.364  0.172
+melon          0.518 0.465      0.308     0.266 0.424 0.585  0.751
+orange         0.351 0.498      0.075     0.302 0.091 0.252  0.384
+passion_fruit  0.572 0.319      0.453     0.280 0.470 0.331  0.405
+peach          0.161 0.508      0.265     0.308 0.281 0.442  0.394
+pear           0.242 0.389      0.184     0.210 0.200 0.361  0.475
+pineapple      0.791 0.738      0.435     0.562 0.551 0.512  0.624
+plum           0.090 0.437      0.336     0.363 0.352 0.413  0.323
+raspberry      0.416 0.363      0.490     0.363 0.426 0.487  0.649
+strawberry     0.409 0.356      0.483     0.356 0.433 0.494  0.642
+tangerine      0.281 0.428      0.145     0.372 0.161 0.222  0.314
+water_melon    0.515 0.462      0.311     0.262 0.427 0.588  0.748
+              mango melon orange passion_fruit peach  pear pineapple
+apricot                                                             
+banana                                                              
+currant                                                             
+blackberry                                                          
+blueberry                                                           
+cherry                                                              
+grape                                                               
+grapefruit                                                          
+kiwifruit                                                           
+lemon                                                               
+lime                                                                
+litchi                                                              
+mango                                                               
+melon         0.580                                                 
+orange        0.312 0.368                                           
+passion_fruit 0.434 0.546  0.378                                    
+peach         0.322 0.357  0.210         0.589                      
+pear          0.404 0.276  0.108         0.470 0.119                
+pineapple     0.452 0.327  0.460         0.419 0.670 0.551          
+plum          0.351 0.428  0.261         0.518 0.071 0.152     0.701
+raspberry     0.777 0.398  0.465         0.543 0.455 0.373     0.725
+strawberry    0.770 0.191  0.458         0.537 0.448 0.367     0.518
+tangerine     0.342 0.437  0.070         0.309 0.280 0.161     0.510
+water_melon   0.576 0.004  0.364         0.542 0.354 0.272     0.324
+               plum raspberry strawberry tangerine
+apricot                                           
+banana                                            
+currant                                           
+blackberry                                        
+blueberry                                         
+cherry                                            
+grape                                             
+grapefruit                                        
+kiwifruit                                         
+lemon                                             
+lime                                              
+litchi                                            
+mango                                             
+melon                                             
+orange                                            
+passion_fruit                                     
+peach                                             
+pear                                              
+pineapple                                         
+plum                                              
+raspberry     0.426                               
+strawberry    0.419     0.207                     
+tangerine     0.209     0.435      0.428          
+water_melon   0.425     0.401      0.194     0.434</code></pre>
+</div>
+<h3 id="building-functional-spaces-and-chosing-the-best-one">1.3 - Building functional spaces and chosing the best one</h3>
+<h4 id="computing-several-multimensional-functional-spaces-and-assessing-their-quality">1.3.1 - Computing several multimensional functional spaces and assessing their quality</h4>
+<p>In order to generate a multidimensional space in which functional diversity indices are computed (<a href="https://www.sciencedirect.com/science/article/pii/S0169534712002650">Mouillot <em>et al.</em> 2013</a>, we will perform a PCoA using the trait-based distances (and if required a functional dendrogram). <code>mFD</code> evaluates the quality of PCoA-based multidimensional spaces according to the deviation between trait-based distances and distances in the functional space (extension of <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12299">Maire <em>et al.</em> (2015)</a> framework). For that, we will use the <code>mFD::quality.fspaces()</code> function:</p>
+<p><br /></p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fspaces_quality_fruits</span> <span class='op'>&lt;-</span> <span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/quality.fspaces.html'>quality.fspaces</a></span><span class='op'>(</span>
+  sp_dist             <span class='op'>=</span> <span class='va'>sp_dist_fruits</span>,
+  maxdim_pcoa         <span class='op'>=</span> <span class='fl'>10</span>,
+  deviation_weighting <span class='op'>=</span> <span class='st'>"absolute"</span>,
+  fdist_scaling       <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  fdendro             <span class='op'>=</span> <span class='st'>"average"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>sp_dist</code> is the <code>dist</code> object with pairwise trait-based distance between species as computed in <strong>step 3</strong></p></li>
+<li><p><code>maxdim_pcoa</code> is the maximum number of PCoA axes to consider to build multidimensional spaces. Actually, the maximum number of dimensions considered depends on the number of PCoA axes with positive eigenvalues.</p></li>
+<li><p><code>deviation_weighting</code> refers to the method(s) used to weight the difference between species pairwise distances in the functional space and trait-based distances. <strong>You can chose between</strong>:</p>
+<ul>
+<li><code>absolute</code>: absolute differences are used to compute the <strong>mean absolute deviation (mad)</strong> . It reflects the actual magnitude of errors that will affect FD metrics.</li>
+<li><code>squared</code>: squared differences are used to compute the <strong>root of mean square deviation (rmsd)</strong>. This weighting puts more weight to the large deviations between trait-based distances and distances in the functional space. misplaced in the functional space.</li>
+<li>Both quality metrics can be used with <code>deviation_weighting = c("absolute", "squared")</code>.</li>
+</ul></li>
+<li><p><code>fdist_scaling</code> specifies whether distances in the functional space should be scaled before computing differences with trait-based distances. Scaling ensures that trait-based distances and distances in the functional space have the same maximum. Scaling distances implies that the quality of the functional space accounts for congruence in distances rather than their equality.</p></li>
+</ul>
+<p><strong>NOTE</strong> The combination of <code>deviation_weighting</code> and <code>fdist_scaling</code> arguments leads to <strong>four possible quality metrics</strong>: <code>mad</code>, <code>rmsd</code>, <code>mad_scaled</code> and <code>rmsd_scaled</code></p>
+<ul>
+<li><code>fdendro</code> specifies the clustering algorithm to compute a functional dendrogram. <code>NULL</code> means no dendrogram computed. The chosen algorithm must be one of the method recognized by the <code>stats::hclust()</code> function from the <a href="https://www.rdocumentation.org/packages/stats"><code>stats</code></a> package.</li>
+</ul>
+<p>This function returns a list various objects:</p>
+<p><br /></p>
+<ul>
+<li>a data frame gathering for each space (in rows), values of quality metric(s) (in columns)</li>
+</ul>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>fspaces_quality_fruits</span><span class='op'>$</span><span class='st'>"quality_fspaces"</span>, <span class='fl'>3</span><span class='op'>)</span>            <span class='co'># Quality metrics of spaces</span>
+</code></pre>
+</div>
+<pre><code>               mad
+pcoa_1d      0.150
+pcoa_2d      0.073
+pcoa_3d      0.047
+pcoa_4d      0.040
+pcoa_5d      0.049
+pcoa_6d      0.055
+pcoa_7d      0.060
+pcoa_8d      0.064
+pcoa_9d      0.065
+pcoa_10d     0.065
+tree_average 0.082</code></pre>
+</div>
+<p><br /></p>
+<ul>
+<li>lists with details required for other tasks in <strong>step 4</strong> to plot functional space quality and in <strong>step 5</strong> to plot functional space.</li>
+</ul>
+<p><br /></p>
+<p><strong>NOTE</strong> The space with the best quality has the lowest quality metric. Here, thanks to mad values, we can see that the 4D space is the best one. That is why the following of this Practice will use this multidimensional space.</p>
+<h4 id="illustrating-the-quality-of-the-functional-spaces">1.3.2 - Illustrating the quality of the functional spaces</h4>
+<p>With the <code>mFD</code> package, it is possible to illustrate the quality of PCoA-based multidimensional spaces according to deviation between trait-based distances and distances in the functional space. For that, we use the <code>mFD::quality.fspace.plot()</code> function with the following arguments:</p>
+<p><br /></p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/quality.fspaces.plot.html'>quality.fspaces.plot</a></span><span class='op'>(</span>
+  fspaces_quality            <span class='op'>=</span> <span class='va'>fspaces_quality_fruits</span>,
+  quality_metric             <span class='op'>=</span> <span class='st'>"mad"</span>,
+  fspaces_plot               <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tree_average"</span>, <span class='st'>"pcoa_2d"</span>, <span class='st'>"pcoa_3d"</span>, 
+                                 <span class='st'>"pcoa_4d"</span>, <span class='st'>"pcoa_5d"</span>, <span class='st'>"pcoa_6d"</span><span class='op'>)</span>,
+  name_file                  <span class='op'>=</span> <span class='cn'>NULL</span>,
+  range_dist                 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  range_dev                  <span class='op'>=</span> <span class='cn'>NULL</span>,
+  range_qdev                 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gradient_deviation         <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>neg <span class='op'>=</span> <span class='st'>"darkblue"</span>, nul <span class='op'>=</span> <span class='st'>"grey80"</span>, pos <span class='op'>=</span> <span class='st'>"darkred"</span><span class='op'>)</span>,
+  gradient_deviation_quality <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"yellow"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,
+  x_lab                      <span class='op'>=</span> <span class='st'>"Trait-based distance"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>fspaces_quality</code> is the output of the <code>mFD::quality.fspaces()</code> function (<strong>step 4.1</strong>).</p></li>
+<li><p><code>quality_metric</code> refers to the quality metric used. It should be one of the column name(s) of the table gathering quality metric values (output of <code>mFD::quality.fspaces()</code> called <code>quality_fspaces</code>) (here: <code>fspaces_quality_fruits$quality_fspaces</code>) Thus it can be: <code>mad</code>, <code>rmsd</code>, <code>mad_scaled</code> or <code>rmsd_scaled</code> (see <strong>step 4.1</strong>)</p></li>
+<li><p><code>fspaces_plot</code> refers to the names of spaces for which quality has to be illustrated (up to 10). Names are those used in the output of <code>mFD::quality.fspaces()</code> function showing the values of the quality metric.</p></li>
+<li><p><code>name_file</code> refers to the name of file to save (without extension) if the user wants to save the figure. If the user only wants the plot to be displayed, then <code>name_file = NULL</code>.</p></li>
+<li><p><code>range_dist</code>, <code>range_dev</code>, <code>range_qdev</code> are arguments to set ranges of panel axes (check function help for further information).</p></li>
+<li><p><code>gradient_deviation</code> and <code>gradient_deviation_quality</code> are arguments to set points colors (check function help for further information).</p></li>
+<li><p><code>xlab</code> is a parameter to set x-axis label.</p></li>
+</ul>
+<p><br /></p>
+<p>This function generates a figure with three panels (in rows) for each selected functional space (in columns). Each column represents a functional space, the value of the quality metric is written on the top of each column. The x-axis of all panels represents trait-based distances. The y-axis is different for each row:</p>
+<ul>
+<li>on the first (top) row, the y-axis represents species functional distances in the multidimensional space. Thus, the closer species are to the 1:1 line, the better distances in the functional space fit trait-based ones.</li>
+<li>on the second row, the y-axis shows the raw deviation of species distances in the functional space compared to trait-based distances. Thus, the raw deviation reflects the distance to the 1:1 line.</li>
+<li>on the third row, the y-axis shows the absolute or squared deviation of the (“scaled”) distance in the functional space. It is the deviation that is taken into account for computing the quality metric.</li>
+</ul>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/quality.fspaces.plot.html'>quality.fspaces.plot</a></span><span class='op'>(</span>
+  fspaces_quality            <span class='op'>=</span> <span class='va'>fspaces_quality_fruits</span>,
+  quality_metric             <span class='op'>=</span> <span class='st'>"mad"</span>,
+  fspaces_plot               <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tree_average"</span>, <span class='st'>"pcoa_2d"</span>, <span class='st'>"pcoa_3d"</span>,
+                                 <span class='st'>"pcoa_4d"</span>, <span class='st'>"pcoa_5d"</span>, <span class='st'>"pcoa_6d"</span><span class='op'>)</span>,
+  name_file                  <span class='op'>=</span> <span class='cn'>NULL</span>,
+  range_dist                 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  range_dev                  <span class='op'>=</span> <span class='cn'>NULL</span>,
+  range_qdev                 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gradient_deviation         <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>neg <span class='op'>=</span> <span class='st'>"darkblue"</span>, nul <span class='op'>=</span> <span class='st'>"grey80"</span>, pos <span class='op'>=</span> <span class='st'>"darkred"</span><span class='op'>)</span>,
+  gradient_deviation_quality <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>low <span class='op'>=</span> <span class='st'>"yellow"</span>, high <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,
+  x_lab                      <span class='op'>=</span> <span class='st'>"Trait-based distance"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="practice_files/figure-html5/unnamed-chunk-10-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<p><br /></p>
+<p>For the 2D space, on the top row there are a lot of points below the 1:1 lines, meaning that distances are overestimated in this multidimensional space. Looking at panels, we can see that the 4D space is the one in which points are the closest to the 1:1 line on the top row,and the closest to the x-axis for the two bottom rows, which reflects a better quality compared to other functional spaces / dendrogram. For the dendrogram, we can see on the top row that species pairs arrange in horizontal lines, meaning that different trait-based distances have then the same cophenetic distance on the dendrogram.</p>
+<h4 id="testing-the-correlation-between-functional-axes-and-traits">1.3.3 -Testing the correlation between functional axes and traits</h4>
+<p><br /></p>
+<p><code>mFD</code> allows to test for correlations between traits and functional axes and then illustrate possible correlations (continuous traits = linear model is computed and r2 and associated p-value are returned ; non-continuous traits = Kruskal-Wallis test is computed and eta2 statistic is returned). The function <code>mFD::traits.faxes.cor()</code> allows to test and plot correlation and needs the following arguments:</p>
+<ul>
+<li><code>sp_tr</code> is the species x traits data frame</li>
+<li><code>sp_faxes_coord</code> is a matrix of species coordinates taken from the outputs of the <code>mFD::quality.fspaces()</code> function <strong>with columns representing axes on which functional space must be computed</strong>. For instance, in this tutorial, we will plot the functional space for 4 and 10 dimensions (<em>cf.</em> the two examples below). The whole <code>sp_faxes_coord</code> can be retrieved through the output of the <code>mFD::quality.fspaces()</code> function:</li>
+</ul>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_faxes_coord_fruits</span> <span class='op'>&lt;-</span> <span class='va'>fspaces_quality_fruits</span><span class='op'>$</span><span class='st'>"details_fspaces"</span><span class='op'>$</span><span class='st'>"sp_pc_coord"</span>
+</code></pre>
+</div>
+</div>
+<ul>
+<li><code>plot</code> is a logical value indicating whether correlations should be illustrated or not. If this option is set to <code>TRUE</code>, traits-axis relationships are plotted through scatterplot for continuous traits and boxplot for non-continuous traits.</li>
+</ul>
+<p><code>mFD::traits.faxes.cor</code> works as follows:</p>
+<p><br /></p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fruits_tr_faxes</span> <span class='op'>&lt;-</span> <span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/traits.faxes.cor.html'>traits.faxes.cor</a></span><span class='op'>(</span>
+  sp_tr          <span class='op'>=</span> <span class='va'>fruits_traits</span>, 
+  sp_faxes_coord <span class='op'>=</span> <span class='va'>sp_faxes_coord_fruits</span><span class='op'>[</span> , <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PC1"</span>, <span class='st'>"PC2"</span>, <span class='st'>"PC3"</span>, <span class='st'>"PC4"</span><span class='op'>)</span><span class='op'>]</span>, 
+  plot           <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>We can print only traits with significant effect on position along one of the axis and look at the plots:</p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Print traits with significant effect:</span>
+<span class='va'>fruits_tr_faxes</span><span class='op'>$</span><span class='st'>"tr_faxes_stat"</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>fruits_tr_faxes</span><span class='op'>$</span><span class='st'>"tr_faxes_stat"</span><span class='op'>$</span><span class='st'>"p.value"</span> <span class='op'>&lt;</span> <span class='fl'>0.05</span><span class='op'>)</span>, <span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code>     trait axis           test stat value p.value
+1     Size  PC1 Kruskal-Wallis eta2 0.308  0.0377
+3     Size  PC3 Kruskal-Wallis eta2 0.326  0.0325
+5    Plant  PC1 Kruskal-Wallis eta2 0.471  0.0049
+6    Plant  PC2 Kruskal-Wallis eta2 0.382  0.0116
+8    Plant  PC4 Kruskal-Wallis eta2 0.264  0.0360
+9  Climate  PC1 Kruskal-Wallis eta2 0.731  0.0001
+13    Seed  PC1 Kruskal-Wallis eta2 0.201  0.0402
+14    Seed  PC2 Kruskal-Wallis eta2 0.593  0.0005
+20   Sugar  PC4   Linear Model   r2 0.682  0.0000</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Return plots:</span>
+<span class='va'>fruits_tr_faxes</span><span class='op'>$</span><span class='st'>"tr_faxes_plot"</span>
+</code></pre>
+</div>
+<p><img src="practice_files/figure-html5/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<p><br /></p>
+<p>We can thus see that <strong>PC1</strong> is mostly driven by <em>Climate</em> (temperate on the left and tropical on the right) and <em>Plant Type</em> (forb &amp; shrub on the left vs tree &amp; vine on the right) and <em>Size</em> (large fruits on the right) with weaker influence of <em>Seed</em> (eta2 &lt; 0.25). Then, <strong>PC2</strong> is mostly driven by <em>Seed</em> (no seed on the left and pit seed on the right) with weaker influence of <em>Plant Type</em>. <strong>PC3</strong> is driven by only one trait, <em>Size</em>. And finally <strong>PC4</strong> is mostly driven by <em>Sugar</em> (high sugar content on the right and low sugar content on the left) with a weaker influence of <em>Plant Type</em>.</p>
+<p><br /></p>
+<h3 id="plotting-the-selected-functional-space-and-position-of-species">1.4 - Plotting the selected functional space and position of species</h3>
+<p>Once the user has selected the dimensionality of the functional space, <code>mFD</code> allows you to plot the given multidimensional functional space and the position of species in all 2-dimensions spaces made by pairs of axes.</p>
+<p><br /></p>
+<p>The <code>mFD::funct.space.plot()</code> function allows to illustrate the position of all species along pairs of space axes.</p>
+<p><br /></p>
+<p>This function allows to plot with many possibilities to change colors/shapes of each plotted element. Here are listed the main arguments:</p>
+<ul>
+<li><code>sp_faxes_coord</code> is a matrix of species coordinates taken from the outputs of the <code>mFD::quality.fspaces()</code> function <strong>with columns representing axes on which functional space must be computed</strong>. For instance, in this tutorial, we will plot the functional space for 4 and 10 dimensions (<em>cf.</em> the two examples below). The whole <code>sp_faxes_coord</code> can be retrieved through the output of the <code>mFD::quality.fspaces()</code> function:</li>
+</ul>
+<p><br /></p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_faxes_coord_fruits</span> <span class='op'>&lt;-</span> <span class='va'>fspaces_quality_fruits</span><span class='op'>$</span><span class='st'>"details_fspaces"</span><span class='op'>$</span><span class='st'>"sp_pc_coord"</span>
+</code></pre>
+</div>
+</div>
+<p><br /></p>
+<ul>
+<li><p><code>faxes</code> is a vector containing names of axes to plot. If set to <code>NULL</code>, the first four functional axes will be plotted.</p></li>
+<li><p><code>faxes_nm</code> is a vector containing labels of <code>faxes</code> (following faxes vector rank). If <code>NULL</code>, labels follow <code>faxes</code> vector names.</p></li>
+<li><p><code>range_faxes</code> is a vector to complete if the user wants to set specific limits for functional axes. If <code>range_faxes = c(NA, NA)</code>, the range is computed according to the range of values among all axes.</p></li>
+<li><p><code>plot_ch</code> is a logical value used to draw or not the 2D convex-hull filled by the global pool of species. Color, fill and opacity of the convex hull can be chosen through other inputs , please refer to the function’s help.</p></li>
+<li><p><code>plot_sp_nm</code> is a vector containing species names to plot. If <code>NULL</code>, no species names plotted. Name size, color and font can be chosen through other inputs, please refer to the function’s help.</p></li>
+<li><p><code>plot_vertices</code> is a logical value used to plot or not vertices with a different shape than other species. <strong>Be careful:</strong> these representations are 2D representations, thus vertices of the convex-hull in the n-multidimensional space can be close to the center of the hull projected in 2D. Color, fill, shape and size of vertices can be chosen through other inputs, please refer to the function’s help.</p></li>
+<li><p><code>color_bg</code> is a R color or an hexadecimal color code referring to the color of the background of the plot.</p></li>
+<li><p>other inputs are used to chose color, fill, size, and shape of species from the global pool, please refer to the function’s help.</p></li>
+<li><p><code>check_input</code> is a recurrent argument in the <code>mFD</code> package. It defines whether inputs should be checked before computation or not. Possible error messages will thus be more understandable for the user than R error messages (<strong>Recommendation:</strong> set it as <code>TRUE</code>).</p></li>
+</ul>
+<p><br /></p>
+<p>Here are the plots for the <em>fruits &amp; baskets</em> dataset for the <strong>first four PCoA axis</strong>:</p>
+<p><br /></p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>big_plot</span> <span class='op'>&lt;-</span> <span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/funct.space.plot.html'>funct.space.plot</a></span><span class='op'>(</span>
+  sp_faxes_coord  <span class='op'>=</span> <span class='va'>sp_faxes_coord_fruits</span><span class='op'>[</span> , <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PC1"</span>, <span class='st'>"PC2"</span>, <span class='st'>"PC3"</span>, <span class='st'>"PC4"</span><span class='op'>)</span><span class='op'>]</span>,
+  faxes           <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PC1"</span>, <span class='st'>"PC2"</span>, <span class='st'>"PC3"</span>, <span class='st'>"PC4"</span><span class='op'>)</span>,
+  name_file       <span class='op'>=</span> <span class='cn'>NULL</span>,
+  faxes_nm        <span class='op'>=</span> <span class='cn'>NULL</span>,
+  range_faxes     <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span>,
+  color_bg        <span class='op'>=</span> <span class='st'>"grey95"</span>,
+  color_pool      <span class='op'>=</span> <span class='st'>"darkgreen"</span>,
+  fill_pool       <span class='op'>=</span> <span class='st'>"white"</span>,
+  shape_pool      <span class='op'>=</span> <span class='fl'>21</span>,
+  size_pool       <span class='op'>=</span> <span class='fl'>1</span>,
+  plot_ch         <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  color_ch        <span class='op'>=</span> <span class='st'>"black"</span>,
+  fill_ch         <span class='op'>=</span> <span class='st'>"white"</span>,
+  alpha_ch        <span class='op'>=</span> <span class='fl'>0.5</span>,
+  plot_vertices   <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  color_vert      <span class='op'>=</span> <span class='st'>"blueviolet"</span>,
+  fill_vert       <span class='op'>=</span> <span class='st'>"blueviolet"</span>,
+  shape_vert      <span class='op'>=</span> <span class='fl'>23</span>,
+  size_vert       <span class='op'>=</span> <span class='fl'>1</span>,
+  plot_sp_nm      <span class='op'>=</span> <span class='cn'>NULL</span>,
+  nm_size         <span class='op'>=</span> <span class='fl'>3</span>,
+  nm_color        <span class='op'>=</span> <span class='st'>"black"</span>,
+  nm_fontface     <span class='op'>=</span> <span class='st'>"plain"</span>,
+  check_input     <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='va'>big_plot</span><span class='op'>$</span><span class='va'>patchwork</span>
+</code></pre>
+</div>
+<p><img src="practice_files/figure-html5/unnamed-chunk-15-1.png" width="624" /></p>
+</div>
+<p><br /></p>
+<p>Here, the convex-hull of the species pool is plotted in white and axis have the same range to get rid of bias based on different axis scales. Species being vertices of the 4D convex hull are in purple.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
