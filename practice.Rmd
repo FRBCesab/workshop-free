@@ -626,3 +626,34 @@ Here, the convex-hull of the species pool is plotted in white and axis have the
 same range to get rid of bias based on different axis scales. Species being
 vertices of the 4D convex hull are in purple.
 
+
+## Part 2 - Computing functional originality indices with `funrar`
+
+In this part we'll be using our built functional space to compute functional
+originality indices.
+
+SHORT EXPLANATION OF FUNCTIONAL ORIGINALITY + FIGURE + CITE SEMINAL PAPERS
+
+
+### Where are species distributed?
+
+Creating a (fake) site-species matrix for our dataset.
+
+
+### Different indices of functional originality
+
+Functional distinctiveness, functional uniqueness.
+
+
+### Computing functional originality
+
+Regional scale
+
+local scale
+
+
+### Plotting functional originality
+
+
+
+
