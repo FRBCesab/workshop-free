@@ -2107,6 +2107,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#questions">Questions</a></li>
 <li><a href="#part-1---build-a-functional-space-using-the-mfd-package">Part 1 - Build a functional space using the <code>mFD</code> package</a>
 <ul>
+<li><a href="#compute-summaries-about-your-data">1.0 Compute summaries about your data</a></li>
 <li><a href="#what-about-the-traits">1.1 - What about the traits?</a></li>
 <li><a href="#computing-distances-between-species-based-on-functional-traits">1.2 - Computing distances between species based on functional traits</a></li>
 <li><a href="#building-functional-spaces-and-chosing-the-best-one">1.3 - Building functional spaces and chosing the best one</a></li>
@@ -2115,6 +2116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#part-2---computing-and-plotting-fd-indices-using-the-mfd-package">Part 2 - Computing and plotting FD indices using the <code>mFD</code> package</a>
 <ul>
 <li><a href="#computing-and-plotting-alpha-fd-indices">2.1 - Computing and plotting alpha FD indices</a></li>
+<li><a href="#computing-and-plotting-beta-fd-indices">2.1 - Computing and plotting beta FD indices</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -2380,6 +2382,45 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </ul>
 <p>To answer these three questions, the first step is to <strong>build a functional space based on species traits</strong> on which functional diversity and functional rarity indices will be then computed.</p>
 <h2 id="part-1---build-a-functional-space-using-the-mfd-package">Part 1 - Build a functional space using the <code>mFD</code> package</h2>
+<h3 id="compute-summaries-about-your-data">1.0 Compute summaries about your data</h3>
+<p>This part is not developped in this Practice (not enough time to see everything ;) ), but it could be useful to knwo that the <code>mFD</code>package can compute summaries about your traits or assemblage data. For instance, you can compute a matrix of species occurrence in each assemblage (needed in Part 2.2):</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Summary of the assemblages * species dataframe:</span>
+<span class='va'>asb_sp_fruits_summ</span> <span class='op'>&lt;-</span> <span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/asb.sp.summary.html'>asb.sp.summary</a></span><span class='op'>(</span>asb_sp_w <span class='op'>=</span> <span class='va'>baskets_fruits_weights</span><span class='op'>)</span>
+<span class='va'>asb_sp_fruits_occ</span> <span class='op'>&lt;-</span> <span class='va'>asb_sp_fruits_summ</span><span class='op'>$</span><span class='st'>"asb_sp_occ"</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>asb_sp_fruits_occ</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>         apple apricot banana currant blackberry blueberry cherry
+basket_1     1       0      1       0          0         0      1
+basket_2     1       0      1       0          0         0      1
+basket_3     1       0      1       0          0         0      1
+basket_4     1       0      0       0          0         0      0
+basket_5     1       0      0       0          0         0      0
+basket_6     1       0      1       0          0         0      0
+         grape grapefruit kiwifruit lemon lime litchi mango melon
+basket_1     0          0         0     1    0      0     0     1
+basket_2     0          0         0     1    0      0     0     1
+basket_3     0          0         0     1    0      0     0     1
+basket_4     0          0         1     1    0      0     0     0
+basket_5     0          0         1     1    0      0     0     0
+basket_6     0          0         0     0    1      1     1     0
+         orange passion_fruit peach pear pineapple plum raspberry
+basket_1      0             1     0    1         0    0         0
+basket_2      0             1     0    1         0    0         0
+basket_3      0             1     0    1         0    0         0
+basket_4      1             0     1    1         0    1         0
+basket_5      1             0     1    1         0    1         0
+basket_6      1             0     0    0         1    0         0
+         strawberry tangerine water_melon
+basket_1          1         0           0
+basket_2          1         0           0
+basket_3          1         0           0
+basket_4          0         1           0
+basket_5          0         1           0
+basket_6          0         0           1</code></pre>
+</div>
 <h3 id="what-about-the-traits">1.1 - What about the traits?</h3>
 <p>The first thing to do before starting analyses is to know your data. To do so, you must be able to characterize the traits you are using (<em>i.e.</em> tell the package what type of traits you are using). That is why <code>mFD</code> package needs a data frame summarizing the type of each trait (<em>i.e.</em> each column of the <code>fruits_traits</code> data frame).</p>
 <em>Code</em>
@@ -2399,7 +2440,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </code></pre>
 </div>
 <table>
-<caption><span id="tab:unnamed-chunk-4">Table 3: </span>Traits types based on <strong>fruits &amp; baskets</strong> dataset</caption>
+<caption><span id="tab:unnamed-chunk-5">Table 3: </span>Traits types based on <strong>fruits &amp; baskets</strong> dataset</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">trait_name</th>
@@ -2691,7 +2732,7 @@ tree_average 0.082</code></pre>
   x_lab                      <span class='op'>=</span> <span class='st'>"Trait-based distance"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-10-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-11-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <p><br /></p>
 <p>For the 2D space, on the top row there are a lot of points below the 1:1 lines, meaning that distances are overestimated in this multidimensional space. Looking at panels, we can see that the 4D space is the one in which points are the closest to the 1:1 line on the top row,and the closest to the x-axis for the two bottom rows, which reflects a better quality compared to other functional spaces / dendrogram. For the dendrogram, we can see on the top row that species pairs arrange in horizontal lines, meaning that different trait-based distances have then the same cophenetic distance on the dendrogram.</p>
@@ -2747,7 +2788,7 @@ tree_average 0.082</code></pre>
 <span class='va'>fruits_tr_faxes</span><span class='op'>$</span><span class='st'>"tr_faxes_plot"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-14-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <p><br /></p>
 <p>We can thus see that <strong>PC1</strong> is mostly driven by <em>Climate</em> (temperate on the left and tropical on the right) and <em>Plant Type</em> (forb &amp; shrub on the left vs tree &amp; vine on the right) and <em>Size</em> (large fruits on the right) with weaker influence of <em>Seed</em> (eta2 &lt; 0.25). Then, <strong>PC2</strong> is mostly driven by <em>Seed</em> (no seed on the left and pit seed on the right) with weaker influence of <em>Plant Type</em>. <strong>PC3</strong> is driven by only one trait, <em>Size</em>. And finally <strong>PC4</strong> is mostly driven by <em>Sugar</em> (high sugar content on the right and low sugar content on the left) with a weaker influence of <em>Plant Type</em>.</p>
@@ -2816,7 +2857,7 @@ tree_average 0.082</code></pre>
 <span class='va'>big_plot</span><span class='op'>$</span><span class='va'>patchwork</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-15-1.png" width="624" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-16-1.png" width="624" /></p>
 </div>
 <p><br /></p>
 <p>Here, the convex-hull of the species pool is plotted in white and axis have the same range to get rid of bias based on different axis scales. Species being vertices of the 4D convex hull are in purple.</p>
@@ -2981,9 +3022,8 @@ basket_10 -0.05649324  0.041191011</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plots_alpha</span><span class='op'>$</span><span class='st'>"fric"</span><span class='op'>$</span><span class='st'>"patchwork"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-20-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-21-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
-<p><br /></p>
 <ul>
 <li><code>FDiv</code> representation: the gravity centers of <strong>vertices</strong> (i.e. species with the most extreme functional traits) of each assemblages are plotted as a square and a triangle. The two colored circles represent the mean distance of species to the gravity center for each assemblage. Species of each assemblage have different size given their relative weight into the assemblage.</li>
 </ul>
@@ -2993,9 +3033,8 @@ basket_10 -0.05649324  0.041191011</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plots_alpha</span><span class='op'>$</span><span class='st'>"fdiv"</span><span class='op'>$</span><span class='st'>"patchwork"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-21-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-22-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
-<p><br /></p>
 <ul>
 <li><code>FSpe</code> representation: colored traits represent distances of each species from a given assemblage to the center of gravity of the global pool (i.e center of the functional space). the center of gravity is plotted with a purple diamond. Species of each assemblage have different size given their relative weight into the assemblage.</li>
 </ul>
@@ -3005,9 +3044,8 @@ basket_10 -0.05649324  0.041191011</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plots_alpha</span><span class='op'>$</span><span class='st'>"fspe"</span><span class='op'>$</span><span class='st'>"patchwork"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-22-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-23-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
-<p><br /></p>
 <ul>
 <li><code>FDis</code> representation: colored traits represent distances of each species from a given assemblage to the center of gravity of species of the assemblage (defined by FIde values). The center of gravity of each assemblage is plotted using a square and a triangle. Species of each assemblage havedifferent size given their relative weight into the assemblage.</li>
 </ul>
@@ -3017,9 +3055,8 @@ basket_10 -0.05649324  0.041191011</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plots_alpha</span><span class='op'>$</span><span class='st'>"fdis"</span><span class='op'>$</span><span class='st'>"patchwork"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-23-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-24-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
-<p><br /></p>
 <ul>
 <li><code>FIde</code> representation:colored lines refer to the weighted average position of species of each assemblage along each axis. Species of each assemblage have different size given their relative weight into the assemblage.</li>
 </ul>
@@ -3029,9 +3066,8 @@ basket_10 -0.05649324  0.041191011</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plots_alpha</span><span class='op'>$</span><span class='st'>"fide"</span><span class='op'>$</span><span class='st'>"patchwork"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-24-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-25-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
-<p><br /></p>
 <ul>
 <li><code>FEve</code> representation: colored traits represent the Minimum Spanning Tree linking species of each assemblage. Species of each assemblage have different size given their relative weight into the assemblage.</li>
 </ul>
@@ -3041,9 +3077,8 @@ basket_10 -0.05649324  0.041191011</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plots_alpha</span><span class='op'>$</span><span class='st'>"feve"</span><span class='op'>$</span><span class='st'>"patchwork"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-25-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-26-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
-<p><br /></p>
 <ul>
 <li><code>FOri</code> representation: colored arrows represent the distances of each species from each assemblage to the nearest species in the global species pool. Species of each assemblage have different size given their relative weight into the assemblage.</li>
 </ul>
@@ -3053,7 +3088,7 @@ basket_10 -0.05649324  0.041191011</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plots_alpha</span><span class='op'>$</span><span class='st'>"fori"</span><span class='op'>$</span><span class='st'>"patchwork"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-26-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-27-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li><code>FNND</code> representation: colored arrows represent the distances of each species from each assemblage to the nearest species in the studied assemblage. Species of each assemblage have different size given their relative weight into the assemblage.</li>
@@ -3064,11 +3099,386 @@ basket_10 -0.05649324  0.041191011</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plots_alpha</span><span class='op'>$</span><span class='st'>"fnnd"</span><span class='op'>$</span><span class='st'>"patchwork"</span>
 </code></pre>
 </div>
-<p><img src="practice_files/figure-html5/unnamed-chunk-27-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="practice_files/figure-html5/unnamed-chunk-28-1.png" width="1920" style="display: block; margin: auto;" /></p>
+</div>
+<p><strong>Note</strong> Using the <code>mFD</code> package, you can plot more than two assemblages but not with the <code>alpha.multidim.plot()</code> function. There are several specific functions for each step of the plot: build the background of the plot (<code>background.plot()</code>), plot the pool of species you are working on (<code>pool.plot()</code>), plot species from the studied assemblages (<code>species.plot()</code>) function and lastly plot the wanted metric using related function (<code>fric.plot()</code>, <code>fdiv.plot()</code>, <code>fide.plot()</code>,<code>fdis.plot()</code>, <code>feve.plot()</code>, <code>fnnd.plot()</code>, <code>fori.plot()</code>, <code>fspe.plot()</code>). Plots for different axes combination can be gathered into a single plot using the <code>panels.to.patchwork()</code> function.</p>
+<h3 id="computing-and-plotting-beta-fd-indices">2.1 - Computing and plotting beta FD indices</h3>
+<p><strong>Note:</strong> Some Mac OS X 10.15 may encounter some issues with the beta_*() functions.</p>
+<p><code>mFD</code> package allows you to compute beta diversity indices for each assemblage pairs following <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12021">Villeger <em>et al.</em> 2013</a>. For that we will use the <code>mFD::beta.fd.multidim()</code> function. This function can compute two families of functional beta diversity indices, either <strong>Jaccard</strong> or <strong>Sorensen</strong>.</p>
+<p>In this example, we will use Jaccard index. For each assemblages pair, the dissimilarity index is decomposed into two additive components: <strong>turnover</strong> and <strong>nestedness-resultant</strong>.</p>
+<p><strong>NB</strong> The <strong>turnover</strong> component is the highest if there is no shared traits combination between the two assemblages. The <strong>nestedness</strong> component is the highest if one assemblage hosts a small subset of the functional strategies present in the other.</p>
+<p>The <code>mFD::beta.fd.multidim()</code> function has the main following arguments:</p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>beta_fd_indices_fruits</span> <span class='op'>&lt;-</span> <span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/beta.fd.multidim.html'>beta.fd.multidim</a></span><span class='op'>(</span>
+      sp_faxes_coord   <span class='op'>=</span> <span class='va'>sp_faxes_coord_fruits</span><span class='op'>[</span> , <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PC1"</span>, <span class='st'>"PC2"</span>, <span class='st'>"PC3"</span>, <span class='st'>"PC4"</span><span class='op'>)</span><span class='op'>]</span>,
+      asb_sp_occ       <span class='op'>=</span> <span class='va'>asb_sp_fruits_occ</span>,
+      check_input      <span class='op'>=</span> <span class='cn'>TRUE</span>,
+      beta_family      <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Jaccard"</span><span class='op'>)</span>,
+      details_returned <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>sp_faxes_coord</code> is the species coordinates matrix. This dataframe gathers <strong>only</strong> axis of the functional space you have chosen based on <strong>step 4</strong>.</p></li>
+<li><p><code>asb_sp_occ</code> is the matrix of occurrence (coded as 0/1) of species assemblages (summarized in <strong>step 1</strong>).</p></li>
+<li><p><code>check_input</code> is a recurrent argument in the <code>mFD</code> package. It defines whether inputs should be checked before computation or not. Possible error messages will thus be more understandable for the user than R error messages (<strong>Recommendation:</strong> set it as <code>TRUE</code>.</p></li>
+<li><p><code>beta_family</code> a character string for the type of beta-diversity index to compute, it can either be <code>Jaccard</code> or <code>Sorensen</code>.</p></li>
+<li><p><code>details_returned</code> is a logical value indicating whether details of outputs must be stored. It should be stored if you plan to use the graphical function to illustrate beta diversity indices thereafter.</p></li>
+<li><p>There are also other arguments for parallelisation options. Check the function help file for more explanation.</p></li>
+</ul>
+<p><br /></p>
+<p>The function returns a list containing:</p>
+<ul>
+<li>a dist object with beta indices values for each pair of assemblages:</li>
+</ul>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>beta_fd_indices_fruits</span><span class='op'>$</span><span class='st'>"pairasb_fbd_indices"</span>, <span class='fl'>10</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$jac_diss
+              basket_1     basket_2     basket_3     basket_4
+basket_2  0.000000e+00                                       
+basket_3  0.000000e+00 0.000000e+00                          
+basket_4  9.654002e-01 9.654002e-01 9.654002e-01             
+basket_5  9.654002e-01 9.654002e-01 9.654002e-01 2.071138e-15
+basket_6  8.701848e-01 8.701848e-01 8.701848e-01 9.972695e-01
+basket_7  8.701848e-01 8.701848e-01 8.701848e-01 9.972695e-01
+basket_8  9.797030e-01 9.797030e-01 9.797030e-01 1.000000e+00
+basket_9  9.797030e-01 9.797030e-01 9.797030e-01 1.000000e+00
+basket_10 9.151338e-01 9.151338e-01 9.151338e-01 9.303584e-01
+              basket_5     basket_6     basket_7     basket_8
+basket_2                                                     
+basket_3                                                     
+basket_4                                                     
+basket_5                                                     
+basket_6  9.972695e-01                                       
+basket_7  9.972695e-01 0.000000e+00                          
+basket_8  1.000000e+00 1.000000e+00 1.000000e+00             
+basket_9  1.000000e+00 1.000000e+00 1.000000e+00 0.000000e+00
+basket_10 9.303584e-01 9.983508e-01 9.983508e-01 9.702788e-01
+              basket_9
+basket_2              
+basket_3              
+basket_4              
+basket_5              
+basket_6              
+basket_7              
+basket_8              
+basket_9              
+basket_10 9.702788e-01
+
+$jac_turn
+              basket_1     basket_2     basket_3     basket_4
+basket_2  0.000000e+00                                       
+basket_3  0.000000e+00 0.000000e+00                          
+basket_4  4.320333e-01 4.320333e-01 4.320333e-01             
+basket_5  4.320333e-01 4.320333e-01 4.320333e-01 2.071138e-15
+basket_6  8.627528e-01 8.627528e-01 8.627528e-01 9.723344e-01
+basket_7  8.627528e-01 8.627528e-01 8.627528e-01 9.723344e-01
+basket_8  9.425331e-01 9.425331e-01 9.425331e-01 1.000000e+00
+basket_9  9.425331e-01 9.425331e-01 9.425331e-01 1.000000e+00
+basket_10 5.990146e-01 5.990146e-01 5.990146e-01 8.385233e-01
+              basket_5     basket_6     basket_7     basket_8
+basket_2                                                     
+basket_3                                                     
+basket_4                                                     
+basket_5                                                     
+basket_6  9.723344e-01                                       
+basket_7  9.723344e-01 0.000000e+00                          
+basket_8  1.000000e+00 1.000000e+00 1.000000e+00             
+basket_9  1.000000e+00 1.000000e+00 1.000000e+00 0.000000e+00
+basket_10 8.385233e-01 9.944208e-01 9.944208e-01 9.638833e-01
+              basket_9
+basket_2              
+basket_3              
+basket_4              
+basket_5              
+basket_6              
+basket_7              
+basket_8              
+basket_9              
+basket_10 9.638833e-01
+
+$jac_nest
+             basket_1    basket_2    basket_3    basket_4    basket_5
+basket_2  0.000000000                                                
+basket_3  0.000000000 0.000000000                                    
+basket_4  0.533366944 0.533366944 0.533366944                        
+basket_5  0.533366944 0.533366944 0.533366944 0.000000000            
+basket_6  0.007431956 0.007431956 0.007431956 0.024935183 0.024935183
+basket_7  0.007431956 0.007431956 0.007431956 0.024935183 0.024935183
+basket_8  0.037169839 0.037169839 0.037169839 0.000000000 0.000000000
+basket_9  0.037169839 0.037169839 0.037169839 0.000000000 0.000000000
+basket_10 0.316119149 0.316119149 0.316119149 0.091835053 0.091835053
+             basket_6    basket_7    basket_8    basket_9
+basket_2                                                 
+basket_3                                                 
+basket_4                                                 
+basket_5                                                 
+basket_6                                                 
+basket_7  0.000000000                                    
+basket_8  0.000000000 0.000000000                        
+basket_9  0.000000000 0.000000000 0.000000000            
+basket_10 0.003930032 0.003930032 0.006395544 0.006395544</code></pre>
+</div>
+<ul>
+<li>a list containing details such as inputs, vertices of the global pool and of each assemblage and FRic values for each assemblage</li>
+</ul>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>beta_fd_indices_fruits</span><span class='op'>$</span><span class='st'>"details"</span>
+</code></pre>
+</div>
+<pre><code>$inputs
+$inputs$sp_faxes_coord
+                        PC1           PC2          PC3          PC4
+apple          0.0055715265  0.0350421604 -0.097471237  0.022402932
+apricot        0.0051324906  0.1993950375 -0.095659935  0.041498534
+banana         0.4180172546 -0.1414728845  0.008086992  0.006165812
+currant       -0.3278449659  0.0536374098  0.049052945 -0.076408888
+blackberry    -0.3034346496  0.0526909897  0.049135314 -0.142658171
+blueberry     -0.2815708070 -0.0866665191  0.051316336  0.112502412
+cherry        -0.0180809780  0.2978695529 -0.029313202  0.111166444
+grape         -0.2228504050  0.0885963887  0.225751135  0.190718259
+grapefruit     0.1450603259 -0.0673074635 -0.119455606 -0.084037260
+kiwifruit     -0.1550698937 -0.0814958746  0.005740138  0.086787104
+lemon          0.1067949113  0.0007714157 -0.088895714 -0.207026513
+lime           0.2079695595  0.0199956576  0.099157708 -0.266782185
+litchi         0.2917434196  0.2537533311  0.202206065  0.041136776
+mango          0.4393412201  0.0559467870 -0.054626734  0.119804224
+melon         -0.1493941692 -0.2420723462 -0.151024241  0.070247222
+orange         0.1236282949 -0.0086604744 -0.050235439 -0.046156784
+passion_fruit  0.1101264243 -0.1062790540  0.342728218  0.031929461
+peach          0.0351203321  0.1465415655 -0.199699124  0.049647666
+pear          -0.0005886084  0.0297927029 -0.105703762  0.010290065
+pineapple      0.1991811945 -0.4756825960  0.075904777  0.042696533
+plum           0.0126064681  0.1989177835 -0.084010036  0.058965350
+raspberry     -0.3070933066  0.0543878274  0.049178225 -0.156730076
+strawberry    -0.2917242495 -0.0898440618  0.025237344 -0.047647147
+tangerine      0.1039035285  0.0526165085  0.041894666 -0.048619225
+water_melon   -0.1465449176 -0.2404738440 -0.149294834  0.080107453
+
+$inputs$asb_sp_occ
+          apple apricot banana currant blackberry blueberry cherry
+basket_1      1       0      1       0          0         0      1
+basket_2      1       0      1       0          0         0      1
+basket_3      1       0      1       0          0         0      1
+basket_4      1       0      0       0          0         0      0
+basket_5      1       0      0       0          0         0      0
+basket_6      1       0      1       0          0         0      0
+basket_7      1       0      1       0          0         0      0
+basket_8      0       0      0       1          1         1      1
+basket_9      0       0      0       1          1         1      1
+basket_10     1       1      0       0          0         0      0
+          grape grapefruit kiwifruit lemon lime litchi mango melon
+basket_1      0          0         0     1    0      0     0     1
+basket_2      0          0         0     1    0      0     0     1
+basket_3      0          0         0     1    0      0     0     1
+basket_4      0          0         1     1    0      0     0     0
+basket_5      0          0         1     1    0      0     0     0
+basket_6      0          0         0     0    1      1     1     0
+basket_7      0          0         0     0    1      1     1     0
+basket_8      1          0         0     1    0      0     0     0
+basket_9      1          0         0     1    0      0     0     0
+basket_10     1          1         0     0    0      0     0     1
+          orange passion_fruit peach pear pineapple plum raspberry
+basket_1       0             1     0    1         0    0         0
+basket_2       0             1     0    1         0    0         0
+basket_3       0             1     0    1         0    0         0
+basket_4       1             0     1    1         0    1         0
+basket_5       1             0     1    1         0    1         0
+basket_6       1             0     0    0         1    0         0
+basket_7       1             0     0    0         1    0         0
+basket_8       0             0     0    0         0    0         1
+basket_9       0             0     0    0         0    0         1
+basket_10      0             0     0    1         0    1         0
+          strawberry tangerine water_melon
+basket_1           1         0           0
+basket_2           1         0           0
+basket_3           1         0           0
+basket_4           0         1           0
+basket_5           0         1           0
+basket_6           0         0           1
+basket_7           0         0           1
+basket_8           1         0           0
+basket_9           1         0           0
+basket_10          1         0           0
+
+
+$pool_vertices
+ [1] &quot;grape&quot;         &quot;lemon&quot;         &quot;water_melon&quot;   &quot;banana&quot;       
+ [5] &quot;raspberry&quot;     &quot;cherry&quot;        &quot;blueberry&quot;     &quot;grapefruit&quot;   
+ [9] &quot;melon&quot;         &quot;strawberry&quot;    &quot;peach&quot;         &quot;apricot&quot;      
+[13] &quot;passion_fruit&quot; &quot;litchi&quot;        &quot;lime&quot;          &quot;pineapple&quot;    
+[17] &quot;mango&quot;         &quot;currant&quot;      
+
+$asb_FRic
+   basket_1    basket_2    basket_3    basket_4    basket_5 
+0.162830681 0.162830681 0.162830681 0.007880372 0.007880372 
+   basket_6    basket_7    basket_8    basket_9   basket_10 
+0.147936148 0.147936148 0.036480112 0.036480112 0.025774304 
+
+$asb_vertices
+$asb_vertices$basket_1
+[1] &quot;lemon&quot;         &quot;melon&quot;         &quot;pear&quot;          &quot;apple&quot;        
+[5] &quot;passion_fruit&quot; &quot;cherry&quot;        &quot;strawberry&quot;    &quot;banana&quot;       
+
+$asb_vertices$basket_2
+[1] &quot;lemon&quot;         &quot;melon&quot;         &quot;pear&quot;          &quot;apple&quot;        
+[5] &quot;passion_fruit&quot; &quot;cherry&quot;        &quot;strawberry&quot;    &quot;banana&quot;       
+
+$asb_vertices$basket_3
+[1] &quot;lemon&quot;         &quot;melon&quot;         &quot;pear&quot;          &quot;apple&quot;        
+[5] &quot;passion_fruit&quot; &quot;cherry&quot;        &quot;strawberry&quot;    &quot;banana&quot;       
+
+$asb_vertices$basket_4
+[1] &quot;peach&quot;     &quot;lemon&quot;     &quot;tangerine&quot; &quot;pear&quot;      &quot;plum&quot;     
+[6] &quot;orange&quot;    &quot;kiwifruit&quot;
+
+$asb_vertices$basket_5
+[1] &quot;peach&quot;     &quot;lemon&quot;     &quot;tangerine&quot; &quot;pear&quot;      &quot;plum&quot;     
+[6] &quot;orange&quot;    &quot;kiwifruit&quot;
+
+$asb_vertices$basket_6
+[1] &quot;litchi&quot;      &quot;lime&quot;        &quot;apple&quot;       &quot;banana&quot;     
+[5] &quot;orange&quot;      &quot;pineapple&quot;   &quot;mango&quot;       &quot;water_melon&quot;
+
+$asb_vertices$basket_7
+[1] &quot;litchi&quot;      &quot;lime&quot;        &quot;apple&quot;       &quot;banana&quot;     
+[5] &quot;orange&quot;      &quot;pineapple&quot;   &quot;mango&quot;       &quot;water_melon&quot;
+
+$asb_vertices$basket_8
+[1] &quot;strawberry&quot; &quot;blueberry&quot;  &quot;raspberry&quot;  &quot;cherry&quot;     &quot;grape&quot;     
+[6] &quot;lemon&quot;      &quot;currant&quot;   
+
+$asb_vertices$basket_9
+[1] &quot;strawberry&quot; &quot;blueberry&quot;  &quot;raspberry&quot;  &quot;cherry&quot;     &quot;grape&quot;     
+[6] &quot;lemon&quot;      &quot;currant&quot;   
+
+$asb_vertices$basket_10
+[1] &quot;grape&quot;      &quot;melon&quot;      &quot;plum&quot;       &quot;apricot&quot;    &quot;grapefruit&quot;
+[6] &quot;strawberry&quot;</code></pre>
+</div>
+<ul>
+<li>a vector containing the <code>FRic</code> value for each assemblage retrieved through the <code>details_beta</code> list:</li>
+</ul>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>beta_fd_indices_fruits</span><span class='op'>$</span><span class='st'>"details"</span><span class='op'>$</span><span class='st'>"asb_FRic"</span>
+</code></pre>
+</div>
+<pre><code>   basket_1    basket_2    basket_3    basket_4    basket_5 
+0.162830681 0.162830681 0.162830681 0.007880372 0.007880372 
+   basket_6    basket_7    basket_8    basket_9   basket_10 
+0.147936148 0.147936148 0.036480112 0.036480112 0.025774304 </code></pre>
 </div>
 <p><br /></p>
-<p><strong>Note</strong> Using the <code>mFD</code> package, you can plot more than two assemblages but not with the <code>alpha.multidim.plot()</code> function. There are several specific functions for each step of the plot: build the background of the plot (<code>background.plot()</code>), plot the pool of species you are working on (<code>pool.plot()</code>), plot species from the studied assemblages (<code>species.plot()</code>) function and lastly plot the wanted metric using related function (<code>fric.plot()</code>, <code>fdiv.plot()</code>, <code>fide.plot()</code>, <code>fdis.plot()</code>, <code>feve.plot()</code>, <code>fnnd.plot()</code>, <code>fori.plot()</code>, <code>fspe.plot()</code>). Plots for different axes combination can be gathered into a single plot using the <code>panels.to.patchwork()</code> function.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<ul>
+<li>a list of vectors containing names of species being vertices of the convex hull for each assemblage retrieved through the <code>details_beta</code> list:</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>beta_fd_indices_fruits</span><span class='op'>$</span><span class='st'>"details"</span><span class='op'>$</span><span class='st'>"asb_vertices"</span>
+</code></pre>
+</div>
+<pre><code>$basket_1
+[1] &quot;lemon&quot;         &quot;melon&quot;         &quot;pear&quot;          &quot;apple&quot;        
+[5] &quot;passion_fruit&quot; &quot;cherry&quot;        &quot;strawberry&quot;    &quot;banana&quot;       
+
+$basket_2
+[1] &quot;lemon&quot;         &quot;melon&quot;         &quot;pear&quot;          &quot;apple&quot;        
+[5] &quot;passion_fruit&quot; &quot;cherry&quot;        &quot;strawberry&quot;    &quot;banana&quot;       
+
+$basket_3
+[1] &quot;lemon&quot;         &quot;melon&quot;         &quot;pear&quot;          &quot;apple&quot;        
+[5] &quot;passion_fruit&quot; &quot;cherry&quot;        &quot;strawberry&quot;    &quot;banana&quot;       
+
+$basket_4
+[1] &quot;peach&quot;     &quot;lemon&quot;     &quot;tangerine&quot; &quot;pear&quot;      &quot;plum&quot;     
+[6] &quot;orange&quot;    &quot;kiwifruit&quot;
+
+$basket_5
+[1] &quot;peach&quot;     &quot;lemon&quot;     &quot;tangerine&quot; &quot;pear&quot;      &quot;plum&quot;     
+[6] &quot;orange&quot;    &quot;kiwifruit&quot;
+
+$basket_6
+[1] &quot;litchi&quot;      &quot;lime&quot;        &quot;apple&quot;       &quot;banana&quot;     
+[5] &quot;orange&quot;      &quot;pineapple&quot;   &quot;mango&quot;       &quot;water_melon&quot;
+
+$basket_7
+[1] &quot;litchi&quot;      &quot;lime&quot;        &quot;apple&quot;       &quot;banana&quot;     
+[5] &quot;orange&quot;      &quot;pineapple&quot;   &quot;mango&quot;       &quot;water_melon&quot;
+
+$basket_8
+[1] &quot;strawberry&quot; &quot;blueberry&quot;  &quot;raspberry&quot;  &quot;cherry&quot;     &quot;grape&quot;     
+[6] &quot;lemon&quot;      &quot;currant&quot;   
+
+$basket_9
+[1] &quot;strawberry&quot; &quot;blueberry&quot;  &quot;raspberry&quot;  &quot;cherry&quot;     &quot;grape&quot;     
+[6] &quot;lemon&quot;      &quot;currant&quot;   
+
+$basket_10
+[1] &quot;grape&quot;      &quot;melon&quot;      &quot;plum&quot;       &quot;apricot&quot;    &quot;grapefruit&quot;
+[6] &quot;strawberry&quot;</code></pre>
+</div>
+<p>Then, the package allows the user to illustrate functional beta-diversity indices for a pair of assemblages in a multidimensional space using the <code>mFD::beta.multidim.plot()</code> function. The output of this function is a figure showing the overlap between convex hulls shaping each of the two species assemblages.</p>
+<p>The plotting function has a large number of arguments, allowing the user to chose graphical options. Arguments are listed below:</p>
+<em>Code</em>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>beta_plot_fruits</span> <span class='op'>&lt;-</span> <span class='fu'>mFD</span><span class='fu'>::</span><span class='fu'><a href='https://cmlmagneville.github.io/mFD/reference/beta.multidim.plot.html'>beta.multidim.plot</a></span><span class='op'>(</span>
+  output_beta_fd_multidim <span class='op'>=</span> <span class='va'>beta_fd_indices_fruits</span>,
+  plot_asb_nm             <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"basket_1"</span>, <span class='st'>"basket_4"</span><span class='op'>)</span>,
+  beta_family             <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Jaccard"</span><span class='op'>)</span>,
+  plot_sp_nm              <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"apple"</span>, <span class='st'>"lemon"</span>, <span class='st'>"pear"</span><span class='op'>)</span>,
+  faxes                   <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"PC"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span>,
+  name_file               <span class='op'>=</span> <span class='cn'>NULL</span>,
+  faxes_nm                <span class='op'>=</span> <span class='cn'>NULL</span>,
+  range_faxes             <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span>,
+  color_bg                <span class='op'>=</span> <span class='st'>"grey95"</span>,
+  shape_sp                <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pool"</span> <span class='op'>=</span> <span class='fl'>3.0</span>, asb1 <span class='op'>=</span> <span class='fl'>22</span>, asb2 <span class='op'>=</span> <span class='fl'>21</span><span class='op'>)</span>,
+  size_sp                 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pool"</span> <span class='op'>=</span> <span class='fl'>0.8</span>, asb1 <span class='op'>=</span>  <span class='fl'>1</span>, asb2 <span class='op'>=</span>  <span class='fl'>1</span><span class='op'>)</span>,
+  color_sp                <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pool"</span> <span class='op'>=</span> <span class='st'>"grey50"</span>, asb1 <span class='op'>=</span> <span class='st'>"blue"</span>, asb2 <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,
+  fill_sp                 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pool"</span> <span class='op'>=</span> <span class='cn'>NA</span>, asb1 <span class='op'>=</span> <span class='st'>"white"</span>, asb2 <span class='op'>=</span> <span class='st'>"white"</span><span class='op'>)</span>,
+  fill_vert               <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pool"</span> <span class='op'>=</span> <span class='cn'>NA</span>, asb1 <span class='op'>=</span> <span class='st'>"blue"</span>, asb2 <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,
+  color_ch                <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pool"</span> <span class='op'>=</span> <span class='cn'>NA</span>, asb1 <span class='op'>=</span> <span class='st'>"blue"</span>, asb2 <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,
+  fill_ch                 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pool"</span> <span class='op'>=</span> <span class='st'>"white"</span>, asb1 <span class='op'>=</span> <span class='st'>"blue"</span>, asb2 <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,
+  alpha_ch                <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pool"</span> <span class='op'>=</span> <span class='fl'>1</span>, asb1 <span class='op'>=</span> <span class='fl'>0.3</span>, asb2 <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span>,
+  nm_size                 <span class='op'>=</span> <span class='fl'>3</span>,
+  nm_color                <span class='op'>=</span> <span class='st'>"black"</span>,
+  nm_fontface             <span class='op'>=</span> <span class='st'>"plain"</span>,
+  check_input             <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>output_beta_fd_multidim</code> is the output of the <code>mFD::beta.fd.multidim()</code> function retrieved before as <code>beta_fd_indices</code>.</p></li>
+<li><p><code>plot_asb_nm</code> is a vector containing the name of the two assemblages to plot. Here plots of indices will be shown for <em>basket_1</em> and <em>basket_4</em>.</p></li>
+<li><p><code>beta_family</code> refers to the family of the plotted index. It must be the same as the family chosen to compute beta functional indices values with the <code>mFD::beta.fd.multidim()</code> function.</p></li>
+<li><p><code>plot_sp_nm</code> is a vector containing the names of species the user want to plot, if any. If no the user does not want to plot any species name, then this argument must be set up to <code>NULL</code>. Here, <em>apple</em>, <em>cherry</em> and <em>lemon</em> will be plotted on the graph.</p></li>
+<li><p><code>faxes</code> is a vector containing the names of the functional axes of the plotted functional space. Here, the figure will be plotted for <em>PC1</em>, <em>PC2</em> and <em>PC3</em>. This function allows you to plot between two and four axes for graphical reasons.</p></li>
+<li><p><code>name_file</code> is a character string with the name of the file to save the figure (without extension). If the user does not want to save the file and only display it, this argument must be set up to <code>NULL</code>.</p></li>
+<li><p><code>faxes_nm</code> is a vector containing the axes labels for the figure if the user wants to set up different labels than those contained in <code>faxes</code>.</p></li>
+<li><p><code>range_faxes</code> is a vector with minimum and maximum values of functional axes. To have a fair representation of the position of species in all plots, axes should have the same range. If the user wants the range to be computed according to the range of values among all axes, this argument must be set up to <code>c(NA, NA)</code>.</p></li>
+<li><p><code>check_input</code> is a recurrent argument in the <code>mFD</code> package. It defines whether inputs should be checked before computation or not. Possible error messages will thus be more understandable for the user than R error messages (<strong>Recommendation:</strong> set it as <code>TRUE</code>)</p></li>
+<li><p>Others arguments to set up colors, shapes, sizes and, text fonts are also available. For more information about them, read the function help file.</p></li>
+</ul>
+<p>Then, the function returns each graph for each functional axes combination and also a multipanel plot with all combinations of axes and the graph caption. Here is the multipanel for the fruits exaample:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>beta_plot_fruits</span><span class='op'>$</span><span class='st'>"patchwork"</span>
+</code></pre>
+</div>
+<p><img src="practice_files/figure-html5/unnamed-chunk-35-1.png" width="1536" style="display: block; margin: auto;" /></p>
+</div>
+<p>For each assemblage, the associated convex hull is plotted in a different colour and indices values are printed on the right corner of the plot. Vertices of the convex hull of a given assemblage can be plotted with a different symbol such as in this example. Species of all assemblages are plotted with gray cross and the associated convex hull is plotted in white.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
