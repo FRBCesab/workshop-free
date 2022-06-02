@@ -1210,17 +1210,34 @@ the one we'll be studying here.
 
 ## 3.2 Different indices of functional originality
 
-Functional originality indices are computed on a species basis and
-not per sites.
+One specificity of functional originality indices is that we compute them
+on a species basis and not per sites. This means that for each species we will
+get one value.
+
+The two proposed indices of functional originality are
+**functional distinctiveness** (*Di*) and **functional uniqueness** (*Ui*).
+They were initially envisioned at different spatial scales, with functional
+distinctiveness computed at local scale (and considering abundance) while
+functional uniqueness was to be computed at regional scales (without considering
+abundances).
 
 SCHEME OF Di AND Ui
 
-Functional distinctiveness is weighted mean of dissimilarity.
+**Functional distinctiveness** is the mean of dissimilarity of 
+the focal species to all the other species of the set of interest. It can be
+abundance-weighted if needed.
 
-functional uniqueness is the nearest neigbhour.
+**Functional uniqueness** is the smallest dissimilarity that exists between
+the focal species and the all other species in the set. It does not consider
+the abundance of any species.
 
 
 ## 3.3 Computing functional originality
+
+To compute functional originality indices we will two object: a functional dissimilarity matrix and a site-species matrix. We will be reusing the ones
+we defined in part 1 for that.
+
+Functions to be used: `distinctiveness()` and `uniqueness()`
 
 Regional scale -> one index per species across all sites
 
