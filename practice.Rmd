@@ -22,10 +22,11 @@ four parts:
 FD alpha and beta indices and plot them 
 ([Magneville _et al._ 2021](https://doi.org/10.1111/ecog.05904))
 3. Using the [`funrar`](https://github.com/rekyt/funrar) package to compute 
-Functional Rarity indices 
-([Violle _et al._ 2017](https://doi.org/10.1016/j.tree.2017.02.002))
+functional rarity indices 
+([Violle _et al._ 2017](https://doi.org/10.1016/j.tree.2017.02.002),
+[Grenié _et al._ 2017](https://doi.org/10.1111%2Fddi.12629))
 4. Using the [`funbiogeo`](https://github.com/frbcesab/funbiogeo) package to 
-compute analyses in functional biogeography 
+help build workflows for functional biogeography 
 ([Violle _et al._ 2014](https://doi.org/10.1073/pnas.1415442111))
 
 
@@ -1173,23 +1174,58 @@ associated convex hull is plotted in white.
 In this part we'll be using our built functional space to compute functional
 originality indices.
 
-SHORT EXPLANATION OF FUNCTIONAL ORIGINALITY + FIGURE + CITE SEMINAL PAPERS
+## 3.1 Components of functional rarity: trait originality and rarity
+
+Functional originality indices (also named functional rarity indices) measures
+how different are the trait of a target species compared to other ones among
+a set. Their idea is analogous to the rarity concept 
+in terms of abundance: some species are rare because they show low abundance,
+some are common because of their high abundance. Well, functionally original
+species are original because they display trait values distant from most other
+species.
+
+FIGURE OF ORIGINAL TRAITS
+
+The indices were initially proposed as complimentary facets: one for "classical"
+rarity and one for trait "rarity" (= originality) [Violle _et al._ 2017](https://doi.org/10.1016/j.tree.2017.02.002). With this framework,
+a species could be either rare or common, with either original or common traits.
+All combinations are possible. For example a species can be rare in abundance
+but have common traits. A species could also be common in abundance but original
+in terms of traits.
+
+Violle _et al._ ([2014](https://doi.org/10.1016/j.tree.2017.02.002)) further
+declined the framework along two spatial scales, local and regional. The local
+scale is scale of the site or the assemblage, where species interact directly.
+The regional scale is the species pools scale, containing all species occurring
+in a given set of assemblages.
+
+This initial framework thus contained 16 different possibilities between
+the different kinds of rarity (trait or abundance) and the spatial scales.
+
+INITIAL TABLE OF FRAMEWORK
+
+More recent studies tend to focus only on the trait originality axis and that's
+the one we'll be studying here.
 
 
-## How are species distributed?
+## 3.2 Different indices of functional originality
+
+Functional originality indices are computed on a species basis and
+not per sites.
+
+SCHEME OF Di AND Ui
+
+Functional distinctiveness is weighted mean of dissimilarity.
+
+functional uniqueness is the nearest neigbhour.
 
 
-## Different indices of functional originality
-
-Functional distinctiveness, functional uniqueness.
-
-
-## Computing functional originality
+## 3.3 Computing functional originality
 
 Regional scale -> one index per species across all sites
 
 local scale -> one index per species per site
 
 
-## Plotting functional originality
+## 3.4 Plotting functional originality
 
