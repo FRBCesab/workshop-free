@@ -1379,3 +1379,13 @@ all of these baskets. But that its closest neighbor is further away in baskets
 
 ## 3.4 Plotting functional originality
 
+`funrar` does not come with visualization functions so that you can use whatever
+tool you prefer to plot the metrics.
+
+Visualization in a functional space. Regional visualization. Color the points
+in function of regional distinctiveness and regional uniqueness.
+
+What traits are driving regional distinctiveness?
+
+Visualization of local communities, visualize the distribution in variation of
+distinctiveness in local community.
