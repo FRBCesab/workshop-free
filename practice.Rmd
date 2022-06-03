@@ -1380,7 +1380,19 @@ all of these baskets. But that its closest neighbor is further away in baskets
 ## 3.4 Plotting functional originality
 
 `funrar` does not come with visualization functions so that you can use whatever
-tool you prefer to plot the metrics.
+tool you prefer to plot the metrics. Here we are going to use `ggplot2`
+visualize the results. However, feel free to use anything plotting packages
+you would like. If you're not fluent in `ggplot2` don't worry this section will
+mostly be about interpreting the figures rather than commenting on code.
+
+We already saw in part 1 how to visualize the functional space using
+the pre-made functions of `mFD`. Here we will use our own functions to be able
+to color species in function of their functional originality.
+
+```{r funrar-plot-di-global}
+library("ggplot2")
+```
+XX
 
 Visualization in a functional space. Regional visualization. Color the points
 in function of regional distinctiveness and regional uniqueness.
