@@ -1172,7 +1172,10 @@ associated convex hull is plotted in white.
 # Part 3. Functional rarity
 
 In this part we'll be using our built functional space to compute functional
-originality indices.
+originality indices. The questions we'll answer are:
+
+* What are functionally distinct fruits compared to all fruits together?
+* Are some of these fruits distinct at regional scale but not when looking at specific baskets?
 
 ## 3.1 Components of functional rarity: trait originality and rarity
 
@@ -1183,8 +1186,6 @@ in terms of abundance: some species are rare because they show low abundance,
 some are common because of their high abundance. Well, functionally original
 species are original because they display trait values distant from most other
 species.
-
-FIGURE OF ORIGINAL TRAITS
 
 The indices were initially proposed as complimentary facets: one for "classical"
 rarity and one for trait "rarity" (= originality) [Violle _et al._ 2017](https://doi.org/10.1016/j.tree.2017.02.002). With this framework,
@@ -1201,8 +1202,6 @@ in a given set of assemblages.
 
 This initial framework thus contained 16 different possibilities between
 the different kinds of rarity (trait or abundance) and the spatial scales.
-
-INITIAL TABLE OF FRAMEWORK
 
 More recent studies tend to focus only on the trait originality axis and that's
 the one we'll be studying here.
@@ -1221,7 +1220,7 @@ distinctiveness computed at local scale (and considering abundance) while
 functional uniqueness was to be computed at regional scales (without considering
 abundances).
 
-SCHEME OF Di AND Ui
+![`r fontawesome::fa_i("caret-right")` &nbsp;Scheme showing how Distinctiveness (Di) and Uniqueness (Ui) are computed](img/di_ui_scheme.jpg)
 
 **Functional distinctiveness** is the mean of dissimilarity of 
 the focal species to all the other species of the set of interest. It can be
@@ -1237,11 +1236,103 @@ the abundance of any species.
 To compute functional originality indices we will two object: a functional dissimilarity matrix and a site-species matrix. We will be reusing the ones
 we defined in part 1 for that.
 
-Functions to be used: `distinctiveness()` and `uniqueness()`
+Because the `funrar` package follows strictly the framework defined by Violle _et al._ (2017), we have to consider the spatial scale at which we compute distinctiveness and uniqueness.
 
-Regional scale -> one index per species across all sites
+### 3.3.1 At regional scale
 
-local scale -> one index per species per site
+At regional scale, we can compute distinctiveness using the `distinctiveness_global()` function. The first argument should be a functional
+dissimilarity matrix and the second argument gives
+the name of the output column.
+
+```{r di-regional}
+library("funrar")
+
+sp_di = distinctiveness_global(sp_dist_fruits, di_name = "distinctiveness")
+
+head(sp_di)
+dim(sp_di)
+```
+We get one value of distinctiveness per species. It only considers
+the functional dissimilarity of all species in the dissimilarity matrix without
+considering their spatial distributions. We get one value of distinctiveness per
+species.
+
+```{r di-regional-summary, results='hide'}
+summary(sp_di)
+
+quantile(sp_di$distinctiveness, probs = seq(0, 1, by = 0.1))
+
+subset(sp_di, distinctiveness >= 0.48)
+```
+ 
+When looking at the most distinct fruits we see that banana, litchi,
+and pineapple, are the most distinct from their characteristics.
+
+To compute uniqueness at regional scale we also need the regional level functional dissimilarity matrix with the `uniqueness()` function, and the site-species
+atrix:
+
+```{r ui-regional, results='hide'}
+sp_ui = uniqueness(
+  pres_matrix = baskets_fruits_weights,
+  as.matrix(sp_dist_fruits)
+)
+
+head(sp_ui)
+quantile(sp_ui$Ui, probs = seq(0, 1, by = 0.1))
+
+subset(sp_ui, Ui >= 0.21)
+```
+
+Note that we have to transform the dissimilarity object `sp_dist_fruits` into
+a matrix explicitly so that the function `uniqueness()` works.
+
+Based on these results we see that banana, passion fruit, and pineapple are
+the most isolated fruits in the functional space. Meaning that they have
+the most distant nearest neighbors.
+
+So we see that some species can be regionally distinct and regionally unique
+(banana and pineapple), while some can be not so regionally distinct but
+regionally unique (passion fruit).
+
+
+### 3.3.2 At local scale
+
+At local scale we can use similar logic but we will obtain one value per species
+per site.
+
+For distinctiveness we can use the `distinctiveness()` function:
+
+```{r di-local}
+sp_local_di = distinctiveness(
+  baskets_fruits_weights, as.matrix(sp_dist_fruits)
+)
+
+sp_local_di[1:6, 1:6]
+
+identical(dim(sp_local_di), dim(baskets_fruits_weights))
+```
+**Note**: because we provided a site-species matrix that contained "abundance"
+values (here the weights of the fruits in our baskets), the `distinctiveness()`
+is going to use them in its computation. If we want it not to consider
+abundances we need to convert the site-species matrix into a presence-absence
+matrix.
+
+We get exactly the same number of sites and species as provided in the
+lists of baskets. Looking at the first column we see that the distinctiveness
+of apple varies a lot. Let's see if can see how much it varies and why.
+
+```{r di-local-apple}
+sp_local_di[, 1]
+```
+It varies from around 0.11 in basket 4 to up to 0.41 in basket 6. We can lookup
+the composition of these baskets to understand why:
+
+```{r di-local-basket-compo}
+baskets_fruits_weights[c(4, 6),]
+```
+We can see that basket 4 contains fruits of similar size, origin and sweetness of apples: peach, pear, plums. This decreases the local distinctiveness of apples.
+While basket 6 contains more tropical fruits that are quite different in terms
+of size and suger from apples.
 
 
 ## 3.4 Plotting functional originality
