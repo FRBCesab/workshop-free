@@ -1332,8 +1332,50 @@ baskets_fruits_weights[c(4, 6),]
 ```
 We can see that basket 4 contains fruits of similar size, origin and sweetness of apples: peach, pear, plums. This decreases the local distinctiveness of apples.
 While basket 6 contains more tropical fruits that are quite different in terms
-of size and suger from apples.
+of size and sugar from apples.
 
+To compute uniqueness at the site scale, we must use a more complex expression
+as it was not envisioned for local computation:
+
+```{r ui-local}
+basket_ui = apply(
+  baskets_fruits_weights, 1,
+  function(single_site, dist_m) {
+    single_site = single_site[single_site > 0 & !is.na(single_site)]
+    uniqueness(t(as.matrix(single_site)), dist_m)
+  }, dist_m = as.matrix(sp_dist_fruits)
+)
+
+head(basket_ui[1])
+```
+As we had to manually build the function to compute the local uniqueness
+the results are strangely formatted.
+
+We provide here a function that can help them to be more easily read:
+
+```{r ui-local-transform}
+basket_ui = lapply(names(basket_ui), function(x) {
+  single_basket = basket_ui[[x]]
+  single_basket$site = x
+  
+  return(single_basket)
+})
+
+basket_ui = do.call(rbind, basket_ui)[, c(3, 1, 2)]
+```
+
+
+Then we can again look at the apple to see how its uniqueness varies across
+baskets.
+
+```{r ui-local-apple}
+subset(basket_ui, species == "apple")
+```
+
+We see that apple have the same uniqueness everywhere but in baskets 6 and 7.
+This means that it has the same nearest neighbor (in functional space) across
+all of these baskets. But that its closest neighbor is further away in baskets
+6 and 7.
 
 ## 3.4 Plotting functional originality
 
