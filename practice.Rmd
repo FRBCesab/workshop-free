@@ -1492,7 +1492,7 @@ functional distinctiveness varies across baskets compared to lemon.
 
 ```{r funrar-plot-local-di}
 local_di_ap <- as.data.frame(sp_local_di[, c(1, 11)])
-local_di_app$basket <- rownames(local_di_ap)
+local_di_ap$basket <- rownames(local_di_ap)
 ```
 
 
