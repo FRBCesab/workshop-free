@@ -1389,10 +1389,40 @@ We already saw in part 1 how to visualize the functional space using
 the pre-made functions of `mFD`. Here we will use our own functions to be able
 to color species in function of their functional originality.
 
-```{r funrar-plot-di-global}
-library("ggplot2")
+```{r funrar-summary}
+# Make a summary data.frame
+sp_coord_di_ui = as.data.frame(sp_faxes_coord_fruits[, 1:2])
+sp_coord_di_ui$species = rownames(sp_coord_di_ui)
+rownames(sp_coord_di_ui) = NULL
+sp_coord_di_ui = sp_coord_di_ui[, c(3, 1, 2)]
+sp_coord_di_ui = merge(sp_coord_di_ui, sp_di, by = "species")
+sp_coord_di_ui = merge(sp_coord_di_ui, sp_ui, by = "species")
 ```
-XX
+
+
+```{r funrar-plot-di-ui-regional}
+library("ggplot2")
+
+plot_reg_distinctiveness = ggplot(sp_coord_di_ui, aes(PC1, PC2)) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  geom_vline(xintercept = 0, linetype = 2) +
+  geom_point(aes(color = distinctiveness)) +
+  ggrepel::geom_text_repel(aes(label = species)) +
+  scale_color_viridis_c("Functional\nDistinctiveness") +
+  theme_bw() +
+  theme(aspect.ratio = 1)
+
+plot_reg_uniqueness = ggplot(sp_coord_di_ui, aes(PC1, PC2)) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  geom_vline(xintercept = 0, linetype = 2) +
+  geom_point(aes(color = Ui)) +
+  ggrepel::geom_text_repel(aes(label = species)) +
+  scale_color_viridis_c("Functional\nUniqueness") +
+  theme_bw() +
+  theme(aspect.ratio = 1)
+
+patchwork::wrap_plots(plot_reg_distinctiveness, plot_reg_uniqueness)
+```
 
 Visualization in a functional space. Regional visualization. Color the points
 in function of regional distinctiveness and regional uniqueness.
