@@ -1247,11 +1247,12 @@ the name of the output column.
 ```{r di-regional}
 library("funrar")
 
-sp_di = distinctiveness_global(sp_dist_fruits, di_name = "distinctiveness")
+sp_di <- distinctiveness_global(sp_dist_fruits, di_name = "distinctiveness")
 
 head(sp_di)
 dim(sp_di)
 ```
+
 We get one value of distinctiveness per species. It only considers
 the functional dissimilarity of all species in the dissimilarity matrix without
 considering their spatial distributions. We get one value of distinctiveness per
@@ -1268,11 +1269,44 @@ subset(sp_di, distinctiveness >= 0.48)
 When looking at the most distinct fruits we see that banana, litchi,
 and pineapple, are the most distinct from their characteristics.
 
-To compute uniqueness at regional scale we also need the regional level functional dissimilarity matrix with the `uniqueness()` function, and the site-species
-atrix:
+For the choice or dissimilarity matrix we can use the raw dissimilarity
+matrix computed directly on raw traits values among species, as we did here.
+Another option would be to compute a new functional dissimilarity matrix based
+on the selected functional axes. One advantage of the latter is that it already
+takes into account the correlation between traits.
+
+Let's recompute regional functional distinctiveness based on the four selected
+functional axes. Because the space comes from a PCA, we can directly use
+euclidean distance.
+
+```{r di-global-alt}
+new_dissim <- dist(sp_faxes_coord_fruits[, c("PC1", "PC2", "PC3", "PC4")])
+
+sp_di_alt <- distinctiveness_global(new_dissim, di_name = "alt_di")
+```
+
+We can now compare both distinctiveness values.
+
+```{r di-comparison}
+sp_all_di <- merge(sp_di, sp_di_alt, by = "species")
+
+plot(sp_all_di$distinctiveness, sp_all_di$alt_di)
+cor.test(sp_all_di$distinctiveness, sp_all_di$alt_di)
+```
+
+Both seems very correlated, so in our case using either one should be fine.
+However, it can be better to use dissimilarity based on a reduced number of
+well-defined axes because: (1) there are more interpretable thanks to the multivariate analysis, (2) the first one contain de most information,
+(3) they explicitly take into account potentially strong correlations between
+provided traits.
+We'll stick here with raw dissimilarity for the sake of simplicity.
+
+To compute uniqueness at regional scale we also need the regional level
+functional dissimilarity matrix with the `uniqueness()` function, and
+the site-species matrix:
 
 ```{r ui-regional, results='hide'}
-sp_ui = uniqueness(
+sp_ui <- uniqueness(
   pres_matrix = baskets_fruits_weights,
   as.matrix(sp_dist_fruits)
 )
@@ -1303,7 +1337,7 @@ per site.
 For distinctiveness we can use the `distinctiveness()` function:
 
 ```{r di-local}
-sp_local_di = distinctiveness(
+sp_local_di <- distinctiveness(
   baskets_fruits_weights, as.matrix(sp_dist_fruits)
 )
 
@@ -1338,7 +1372,7 @@ To compute uniqueness at the site scale, we must use a more complex expression
 as it was not envisioned for local computation:
 
 ```{r ui-local}
-basket_ui = apply(
+basket_ui <- apply(
   baskets_fruits_weights, 1,
   function(single_site, dist_m) {
     single_site = single_site[single_site > 0 & !is.na(single_site)]
@@ -1354,14 +1388,14 @@ the results are strangely formatted.
 We provide here a function that can help them to be more easily read:
 
 ```{r ui-local-transform}
-basket_ui = lapply(names(basket_ui), function(x) {
+basket_ui <- lapply(names(basket_ui), function(x) {
   single_basket = basket_ui[[x]]
   single_basket$site = x
   
   return(single_basket)
 })
 
-basket_ui = do.call(rbind, basket_ui)[, c(3, 1, 2)]
+basket_ui <- do.call(rbind, basket_ui)[, c(3, 1, 2)]
 ```
 
 
@@ -1391,19 +1425,19 @@ to color species in function of their functional originality.
 
 ```{r funrar-summary}
 # Make a summary data.frame
-sp_coord_di_ui = as.data.frame(sp_faxes_coord_fruits[, 1:2])
-sp_coord_di_ui$species = rownames(sp_coord_di_ui)
-rownames(sp_coord_di_ui) = NULL
-sp_coord_di_ui = sp_coord_di_ui[, c(3, 1, 2)]
-sp_coord_di_ui = merge(sp_coord_di_ui, sp_di, by = "species")
-sp_coord_di_ui = merge(sp_coord_di_ui, sp_ui, by = "species")
+sp_coord_di_ui <- as.data.frame(sp_faxes_coord_fruits[, 1:2])
+sp_coord_di_ui$species <- rownames(sp_coord_di_ui)
+rownames(sp_coord_di_ui) <- NULL
+sp_coord_di_ui <- sp_coord_di_ui[, c(3, 1, 2)]
+sp_coord_di_ui <- merge(sp_coord_di_ui, sp_di, by = "species")
+sp_coord_di_ui <- merge(sp_coord_di_ui, sp_ui, by = "species")
 ```
 
 
 ```{r funrar-plot-di-ui-regional}
 library("ggplot2")
 
-plot_reg_distinctiveness = ggplot(sp_coord_di_ui, aes(PC1, PC2)) +
+plot_reg_distinctiveness <- ggplot(sp_coord_di_ui, aes(PC1, PC2)) +
   geom_hline(yintercept = 0, linetype = 2) +
   geom_vline(xintercept = 0, linetype = 2) +
   geom_point(aes(color = distinctiveness)) +
@@ -1412,7 +1446,7 @@ plot_reg_distinctiveness = ggplot(sp_coord_di_ui, aes(PC1, PC2)) +
   theme_bw() +
   theme(aspect.ratio = 1)
 
-plot_reg_uniqueness = ggplot(sp_coord_di_ui, aes(PC1, PC2)) +
+plot_reg_uniqueness <- ggplot(sp_coord_di_ui, aes(PC1, PC2)) +
   geom_hline(yintercept = 0, linetype = 2) +
   geom_vline(xintercept = 0, linetype = 2) +
   geom_point(aes(color = Ui)) +
@@ -1424,10 +1458,41 @@ plot_reg_uniqueness = ggplot(sp_coord_di_ui, aes(PC1, PC2)) +
 patchwork::wrap_plots(plot_reg_distinctiveness, plot_reg_uniqueness)
 ```
 
-Visualization in a functional space. Regional visualization. Color the points
-in function of regional distinctiveness and regional uniqueness.
+We can clearly see that, by definition, most functionally
+distinct species are on the edges of the functional space (pineapple, litchi,
+mango). If we compare both plots, we realize that functional distinctiveness
+doesn't always come with functional uniqueness. One strange observation is that
+passion-fruit has a very functional uniqueness even though it seems quite 
+in the middle of the points. This is a consequence of using the raw trait
+dissimilarity matrix instead of the projected axes. We're are here visualizing
+the position of passion fruit in a 2D space while it should be considered in a
+5D space, so it may seem close to other points in 2D while it is further away in
+reality.
 
-What traits are driving regional distinctiveness?
+As was done with `mFD` to correlate the functional axes with species' traits we
+can correlate functional distinctiveness to specific traits in order to see
+which traits are mainly driving distinctiveness.
 
-Visualization of local communities, visualize the distribution in variation of
-distinctiveness in local community.
+XXX
+
+Regarding local level functional originality indices, the visualization can be
+more difficult to grasp and depends highly on the question. Would you rather
+focus on visualizing the functional distinctiveness of one species across
+communities? Compare the distribution of functional distinctiveness values
+across communities?
+
+One idea to keep in mind is that averaging functional distinctiveness per
+community is exactly equal to computing functional dispersion. Functional
+originality is computed on a species basis, so we should be aware that if we are
+rather interested by community properties than we can compute functional 
+diversity metrics which are much more appropriate.
+
+If we take again our example of the apple we can see to what extent its
+functional distinctiveness varies across baskets compared to lemon.
+
+```{r funrar-plot-local-di}
+local_di_ap <- as.data.frame(sp_local_di[, c(1, 11)])
+local_di_app$basket <- rownames(local_di_ap)
+```
+
+
