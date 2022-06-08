@@ -614,16 +614,13 @@ space can be close to the center of the hull projected in 2D. Color, fill,
 shape and size of vertices can be chosen through other inputs, please refer to 
 the function's help.
 
-* `color_bg` is a R color or an hexadecimal color code referring to the 
-color of the background of the plot.
-
-* other inputs are used to chose color, fill, size, and shape of species from
-the global pool, please refer to the function's help.
-
 * `check_input` is a recurrent argument in the `mFD` package. It defines
 whether inputs should be checked before computation or not. Possible error
 messages will thus be more understandable for the user than R error messages
 (**Recommendation:** set it as `TRUE`).
+
+* other inputs are used to chose color, fill, size, and shape of species from
+the global pool, please refer to the function's help.
 
 <br />
 
@@ -641,24 +638,9 @@ big_plot <- mFD::funct.space.plot(
   name_file       = NULL,
   faxes_nm        = NULL,
   range_faxes     = c(NA, NA),
-  color_bg        = "grey95",
-  color_pool      = "darkgreen",
-  fill_pool       = "white",
-  shape_pool      = 21,
-  size_pool       = 1,
   plot_ch         = TRUE,
-  color_ch        = "black",
-  fill_ch         = "white",
-  alpha_ch        = 0.5,
   plot_vertices   = TRUE,
-  color_vert      = "blueviolet",
-  fill_vert       = "blueviolet",
-  shape_vert      = 23,
-  size_vert       = 1,
   plot_sp_nm      = NULL,
-  nm_size         = 3,
-  nm_color        = "black",
-  nm_fontface     = "plain",
   check_input     = TRUE)
 
 big_plot$"patchwork"
@@ -727,6 +709,7 @@ Using the `alpha.fd.multidim()` function, you can compute up to nine alpha FD in
   species from the global species pool.
 
 
+In this Practice we will only compute five of them.
 The function is used as follow:
 
 *Code*
@@ -812,24 +795,7 @@ plots_alpha <- mFD::alpha.multidim.plot(
   faxes                    = NULL,
   faxes_nm                 = NULL,
   range_faxes              = c(NA, NA),
-  color_bg                 = "grey95",
-  shape_sp                 = c(pool = 3, asb1 = 21, asb2 = 21),
-  size_sp                  = c(pool = 0.7, asb1 = 1, asb2 = 1),
-  color_sp                 = c(pool = "grey50", asb1 = "#1F968BFF", asb2 = "#DCE319FF"),
-  color_vert               = c(pool = "grey50", asb1 = "#1F968BFF", asb2 = "#DCE319FF"),
-  fill_sp                  = c(pool = NA, asb1 = "#1F968BFF", asb2 = "#DCE319FF"),
-  fill_vert                = c(pool = NA, asb1 = "#1F968BFF", asb2 = "#DCE319FF"),
-  color_ch                 = c(pool = NA, asb1 = "#1F968BFF", asb2 = "#DCE319FF"),
-  fill_ch                  = c(pool = "white", asb1 = "#1F968BFF", asb2 = "#DCE319FF"),
-  alpha_ch                 = c(pool = 1, asb1 = 0.3, asb2 = 0.3),
-  shape_centroid_fdis      = c(asb1 = 22,  asb2 = 24),
-  shape_centroid_fdiv      = c(asb1 = 22,  asb2 = 24),
-  shape_centroid_fspe      = 23,
-  color_centroid_fspe      = "black",
-  size_sp_nm               = 3, 
-  color_sp_nm              = "black",
   plot_sp_nm               = NULL,
-  fontface_sp_nm           = "plain",
   save_file                = FALSE,
   check_input              = TRUE) 
 ```
@@ -837,7 +803,7 @@ plots_alpha <- mFD::alpha.multidim.plot(
 
 <br />
 
-As you can see, this function has a lot of arguments: most of them are graphical
+This function has a lot of arguments: most of them are graphical
 arguments allowing the user to chose colors, shapes, sizes, scales, etc. This
 tutorial only presents main arguments. To learn about the use of graphical
 arguments, check the function help file. The main arguments of this function are
@@ -859,16 +825,17 @@ representation of species positions in all plots, all axes must have the same
 range.
 * `plot_sp_nm` is a vector containing species names to plot. If `NULL`, then no
 name is plotted.
+* `check_input` is a recurrent argument in `mFD`. It defines whether inputs
+should be checked before computation or not. Possible error messages will thus
+be more understandable for the user than R error messages (**Recommendation:**
+set it as `TRUE`.
 * size, color, fill, and shape arguments for each component of the graphs *i.e.*
 species of the global pool, species of the studied assemblage(s), vertices,
 centroids and segments. If you have to plot two assemblages, then inputs
 should be formatted as follow: `c(pool = ..., asb1 = ..., asb2 = ...)` for
 inputs used for global pool and studied assemblages and 
 `c(asb1 = ..., asb2 = ...)` for inputs used for studied assemblages only.
-* `check_input` is a recurrent argument in `mFD`. It defines whether inputs
-should be checked before computation or not. Possible error messages will thus
-be more understandable for the user than R error messages (**Recommendation:**
-set it as `TRUE`.
+
 
 <br />
 
@@ -1052,7 +1019,7 @@ assemblages.
 
 
 The plotting function has a large number of arguments, allowing the user to
-chose graphical options. Arguments are listed below:
+chose graphical options. Only main arguments are listed below:
 
 *Code*
 ```{r, results = "hide", warning = FALSE}
@@ -1065,18 +1032,6 @@ beta_plot_fruits <- mFD::beta.multidim.plot(
   name_file               = NULL,
   faxes_nm                = NULL,
   range_faxes             = c(NA, NA),
-  color_bg                = "grey95",
-  shape_sp                = c("pool" = 3.0, asb1 = 22, asb2 = 21),
-  size_sp                 = c("pool" = 0.8, asb1 =  1, asb2 =  1),
-  color_sp                = c("pool" = "grey50", asb1 = "blue", asb2 = "red"),
-  fill_sp                 = c("pool" = NA, asb1 = "white", asb2 = "white"),
-  fill_vert               = c("pool" = NA, asb1 = "blue", asb2 = "red"),
-  color_ch                = c("pool" = NA, asb1 = "blue", asb2 = "red"),
-  fill_ch                 = c("pool" = "white", asb1 = "blue", asb2 = "red"),
-  alpha_ch                = c("pool" = 1, asb1 = 0.3, asb2 = 0.3),
-  nm_size                 = 3,
-  nm_color                = "black",
-  nm_fontface             = "plain",
   check_input             = TRUE)
 ```
 
