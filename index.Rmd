@@ -61,7 +61,7 @@ Welcome coffee and icebreaker
 **09:00 – 12:30**
 
 &nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Introduction to functional ecology (traits, distance metrics, functional space) (~ 45 min)
+General introduction (traits, distance metrics, functional space) (~ 45 min)
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Break and questions (~ 15 min)
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
