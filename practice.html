@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,9 +74,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -1028,10 +1029,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     margin-top: 1.5em;
   }
 
-  .figure img {
-    width: 100%;
-  }
-
   .figure .caption {
     color: rgba(0, 0, 0, 0.6);
     font-size: 12px;
@@ -1861,6 +1858,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
+        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+          var fn = $(this).children()[0]
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
           return "<p>" + $('#ref-' + ref).html() + "</p>";
@@ -1875,6 +1878,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1974,6 +2002,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -1996,7 +2026,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -2035,7 +2065,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+  <link href="site_libs/font-awesome-5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="site_libs/font-awesome-5.15.3/css/v4-shims.min.css" rel="stylesheet" />
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2100,46 +2132,119 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#about">About</a></li>
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#data-description">Data description</a></li>
-<li><a href="#questions">Questions</a></li>
-<li><a href="#part-1.-build-a-functional-space-using-the-mfd-package">Part 1. Build a functional space using the <code>mFD</code> package</a>
+<li><a href="#about" id="toc-about">About</a></li>
+<li><a href="#prerequisites"
+id="toc-prerequisites">Prerequisites</a></li>
+<li><a href="#data-description" id="toc-data-description">Data
+description</a></li>
+<li><a href="#questions" id="toc-questions">Questions</a></li>
+<li><a href="#part-1.-build-a-functional-space-using-the-mfd-package"
+id="toc-part-1.-build-a-functional-space-using-the-mfd-package">Part 1.
+Build a functional space using the <code>mFD</code> package</a>
 <ul>
-<li><a href="#compute-summaries-about-your-data">1.0. Compute summaries about your data</a></li>
-<li><a href="#what-about-the-traits">1.1. What about the traits?</a></li>
-<li><a href="#computing-distances-between-species-based-on-functional-traits">1.2. Computing distances between species based on functional traits</a></li>
-<li><a href="#building-functional-spaces-and-chosing-the-best-one">1.3. Building functional spaces and chosing the best one</a>
+<li><a href="#compute-summaries-about-your-data"
+id="toc-compute-summaries-about-your-data">1.0. Compute summaries about
+your data</a></li>
+<li><a href="#what-about-the-traits" id="toc-what-about-the-traits">1.1.
+What about the traits?</a></li>
+<li><a
+href="#computing-distances-between-species-based-on-functional-traits"
+id="toc-computing-distances-between-species-based-on-functional-traits">1.2.
+Computing distances between species based on functional traits</a></li>
+<li><a href="#building-functional-spaces-and-chosing-the-best-one"
+id="toc-building-functional-spaces-and-chosing-the-best-one">1.3.
+Building functional spaces and chosing the best one</a>
 <ul>
-<li><a href="#computing-several-multimensional-functional-spaces-and-assessing-their-quality">1.3.1. Computing several multimensional functional spaces and assessing their quality</a></li>
-<li><a href="#illustrating-the-quality-of-the-functional-spaces">1.3.2. Illustrating the quality of the functional spaces</a></li>
-<li><a href="#testing-the-correlation-between-functional-axes-and-traits">1.3.3. Testing the correlation between functional axes and traits</a></li>
+<li><a
+href="#computing-several-multimensional-functional-spaces-and-assessing-their-quality"
+id="toc-computing-several-multimensional-functional-spaces-and-assessing-their-quality">1.3.1.
+Computing several multimensional functional spaces and assessing their
+quality</a></li>
+<li><a href="#illustrating-the-quality-of-the-functional-spaces"
+id="toc-illustrating-the-quality-of-the-functional-spaces">1.3.2.
+Illustrating the quality of the functional spaces</a></li>
+<li><a
+href="#testing-the-correlation-between-functional-axes-and-traits"
+id="toc-testing-the-correlation-between-functional-axes-and-traits">1.3.3.
+Testing the correlation between functional axes and traits</a></li>
 </ul></li>
-<li><a href="#plotting-the-selected-functional-space-and-position-of-species">1.4. Plotting the selected functional space and position of species</a></li>
+<li><a
+href="#plotting-the-selected-functional-space-and-position-of-species"
+id="toc-plotting-the-selected-functional-space-and-position-of-species">1.4.
+Plotting the selected functional space and position of species</a></li>
 </ul></li>
-<li><a href="#part-2.-computing-and-plotting-fd-indices-using-the-mfd-package">Part 2. Computing and plotting FD indices using the <code>mFD</code> package</a>
+<li><a
+href="#part-2.-computing-and-plotting-fd-indices-using-the-mfd-package"
+id="toc-part-2.-computing-and-plotting-fd-indices-using-the-mfd-package">Part
+2. Computing and plotting FD indices using the <code>mFD</code>
+package</a>
 <ul>
-<li><a href="#computing-and-plotting-alpha-fd-indices">2.1. Computing and plotting alpha FD indices</a></li>
-<li><a href="#computing-and-plotting-beta-fd-indices">2.2. Computing and plotting beta FD indices</a></li>
+<li><a href="#computing-and-plotting-alpha-fd-indices"
+id="toc-computing-and-plotting-alpha-fd-indices">2.1. Computing and
+plotting alpha FD indices</a></li>
+<li><a href="#computing-and-plotting-beta-fd-indices"
+id="toc-computing-and-plotting-beta-fd-indices">2.2. Computing and
+plotting beta FD indices</a></li>
 </ul></li>
-<li><a href="#part-3.-functional-rarity">Part 3. Functional rarity</a></li>
+<li><a href="#part-3.-functional-rarity"
+id="toc-part-3.-functional-rarity">Part 3. Functional rarity</a>
+<ul>
+<li><a
+href="#components-of-functional-rarity-trait-originality-and-rarity"
+id="toc-components-of-functional-rarity-trait-originality-and-rarity">3.1
+Components of functional rarity: trait originality and rarity</a></li>
+<li><a href="#different-indices-of-functional-originality"
+id="toc-different-indices-of-functional-originality">3.2 Different
+indices of functional originality</a></li>
+<li><a href="#computing-functional-originality"
+id="toc-computing-functional-originality">3.3 Computing functional
+originality</a>
+<ul>
+<li><a href="#at-regional-scale" id="toc-at-regional-scale">3.3.1 At
+regional scale</a></li>
+<li><a href="#at-local-scale" id="toc-at-local-scale">3.3.2 At local
+scale</a></li>
+</ul></li>
+<li><a href="#plotting-functional-originality"
+id="toc-plotting-functional-originality">3.4 Plotting functional
+originality</a></li>
+</ul></li>
 </ul>
 </nav>
 </div>
 <h1 id="about">About</h1>
 <p><br /></p>
-<p>This tutorial describes the basic workflow showing how to compute step by step functional diversity (FD) indices in a multidimensional space. It is divided in four parts:</p>
+<p>This tutorial describes the basic workflow showing how to compute
+step by step functional diversity (FD) indices in a multidimensional
+space. It is divided in four parts:</p>
 <ol type="1">
-<li>Computing trait-based distances and the multidimensional functional space</li>
-<li>Using the <a href="https://github.com/CmlMagneville/mFD"><code>mFD</code></a> package to compute FD alpha and beta indices and plot them (<a href="https://doi.org/10.1111/ecog.05904">Magneville <em>et al.</em> 2021</a>)</li>
-<li>Using the <a href="https://github.com/rekyt/funrar"><code>funrar</code></a> package to compute Functional Rarity indices (<a href="https://doi.org/10.1016/j.tree.2017.02.002">Violle <em>et al.</em> 2017</a>)</li>
-<li>Using the <a href="https://github.com/frbcesab/funbiogeo"><code>funbiogeo</code></a> package to compute analyses in functional biogeography (<a href="https://doi.org/10.1073/pnas.1415442111">Violle <em>et al.</em> 2014</a>)</li>
+<li>Computing trait-based distances and the multidimensional functional
+space</li>
+<li>Using the <a
+href="https://github.com/CmlMagneville/mFD"><code>mFD</code></a> package
+to compute FD alpha and beta indices and plot them (<a
+href="https://doi.org/10.1111/ecog.05904">Magneville <em>et al.</em>
+2021</a>)</li>
+<li>Using the <a
+href="https://github.com/rekyt/funrar"><code>funrar</code></a> package
+to compute functional rarity indices (<a
+href="https://doi.org/10.1016/j.tree.2017.02.002">Violle <em>et al.</em>
+2017</a>, <a href="https://doi.org/10.1111%2Fddi.12629">Grenié <em>et
+al.</em> 2017</a>)</li>
+<li>Using the <a
+href="https://github.com/frbcesab/funbiogeo"><code>funbiogeo</code></a>
+package to help build workflows for functional biogeography (<a
+href="https://doi.org/10.1073/pnas.1415442111">Violle <em>et al.</em>
+2014</a>)</li>
 </ol>
 <p><br /></p>
-<p><strong>N.B.</strong> You can chose to do Part 2, Part 3 and Part 4 in the order that you want but Part 1 has to be realized first.</p>
+<p><strong>N.B.</strong> You can chose to do Part 2, Part 3 and Part 4
+in the order that you want but Part 1 has to be realized first.</p>
 <p><br /></p>
 <h1 id="prerequisites">Prerequisites</h1>
-<p>Be sure you have followed the <a href="https://frbcesab.github.io/workshop-free/instructions.html"><strong>instructions</strong></a> to set up your system (e.g. <code>R version &gt;= 3.5</code>).</p>
+<p>Be sure you have followed the <a
+href="https://frbcesab.github.io/workshop-free/instructions.html"><strong>instructions</strong></a>
+to set up your system (e.g. <code>R version &gt;= 3.5</code>).</p>
 <p>If not already done, please install the following R packages:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2154,9 +2259,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p><br /></p>
 <h1 id="data-description">Data description</h1>
-<p>The dataset used as study case all along this workshop is the <strong>Fruits dataset</strong> based on 25 types of fruits (i.e. species) distributed in 10 fruits baskets (i.e. assemblages). Each fruit is characterized by five traits values summarized in the following table:</p>
+<p>The dataset used as study case all along this workshop is the
+<strong>Fruits dataset</strong> based on 25 types of fruits
+(i.e. species) distributed in 10 fruits baskets (i.e. assemblages). Each
+fruit is characterized by five traits values summarized in the following
+table:</p>
 <p><br /></p>
 <table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 17%" />
+<col style="width: 13%" />
+<col style="width: 18%" />
+<col style="width: 31%" />
+<col style="width: 7%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: center;">Trait name</th>
@@ -2211,9 +2328,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </tbody>
 </table>
 <p><br /></p>
-<p>The use of the <code>mFD</code> and <code>funrar</code> packages is based on two datasets:</p>
+<p>The use of the <code>mFD</code> and <code>funrar</code> packages is
+based on two datasets:</p>
 <ul>
-<li>a <strong><code>data.frame</code></strong> summarizing traits values for each species called <code>fruits_traits</code> in this tutorial</li>
+<li>a <strong><code>data.frame</code></strong> summarizing traits values
+for each species called <code>fruits_traits</code> in this tutorial</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2295,7 +2414,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p><br /></p>
 <ul>
-<li>a <strong><code>matrix</code></strong> summarizing species assemblages called <code>baskets_fruits_weights</code> in this tutorial. Weights in this matrix can be occurrence data, abundance, biomass, coverage, etc. The studied example works with biomass (<em>i.e.</em> grams of a fruit in a basket) and this matrix looks as follows:</li>
+<li>a <strong><code>matrix</code></strong> summarizing species
+assemblages called <code>baskets_fruits_weights</code> in this tutorial.
+Weights in this matrix can be occurrence data, abundance, biomass,
+coverage, etc. The studied example works with biomass (<em>i.e.</em>
+grams of a fruit in a basket) and this matrix looks as follows:</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2310,7 +2433,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </code></pre>
 </div>
 <table>
-<caption><span id="tab:unnamed-chunk-3">Table 2: </span>Species x assemblages matrix based on the <strong>fruits</strong> dataset</caption>
+<caption><span id="tab:unnamed-chunk-3">Table 2: </span>Species x assemblages matrix based on the
+<strong>fruits</strong> dataset</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -2383,17 +2507,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1 id="questions">Questions</h1>
 <p>Using this Practice, we ask the following questions:</p>
 <ul>
-<li>How different are the fruits baskets based on their functional traits?</li>
+<li>How different are the fruits baskets based on their functional
+traits?</li>
 <li><strong><em>{{ Question functional rarity }}</em></strong></li>
 <li><strong><em>{{ Question funbiogeo }}</em></strong></li>
 </ul>
-<p>To answer these three questions, the first step is to <strong>build a functional space based on species traits</strong> on which functional diversity and functional rarity indices will be then computed.</p>
+<p>To answer these three questions, the first step is to <strong>build a
+functional space based on species traits</strong> on which functional
+diversity and functional rarity indices will be then computed.</p>
 <p><br/></p>
-<h1 id="part-1.-build-a-functional-space-using-the-mfd-package">Part 1. Build a functional space using the <code>mFD</code> package</h1>
+<h1 id="part-1.-build-a-functional-space-using-the-mfd-package">Part 1.
+Build a functional space using the <code>mFD</code> package</h1>
 <p><br/></p>
-<h2 id="compute-summaries-about-your-data">1.0. Compute summaries about your data</h2>
+<h2 id="compute-summaries-about-your-data">1.0. Compute summaries about
+your data</h2>
 <p><br/></p>
-<p>This part is not developed in this Practice (not enough time to see everything ;) ), but it could be useful to know that the <code>mFD</code> package can compute summaries about your traits or assemblage data. For instance, you can compute a matrix of species occurrence in each assemblage (needed in 2.2).</p>
+<p>This part is not developed in this Practice (not enough time to see
+everything ;) ), but it could be useful to know that the
+<code>mFD</code> package can compute summaries about your traits or
+assemblage data. For instance, you can compute a matrix of species
+occurrence in each assemblage (needed in 2.2).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>## Summary of the assemblages * species data.frame ----</span>
@@ -2435,7 +2568,12 @@ basket_6          0         0           1</code></pre>
 <p><br/></p>
 <h2 id="what-about-the-traits">1.1. What about the traits?</h2>
 <p><br/></p>
-<p>The first thing to do before starting analyses is to know your data. To do so, you must be able to characterize the traits you are using (<em>i.e.</em> tell the package what type of traits you are using). That is why <code>mFD</code> package needs a <code>data.frame</code> summarizing the type of each trait (<em>i.e.</em> each column of the <code>fruits_traits</code> <code>data.frame</code>).</p>
+<p>The first thing to do before starting analyses is to know your data.
+To do so, you must be able to characterize the traits you are using
+(<em>i.e.</em> tell the package what type of traits you are using). That
+is why <code>mFD</code> package needs a <code>data.frame</code>
+summarizing the type of each trait (<em>i.e.</em> each column of the
+<code>fruits_traits</code> <code>data.frame</code>).</p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2454,7 +2592,8 @@ basket_6          0         0           1</code></pre>
 </code></pre>
 </div>
 <table>
-<caption><span id="tab:unnamed-chunk-5">Table 3: </span>Traits types based on <strong>fruits &amp; baskets</strong> dataset</caption>
+<caption><span id="tab:unnamed-chunk-5">Table 3: </span>Traits types based on <strong>fruits
+&amp; baskets</strong> dataset</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">trait_name</th>
@@ -2485,19 +2624,34 @@ basket_6          0         0           1</code></pre>
 </tbody>
 </table>
 </div>
-<p>The <strong>first column</strong> contains <strong>traits name</strong>. The <strong>second column</strong> contains <strong>traits type</strong> following this code:</p>
+<p>The <strong>first column</strong> contains <strong>traits
+name</strong>. The <strong>second column</strong> contains
+<strong>traits type</strong> following this code:</p>
 <ul>
 <li><strong>N</strong>: nominal trait (factor variable)</li>
 <li><strong>O</strong>: ordinal traits (ordered variable)</li>
-<li><strong>C</strong>: circular traits (integer values) (<strong>N.B.</strong> circular traits can not be used in <code>mFD</code> function used to compute functional distance but ok for summary function and function to group species into Functional Entities)</li>
+<li><strong>C</strong>: circular traits (integer values)
+(<strong>N.B.</strong> circular traits can not be used in
+<code>mFD</code> function used to compute functional distance but ok for
+summary function and function to group species into Functional
+Entities)</li>
 <li><strong>Q</strong>: quantitative traits (numeric values)</li>
-<li><strong>F</strong>: fuzzy traits (described with several values defined in several columns in the <code>fruits_traits</code> <code>data.frame</code>)</li>
+<li><strong>F</strong>: fuzzy traits (described with several values
+defined in several columns in the <code>fruits_traits</code>
+<code>data.frame</code>)</li>
 </ul>
 <p><br/></p>
-<h2 id="computing-distances-between-species-based-on-functional-traits">1.2. Computing distances between species based on functional traits</h2>
+<h2
+id="computing-distances-between-species-based-on-functional-traits">1.2.
+Computing distances between species based on functional traits</h2>
 <p><br/></p>
-<p>The next step toward the computation of functional diversity indices is to estimate functional traits-based distances between species in order to build the functional space in which indices will be computed.</p>
-<p>To compute trait-based distances, we will use the <code>mFD::funct.dist()</code> function which includes the following arguments:</p>
+<p>The next step toward the computation of functional diversity indices
+is to estimate functional traits-based distances between species in
+order to build the functional space in which indices will be
+computed.</p>
+<p>To compute trait-based distances, we will use the
+<code>mFD::funct.dist()</code> function which includes the following
+arguments:</p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2513,19 +2667,61 @@ basket_6          0         0           1</code></pre>
 </div>
 </div>
 <ul>
-<li><p><code>sp_tr</code> is the species x trait <code>data.frame</code></p></li>
-<li><p><code>tr_cat</code> is the <code>data.frame</code> summarizing trait type for each trait</p></li>
-<li><p><code>metric</code> is a character string referring to the metric used to compute distances. Two metrics are available and <strong>the choice depends on your traits data</strong>:</p>
+<li><p><code>sp_tr</code> is the species x trait
+<code>data.frame</code></p></li>
+<li><p><code>tr_cat</code> is the <code>data.frame</code> summarizing
+trait type for each trait</p></li>
+<li><p><code>metric</code> is a character string referring to the metric
+used to compute distances. Two metrics are available and <strong>the
+choice depends on your traits data</strong>:</p>
 <ul>
-<li><p>if <strong>all traits are continuous</strong> use the <strong>Euclidean distance</strong> (<code>metric = "euclidean"</code>) and check the <a href="https://cmlmagneville.github.io/mFD/articles/Continuous_traits_framework.html">Compute Functional Diversity Indices based on Only Continuous Traits</a> tutorial which explains how to build a multidimensional space from traits through PCA analysis or considering directly each trait as a dimension.</p></li>
-<li><p>if you have <strong>non-continuous traits</strong> use the <strong>Gower distance</strong> (<code>metric = "gower"</code>) as this method allows traits weighting. This method can also deal with fuzzy traits.</p></li>
+<li><p>if <strong>all traits are continuous</strong> use the
+<strong>Euclidean distance</strong> (<code>metric = "euclidean"</code>)
+and check the <a
+href="https://cmlmagneville.github.io/mFD/articles/Continuous_traits_framework.html">Compute
+Functional Diversity Indices based on Only Continuous Traits</a>
+tutorial which explains how to build a multidimensional space from
+traits through PCA analysis or considering directly each trait as a
+dimension.</p></li>
+<li><p>if you have <strong>non-continuous traits</strong> use the
+<strong>Gower distance</strong> (<code>metric = "gower"</code>) as this
+method allows traits weighting. This method can also deal with fuzzy
+traits.</p></li>
 </ul></li>
-<li><p><code>scale_euclid</code> is a character string referring to the way the user wants to scale <strong>euclidean</strong> traits. You can either chose to scale by range (<code>range</code>), use the center transformation (<code>center</code>), use the scale transformation (<code>scale</code>), use the scale-center transformation (<code>scale_center</code>) or you can chose not to scale (<code>noscale</code>).</p></li>
-<li><p><code>ordinal_var</code> is a character string specifying the method to be used for ordinal variables (<em>i.e.</em> ordered). You can either chose to treat ordinal variables as continuous variables (with <code>"classic"</code> option) or to treat ordinal variables as ranks (with <code>metric</code> or <code>podani</code> options, see <code>mFD::funct.dist()</code> help file for detail).</p></li>
-<li><p><code>weight_type</code> is a character string referring to the type of method to weight traits. You can either chose to define weights using the <code>tr_cat</code> <code>data.frame</code> (cf. <strong>step 1.1</strong>) (<code>user</code> option) or you can chose to give the same weight to all traits (<code>equal</code> option). (<strong>N.B.</strong> Using <code>mFD</code>, you can not define weights for fuzzy traits, use <a href="https://cran.r-project.org/package=gawdis"><code>gawdis</code></a> package instead)</p></li>
-<li><p><code>stop_if_NA</code> is a logical value to stop or not the process if the <code>sp_tr</code> <code>data.frame</code> contains <code>NA</code>. If the <code>sp_tr</code> <code>data.frame</code> contains <code>NA</code> you can either chose to compute anyway functional distances (but keep in mind that <strong>Functional measures are sensitive to missing traits!</strong>) or you can delete species with missing or extrapolate missing traits (see <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.13185">Johnson <em>et al.</em> (2020)</a>).</p></li>
+<li><p><code>scale_euclid</code> is a character string referring to the
+way the user wants to scale <strong>euclidean</strong> traits. You can
+either chose to scale by range (<code>range</code>), use the center
+transformation (<code>center</code>), use the scale transformation
+(<code>scale</code>), use the scale-center transformation
+(<code>scale_center</code>) or you can chose not to scale
+(<code>noscale</code>).</p></li>
+<li><p><code>ordinal_var</code> is a character string specifying the
+method to be used for ordinal variables (<em>i.e.</em> ordered). You can
+either chose to treat ordinal variables as continuous variables (with
+<code>"classic"</code> option) or to treat ordinal variables as ranks
+(with <code>metric</code> or <code>podani</code> options, see
+<code>mFD::funct.dist()</code> help file for detail).</p></li>
+<li><p><code>weight_type</code> is a character string referring to the
+type of method to weight traits. You can either chose to define weights
+using the <code>tr_cat</code> <code>data.frame</code> (cf. <strong>step
+1.1</strong>) (<code>user</code> option) or you can chose to give the
+same weight to all traits (<code>equal</code> option).
+(<strong>N.B.</strong> Using <code>mFD</code>, you can not define
+weights for fuzzy traits, use <a
+href="https://cran.r-project.org/package=gawdis"><code>gawdis</code></a>
+package instead)</p></li>
+<li><p><code>stop_if_NA</code> is a logical value to stop or not the
+process if the <code>sp_tr</code> <code>data.frame</code> contains
+<code>NA</code>. If the <code>sp_tr</code> <code>data.frame</code>
+contains <code>NA</code> you can either chose to compute anyway
+functional distances (but keep in mind that <strong>Functional measures
+are sensitive to missing traits!</strong>) or you can delete species
+with missing or extrapolate missing traits (see <a
+href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.13185">Johnson
+<em>et al.</em> (2020)</a>).</p></li>
 </ul>
-<p>This function returns a <code>dist</code> object with traits-based distances between all pairs of species:</p>
+<p>This function returns a <code>dist</code> object with traits-based
+distances between all pairs of species:</p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2635,11 +2831,25 @@ tangerine     0.209     0.435      0.428
 water_melon   0.425     0.401      0.194     0.434</code></pre>
 </div>
 <p><br/></p>
-<h2 id="building-functional-spaces-and-chosing-the-best-one">1.3. Building functional spaces and chosing the best one</h2>
+<h2 id="building-functional-spaces-and-chosing-the-best-one">1.3.
+Building functional spaces and chosing the best one</h2>
 <p><br/></p>
-<h3 id="computing-several-multimensional-functional-spaces-and-assessing-their-quality">1.3.1. Computing several multimensional functional spaces and assessing their quality</h3>
+<h3
+id="computing-several-multimensional-functional-spaces-and-assessing-their-quality">1.3.1.
+Computing several multimensional functional spaces and assessing their
+quality</h3>
 <p><br/></p>
-<p>In order to generate a multidimensional space in which functional diversity indices are computed (<a href="https://www.sciencedirect.com/science/article/pii/S0169534712002650">Mouillot <em>et al.</em> 2013</a>, we will perform a PCoA using the trait-based distances (and if required a functional dendrogram). <code>mFD</code> evaluates the quality of PCoA-based multidimensional spaces according to the deviation between trait-based distances and distances in the functional space (extension of <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12299">Maire <em>et al.</em> (2015)</a> framework). For that, we will use the <code>mFD::quality.fspaces()</code> function:</p>
+<p>In order to generate a multidimensional space in which functional
+diversity indices are computed (<a
+href="https://www.sciencedirect.com/science/article/pii/S0169534712002650">Mouillot
+<em>et al.</em> 2013</a>, we will perform a PCoA using the trait-based
+distances (and if required a functional dendrogram). <code>mFD</code>
+evaluates the quality of PCoA-based multidimensional spaces according to
+the deviation between trait-based distances and distances in the
+functional space (extension of <a
+href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12299">Maire
+<em>et al.</em> (2015)</a> framework). For that, we will use the
+<code>mFD::quality.fspaces()</code> function:</p>
 <p><br /></p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2654,24 +2864,53 @@ water_melon   0.425     0.401      0.194     0.434</code></pre>
 </div>
 </div>
 <ul>
-<li><p><code>sp_dist</code> is the <code>dist</code> object with pairwise trait-based distance between species as computed in <strong>step 1.2</strong></p></li>
-<li><p><code>maxdim_pcoa</code> is the maximum number of PCoA axes to consider to build multidimensional spaces. Actually, the maximum number of dimensions considered depends on the number of PCoA axes with positive eigenvalues.</p></li>
-<li><p><code>deviation_weighting</code> refers to the method(s) used to weight the difference between species pairwise distances in the functional space and trait-based distances. <strong>You can chose between</strong>:</p>
+<li><p><code>sp_dist</code> is the <code>dist</code> object with
+pairwise trait-based distance between species as computed in
+<strong>step 1.2</strong></p></li>
+<li><p><code>maxdim_pcoa</code> is the maximum number of PCoA axes to
+consider to build multidimensional spaces. Actually, the maximum number
+of dimensions considered depends on the number of PCoA axes with
+positive eigenvalues.</p></li>
+<li><p><code>deviation_weighting</code> refers to the method(s) used to
+weight the difference between species pairwise distances in the
+functional space and trait-based distances. <strong>You can chose
+between</strong>:</p>
 <ul>
-<li><code>absolute</code>: absolute differences are used to compute the <strong>mean absolute deviation (mad)</strong> . It reflects the actual magnitude of errors that will affect FD metrics.</li>
-<li><code>squared</code>: squared differences are used to compute the <strong>root of mean square deviation (rmsd)</strong>. This weighting puts more weight to the large deviations between trait-based distances and distances in the functional space.</li>
-<li>Both quality metrics can be used with: <code>deviation_weighting = c("absolute", "squared")</code>.</li>
+<li><code>absolute</code>: absolute differences are used to compute the
+<strong>mean absolute deviation (mad)</strong> . It reflects the actual
+magnitude of errors that will affect FD metrics.</li>
+<li><code>squared</code>: squared differences are used to compute the
+<strong>root of mean square deviation (rmsd)</strong>. This weighting
+puts more weight to the large deviations between trait-based distances
+and distances in the functional space.</li>
+<li>Both quality metrics can be used with:
+<code>deviation_weighting = c("absolute", "squared")</code>.</li>
 </ul></li>
-<li><p><code>fdist_scaling</code> specifies whether distances in the functional space should be scaled before computing differences with trait-based distances. Scaling ensures that trait-based distances and distances in the functional space have the same maximum. Scaling distances implies that the quality of the functional space accounts for congruence in distances rather than their equality.</p></li>
+<li><p><code>fdist_scaling</code> specifies whether distances in the
+functional space should be scaled before computing differences with
+trait-based distances. Scaling ensures that trait-based distances and
+distances in the functional space have the same maximum. Scaling
+distances implies that the quality of the functional space accounts for
+congruence in distances rather than their equality.</p></li>
 </ul>
-<p><strong>N.B.</strong> The combination of <code>deviation_weighting</code> and <code>fdist_scaling</code> arguments leads to <strong>four possible quality metrics</strong>: <code>mad</code>, <code>rmsd</code>, <code>mad_scaled</code> and <code>rmsd_scaled</code></p>
+<p><strong>N.B.</strong> The combination of
+<code>deviation_weighting</code> and <code>fdist_scaling</code>
+arguments leads to <strong>four possible quality metrics</strong>:
+<code>mad</code>, <code>rmsd</code>, <code>mad_scaled</code> and
+<code>rmsd_scaled</code></p>
 <ul>
-<li><code>fdendro</code> specifies the clustering algorithm to compute a functional dendrogram. <code>NULL</code> means no dendrogram computed. The chosen algorithm must be one of the method recognized by the <code>stats::hclust()</code> function from the <a href="https://www.rdocumentation.org/packages/stats"><code>stats</code></a> package.</li>
+<li><code>fdendro</code> specifies the clustering algorithm to compute a
+functional dendrogram. <code>NULL</code> means no dendrogram computed.
+The chosen algorithm must be one of the method recognized by the
+<code>stats::hclust()</code> function from the <a
+href="https://www.rdocumentation.org/packages/stats"><code>stats</code></a>
+package.</li>
 </ul>
 <p>This function returns a list various objects:</p>
 <p><br /></p>
 <ul>
-<li>a <code>data.frame</code> gathering for each space (in rows), values of quality metric(s) (in columns)</li>
+<li>a <code>data.frame</code> gathering for each space (in rows), values
+of quality metric(s) (in columns)</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2695,14 +2934,24 @@ tree_average 0.082</code></pre>
 </div>
 <p><br /></p>
 <ul>
-<li><code>list</code> with details required for other tasks in <strong>step 1.4</strong> to plot functional space quality and in <strong>step 1.5</strong> to plot functional space.</li>
+<li><code>list</code> with details required for other tasks in
+<strong>step 1.4</strong> to plot functional space quality and in
+<strong>step 1.5</strong> to plot functional space.</li>
 </ul>
 <p><br /></p>
-<p><strong>N.B.</strong> The space with the best quality has the lowest quality metric. Here, thanks to mad values, we can see that the 4D space is the best one. That is why the following of this Practice will use this multidimensional space.</p>
+<p><strong>N.B.</strong> The space with the best quality has the lowest
+quality metric. Here, thanks to mad values, we can see that the 4D space
+is the best one. That is why the following of this Practice will use
+this multidimensional space.</p>
 <p><br/></p>
-<h3 id="illustrating-the-quality-of-the-functional-spaces">1.3.2. Illustrating the quality of the functional spaces</h3>
+<h3 id="illustrating-the-quality-of-the-functional-spaces">1.3.2.
+Illustrating the quality of the functional spaces</h3>
 <p><br/></p>
-<p>With the <code>mFD</code> package, it is possible to illustrate the quality of PCoA-based multidimensional spaces according to deviation between trait-based distances and distances in the functional space. For that, we use the <code>mFD::quality.fspace.plot()</code> function with the following arguments:</p>
+<p>With the <code>mFD</code> package, it is possible to illustrate the
+quality of PCoA-based multidimensional spaces according to deviation
+between trait-based distances and distances in the functional space. For
+that, we use the <code>mFD::quality.fspace.plot()</code> function with
+the following arguments:</p>
 <p><br /></p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2723,20 +2972,50 @@ tree_average 0.082</code></pre>
 </div>
 </div>
 <ul>
-<li><p><code>fspaces_quality</code> is the output of the <code>mFD::quality.fspaces()</code> function (<strong>step 1.3.1</strong>).</p></li>
-<li><p><code>quality_metric</code> refers to the quality metric used. It should be one of the column name(s) of the table gathering quality metric values (output of <code>mFD::quality.fspaces()</code> called <code>quality_fspaces</code>) (here: <code>fspaces_quality_fruits$quality_fspaces</code>) Thus it can be: <code>mad</code>, <code>rmsd</code>, <code>mad_scaled</code> or <code>rmsd_scaled</code> (see <strong>step 1.3.1</strong>)</p></li>
-<li><p><code>fspaces_plot</code> refers to the names of spaces for which quality has to be illustrated (up to 10). Names are those used in the output of <code>mFD::quality.fspaces()</code> function showing the values of the quality metric.</p></li>
-<li><p><code>name_file</code> refers to the name of file to save (without extension) if the user wants to save the figure. If the user only wants the plot to be displayed, then <code>name_file = NULL</code>.</p></li>
-<li><p><code>range_dist</code>, <code>range_dev</code>, <code>range_qdev</code> are arguments to set ranges of panel axes (check function help for further information).</p></li>
-<li><p><code>gradient_deviation</code> and <code>gradient_deviation_quality</code> are arguments to set points colors (check function help for further information).</p></li>
+<li><p><code>fspaces_quality</code> is the output of the
+<code>mFD::quality.fspaces()</code> function (<strong>step
+1.3.1</strong>).</p></li>
+<li><p><code>quality_metric</code> refers to the quality metric used. It
+should be one of the column name(s) of the table gathering quality
+metric values (output of <code>mFD::quality.fspaces()</code> called
+<code>quality_fspaces</code>) (here:
+<code>fspaces_quality_fruits$quality_fspaces</code>) Thus it can be:
+<code>mad</code>, <code>rmsd</code>, <code>mad_scaled</code> or
+<code>rmsd_scaled</code> (see <strong>step 1.3.1</strong>)</p></li>
+<li><p><code>fspaces_plot</code> refers to the names of spaces for which
+quality has to be illustrated (up to 10). Names are those used in the
+output of <code>mFD::quality.fspaces()</code> function showing the
+values of the quality metric.</p></li>
+<li><p><code>name_file</code> refers to the name of file to save
+(without extension) if the user wants to save the figure. If the user
+only wants the plot to be displayed, then
+<code>name_file = NULL</code>.</p></li>
+<li><p><code>range_dist</code>, <code>range_dev</code>,
+<code>range_qdev</code> are arguments to set ranges of panel axes (check
+function help for further information).</p></li>
+<li><p><code>gradient_deviation</code> and
+<code>gradient_deviation_quality</code> are arguments to set points
+colors (check function help for further information).</p></li>
 <li><p><code>xlab</code> is a parameter to set x-axis label.</p></li>
 </ul>
 <p><br /></p>
-<p>This function generates a figure with three panels (in rows) for each selected functional space (in columns). Each column represents a functional space, the value of the quality metric is written on the top of each column. The x-axis of all panels represents trait-based distances. The y-axis is different for each row:</p>
+<p>This function generates a figure with three panels (in rows) for each
+selected functional space (in columns). Each column represents a
+functional space, the value of the quality metric is written on the top
+of each column. The x-axis of all panels represents trait-based
+distances. The y-axis is different for each row:</p>
 <ul>
-<li>on the first (top) row, the y-axis represents species functional distances in the multidimensional space. Thus, the closer species are to the 1:1 line, the better distances in the functional space fit trait-based ones.</li>
-<li>on the second row, the y-axis shows the raw deviation of species distances in the functional space compared to trait-based distances. Thus, the raw deviation reflects the distance to the 1:1 line.</li>
-<li>on the third row (bottom), the y-axis shows the absolute or squared deviation of the (“scaled”) distance in the functional space. It is the deviation that is taken into account for computing the quality metric.</li>
+<li>on the first (top) row, the y-axis represents species functional
+distances in the multidimensional space. Thus, the closer species are to
+the 1:1 line, the better distances in the functional space fit
+trait-based ones.</li>
+<li>on the second row, the y-axis shows the raw deviation of species
+distances in the functional space compared to trait-based distances.
+Thus, the raw deviation reflects the distance to the 1:1 line.</li>
+<li>on the third row (bottom), the y-axis shows the absolute or squared
+deviation of the (“scaled”) distance in the functional space. It is the
+deviation that is taken into account for computing the quality
+metric.</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2758,14 +3037,38 @@ tree_average 0.082</code></pre>
 <p><img src="practice_files/figure-html5/unnamed-chunk-11-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <p><br /></p>
-<p>For the 2D space, on the top row there are a lot of points below the 1:1 lines, meaning that distances are overestimated in this multidimensional space. Looking at panels, we can see that the 4D space is the one in which points are the closest to the 1:1 line on the top row,and the closest to the x-axis for the two bottom rows, which reflects a better quality compared to other functional spaces / dendrogram. For the dendrogram, we can see on the top row that species pairs arrange in horizontal lines, meaning that different trait-based distances have then the same cophenetic distance on the dendrogram.</p>
+<p>For the 2D space, on the top row there are a lot of points below the
+1:1 lines, meaning that distances are overestimated in this
+multidimensional space. Looking at panels, we can see that the 4D space
+is the one in which points are the closest to the 1:1 line on the top
+row,and the closest to the x-axis for the two bottom rows, which
+reflects a better quality compared to other functional spaces /
+dendrogram. For the dendrogram, we can see on the top row that species
+pairs arrange in horizontal lines, meaning that different trait-based
+distances have then the same cophenetic distance on the dendrogram.</p>
 <p><br/></p>
-<h3 id="testing-the-correlation-between-functional-axes-and-traits">1.3.3. Testing the correlation between functional axes and traits</h3>
+<h3
+id="testing-the-correlation-between-functional-axes-and-traits">1.3.3.
+Testing the correlation between functional axes and traits</h3>
 <p><br /></p>
-<p><code>mFD</code> allows to test for correlations between traits and functional axes and then illustrate possible correlations (continuous traits = linear model is computed and r<sup>2</sup> and associated p-value are returned; non-continuous traits = Kruskal-Wallis test is computed and eta2 statistic is returned). The function <code>mFD::traits.faxes.cor()</code> allows to test and plot correlation and needs the following arguments:</p>
+<p><code>mFD</code> allows to test for correlations between traits and
+functional axes and then illustrate possible correlations (continuous
+traits = linear model is computed and r<sup>2</sup> and associated
+p-value are returned; non-continuous traits = Kruskal-Wallis test is
+computed and eta2 statistic is returned). The function
+<code>mFD::traits.faxes.cor()</code> allows to test and plot correlation
+and needs the following arguments:</p>
 <ul>
-<li><code>sp_tr</code> is the species x traits <code>data.frame</code></li>
-<li><code>sp_faxes_coord</code> is a <code>matrix</code> of species coordinates taken from the outputs of the <code>mFD::quality.fspaces()</code> function <strong>with columns representing axes on which functional space must be computed</strong>. For instance, in this tutorial, we will plot the functional space for 4 and 10 dimensions (<em>cf.</em> the two examples below). The whole <code>sp_faxes_coord</code> can be retrieved through the output of the <code>mFD::quality.fspaces()</code> function:</li>
+<li><code>sp_tr</code> is the species x traits
+<code>data.frame</code></li>
+<li><code>sp_faxes_coord</code> is a <code>matrix</code> of species
+coordinates taken from the outputs of the
+<code>mFD::quality.fspaces()</code> function <strong>with columns
+representing axes on which functional space must be computed</strong>.
+For instance, in this tutorial, we will plot the functional space for 4
+and 10 dimensions (<em>cf.</em> the two examples below). The whole
+<code>sp_faxes_coord</code> can be retrieved through the output of the
+<code>mFD::quality.fspaces()</code> function:</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2775,9 +3078,14 @@ tree_average 0.082</code></pre>
 </div>
 </div>
 <ul>
-<li><code>plot</code> is a logical value indicating whether correlations should be illustrated or not. If this option is set to <code>TRUE</code>, traits-axis relationships are plotted through scatterplot for continuous traits and boxplot for non-continuous traits.</li>
+<li><code>plot</code> is a logical value indicating whether correlations
+should be illustrated or not. If this option is set to
+<code>TRUE</code>, traits-axis relationships are plotted through
+scatterplot for continuous traits and boxplot for non-continuous
+traits.</li>
 </ul>
-<p>The function <code>mFD::traits.faxes.cor()</code> works as follows:</p>
+<p>The function <code>mFD::traits.faxes.cor()</code> works as
+follows:</p>
 <p><br /></p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2789,7 +3097,8 @@ tree_average 0.082</code></pre>
 </code></pre>
 </div>
 </div>
-<p>We can print only traits with significant effect on position along one of the axis and look at the plots:</p>
+<p>We can print only traits with significant effect on position along
+one of the axis and look at the plots:</p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2815,17 +3124,42 @@ tree_average 0.082</code></pre>
 <p><img src="practice_files/figure-html5/unnamed-chunk-14-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
 <p><br /></p>
-<p>We can thus see that <strong>PC1</strong> is mostly driven by <em>Climate</em> (temperate on the left and tropical on the right) and <em>Plant Type</em> (forb &amp; shrub on the left vs tree &amp; vine on the right) and <em>Size</em> (large fruits on the right) with weaker influence of <em>Seed</em> (eta2 &lt; 0.25). Then, <strong>PC2</strong> is mostly driven by <em>Seed</em> (no seed on the left and pit seed on the right) with weaker influence of <em>Plant Type</em>. <strong>PC3</strong> is driven by only one trait, <em>Size</em>. And finally <strong>PC4</strong> is mostly driven by <em>Sugar</em> (high sugar content on the right and low sugar content on the left) with a weaker influence of <em>Plant Type</em>.</p>
+<p>We can thus see that <strong>PC1</strong> is mostly driven by
+<em>Climate</em> (temperate on the left and tropical on the right) and
+<em>Plant Type</em> (forb &amp; shrub on the left vs tree &amp; vine on
+the right) and <em>Size</em> (large fruits on the right) with weaker
+influence of <em>Seed</em> (eta2 &lt; 0.25). Then, <strong>PC2</strong>
+is mostly driven by <em>Seed</em> (no seed on the left and pit seed on
+the right) with weaker influence of <em>Plant Type</em>.
+<strong>PC3</strong> is driven by only one trait, <em>Size</em>. And
+finally <strong>PC4</strong> is mostly driven by <em>Sugar</em> (high
+sugar content on the right and low sugar content on the left) with a
+weaker influence of <em>Plant Type</em>.</p>
 <p><br /></p>
-<h2 id="plotting-the-selected-functional-space-and-position-of-species">1.4. Plotting the selected functional space and position of species</h2>
+<h2
+id="plotting-the-selected-functional-space-and-position-of-species">1.4.
+Plotting the selected functional space and position of species</h2>
 <p><br/></p>
-<p>Once the user has selected the dimensionality of the functional space, <code>mFD</code> allows you to plot the given multidimensional functional space and the position of species in all 2-dimensions spaces made by pairs of axes.</p>
+<p>Once the user has selected the dimensionality of the functional
+space, <code>mFD</code> allows you to plot the given multidimensional
+functional space and the position of species in all 2-dimensions spaces
+made by pairs of axes.</p>
 <p><br /></p>
-<p>The <code>mFD::funct.space.plot()</code> function allows to illustrate the position of all species along pairs of space axes.</p>
+<p>The <code>mFD::funct.space.plot()</code> function allows to
+illustrate the position of all species along pairs of space axes.</p>
 <p><br /></p>
-<p>This function allows to plot with many possibilities to change colors/shapes of each plotted element. Here are listed the main arguments:</p>
+<p>This function allows to plot with many possibilities to change
+colors/shapes of each plotted element. Here are listed the main
+arguments:</p>
 <ul>
-<li><code>sp_faxes_coord</code> is a <code>matrix</code> of species coordinates taken from the outputs of the <code>mFD::quality.fspaces()</code> function <strong>with columns representing axes on which functional space must be computed</strong>. For instance, in this tutorial, we will plot the functional space for 4 and 10 dimensions (<em>cf.</em> the two examples below). The whole <code>sp_faxes_coord</code> can be retrieved through the output of the <code>mFD::quality.fspaces()</code> function:</li>
+<li><code>sp_faxes_coord</code> is a <code>matrix</code> of species
+coordinates taken from the outputs of the
+<code>mFD::quality.fspaces()</code> function <strong>with columns
+representing axes on which functional space must be computed</strong>.
+For instance, in this tutorial, we will plot the functional space for 4
+and 10 dimensions (<em>cf.</em> the two examples below). The whole
+<code>sp_faxes_coord</code> can be retrieved through the output of the
+<code>mFD::quality.fspaces()</code> function:</li>
 </ul>
 <p><br /></p>
 <em>Code</em>
@@ -2837,17 +3171,44 @@ tree_average 0.082</code></pre>
 </div>
 <p><br /></p>
 <ul>
-<li><p><code>faxes</code> is a <code>vector</code> containing names of axes to plot. If set to <code>NULL</code>, the first four functional axes will be plotted.</p></li>
-<li><p><code>faxes_nm</code> is a <code>vector</code> containing labels of <code>faxes</code> (following faxes vector rank). If <code>NULL</code>, labels follow <code>faxes</code> vector names.</p></li>
-<li><p><code>range_faxes</code> is a <code>vector</code> to complete if the user wants to set specific limits for functional axes. If <code>range_faxes = c(NA, NA)</code>, the range is computed according to the range of values among all axes.</p></li>
-<li><p><code>plot_ch</code> is a <code>logical</code> value used to draw or not the 2D convex-hull filled by the global pool of species. Color, fill and opacity of the convex hull can be chosen through other inputs, please refer to the function’s help.</p></li>
-<li><p><code>plot_sp_nm</code> is a <code>vector</code> containing species names to plot. If <code>NULL</code>, no species names plotted. Name size, color and font can be chosen through other inputs, please refer to the function’s help.</p></li>
-<li><p><code>plot_vertices</code> is a <code>logical</code> value used to plot or not vertices with a different shape than other species. <strong>Be careful</strong> these representations are 2D representations, thus vertices of the convex-hull in the n-multidimensional space can be close to the center of the hull projected in 2D. Color, fill, shape and size of vertices can be chosen through other inputs, please refer to the function’s help.</p></li>
-<li><p><code>check_input</code> is a recurrent argument in the <code>mFD</code> package. It defines whether inputs should be checked before computation or not. Possible error messages will thus be more understandable for the user than R error messages (<strong>Recommendation:</strong> set it as <code>TRUE</code>).</p></li>
-<li><p>other inputs are used to chose color, fill, size, and shape of species from the global pool, please refer to the function’s help.</p></li>
+<li><p><code>faxes</code> is a <code>vector</code> containing names of
+axes to plot. If set to <code>NULL</code>, the first four functional
+axes will be plotted.</p></li>
+<li><p><code>faxes_nm</code> is a <code>vector</code> containing labels
+of <code>faxes</code> (following faxes vector rank). If
+<code>NULL</code>, labels follow <code>faxes</code> vector
+names.</p></li>
+<li><p><code>range_faxes</code> is a <code>vector</code> to complete if
+the user wants to set specific limits for functional axes. If
+<code>range_faxes = c(NA, NA)</code>, the range is computed according to
+the range of values among all axes.</p></li>
+<li><p><code>plot_ch</code> is a <code>logical</code> value used to draw
+or not the 2D convex-hull filled by the global pool of species. Color,
+fill and opacity of the convex hull can be chosen through other inputs,
+please refer to the function’s help.</p></li>
+<li><p><code>plot_sp_nm</code> is a <code>vector</code> containing
+species names to plot. If <code>NULL</code>, no species names plotted.
+Name size, color and font can be chosen through other inputs, please
+refer to the function’s help.</p></li>
+<li><p><code>plot_vertices</code> is a <code>logical</code> value used
+to plot or not vertices with a different shape than other species.
+<strong>Be careful</strong> these representations are 2D
+representations, thus vertices of the convex-hull in the
+n-multidimensional space can be close to the center of the hull
+projected in 2D. Color, fill, shape and size of vertices can be chosen
+through other inputs, please refer to the function’s help.</p></li>
+<li><p><code>check_input</code> is a recurrent argument in the
+<code>mFD</code> package. It defines whether inputs should be checked
+before computation or not. Possible error messages will thus be more
+understandable for the user than R error messages
+(<strong>Recommendation:</strong> set it as <code>TRUE</code>).</p></li>
+<li><p>other inputs are used to chose color, fill, size, and shape of
+species from the global pool, please refer to the function’s
+help.</p></li>
 </ul>
 <p><br /></p>
-<p>Here are the plots for the <em>fruits &amp; baskets</em> dataset for the <strong>first four PCoA axis</strong>:</p>
+<p>Here are the plots for the <em>fruits &amp; baskets</em> dataset for
+the <strong>first four PCoA axis</strong>:</p>
 <p><br /></p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2869,27 +3230,60 @@ tree_average 0.082</code></pre>
 <p><img src="practice_files/figure-html5/unnamed-chunk-16-1.png" width="624" /></p>
 </div>
 <p><br /></p>
-<p>Here, the convex-hull of the species pool is plotted in white and axis have the same range to get rid of bias based on different axis scales. Species being vertices of the 4D convex hull are in purple.</p>
+<p>Here, the convex-hull of the species pool is plotted in white and
+axis have the same range to get rid of bias based on different axis
+scales. Species being vertices of the 4D convex hull are in purple.</p>
 <p><br/></p>
-<h1 id="part-2.-computing-and-plotting-fd-indices-using-the-mfd-package">Part 2. Computing and plotting FD indices using the <code>mFD</code> package</h1>
+<h1
+id="part-2.-computing-and-plotting-fd-indices-using-the-mfd-package">Part
+2. Computing and plotting FD indices using the <code>mFD</code>
+package</h1>
 <p><br /></p>
-<p>The <code>mFD::alpha.fd.multidim()</code> function allows computing alpha and beta FD indices.</p>
+<p>The <code>mFD::alpha.fd.multidim()</code> function allows computing
+alpha and beta FD indices.</p>
 <p><br /></p>
-<h2 id="computing-and-plotting-alpha-fd-indices">2.1. Computing and plotting alpha FD indices</h2>
+<h2 id="computing-and-plotting-alpha-fd-indices">2.1. Computing and
+plotting alpha FD indices</h2>
 <p><br /></p>
-<p>Using the <code>alpha.fd.multidim()</code> function, you can compute up to nine alpha FD indices:</p>
+<p>Using the <code>alpha.fd.multidim()</code> function, you can compute
+up to nine alpha FD indices:</p>
 <ul>
-<li><p><code>FDis</code> <strong>Functional Dispersion</strong>: the biomass weighted deviation of species traits values from the center of the functional space filled by the assemblage <em>i.e.</em> the biomass-weighted mean distance to the biomass-weighted mean trait values of the assemblage.</p></li>
-<li><p><code>FRic</code> <strong>Functional Richness</strong>: the proportion of functional space filled by species of the studied assemblage, <em>i.e.</em> the volume inside the convex-hull shaping species. To compute <code>FRic</code> the number of species must be at least higher than the number of functional axis + 1.</p></li>
-<li><p><code>FDiv</code> <strong>Functional Divergence</strong>: the proportion of the biomass supported by the species with the most extreme functional traits <em>i.e.</em> the ones located close to the edge of the convex-hull filled by the assemblage.</p></li>
-<li><p><code>FEve</code> <strong>Functional Evenness</strong>: the regularity of biomass distribution in the functional space using the Minimum Spanning Tree linking all species present in the assemblage.</p></li>
-<li><p><code>FSpe</code> <strong>Functional Specialization</strong>: the biomass weighted mean distance to the mean position of species from the global pool (present in all assemblages).</p></li>
-<li><p><code>FMPD</code> <strong>Functional Mean Pairwise Distance</strong>: the mean weighted distance between all species pairs.</p></li>
-<li><p><code>FNND</code> <strong>Functional Mean Nearest Neighbour Distance</strong>: the weighted distance to the nearest neighbor within the assemblage.</p></li>
-<li><p><code>FIde</code> <strong>Functional Identity</strong>: the mean traits values for the assemblage. <code>FIde</code> is always computed when <code>FDis</code> is computed.</p></li>
-<li><p><code>FOri</code> <strong>Functional Originality</strong>: the weighted mean distance to the nearest species from the global species pool.</p></li>
+<li><p><code>FDis</code> <strong>Functional Dispersion</strong>: the
+biomass weighted deviation of species traits values from the center of
+the functional space filled by the assemblage <em>i.e.</em> the
+biomass-weighted mean distance to the biomass-weighted mean trait values
+of the assemblage.</p></li>
+<li><p><code>FRic</code> <strong>Functional Richness</strong>: the
+proportion of functional space filled by species of the studied
+assemblage, <em>i.e.</em> the volume inside the convex-hull shaping
+species. To compute <code>FRic</code> the number of species must be at
+least higher than the number of functional axis + 1.</p></li>
+<li><p><code>FDiv</code> <strong>Functional Divergence</strong>: the
+proportion of the biomass supported by the species with the most extreme
+functional traits <em>i.e.</em> the ones located close to the edge of
+the convex-hull filled by the assemblage.</p></li>
+<li><p><code>FEve</code> <strong>Functional Evenness</strong>: the
+regularity of biomass distribution in the functional space using the
+Minimum Spanning Tree linking all species present in the
+assemblage.</p></li>
+<li><p><code>FSpe</code> <strong>Functional Specialization</strong>: the
+biomass weighted mean distance to the mean position of species from the
+global pool (present in all assemblages).</p></li>
+<li><p><code>FMPD</code> <strong>Functional Mean Pairwise
+Distance</strong>: the mean weighted distance between all species
+pairs.</p></li>
+<li><p><code>FNND</code> <strong>Functional Mean Nearest Neighbour
+Distance</strong>: the weighted distance to the nearest neighbor within
+the assemblage.</p></li>
+<li><p><code>FIde</code> <strong>Functional Identity</strong>: the mean
+traits values for the assemblage. <code>FIde</code> is always computed
+when <code>FDis</code> is computed.</p></li>
+<li><p><code>FOri</code> <strong>Functional Originality</strong>: the
+weighted mean distance to the nearest species from the global species
+pool.</p></li>
 </ul>
-<p>In this Practice we will only compute five of them. The function is used as follow:</p>
+<p>In this Practice we will only compute five of them. The function is
+used as follow:</p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2907,19 +3301,36 @@ tree_average 0.082</code></pre>
 <p><br /></p>
 <p>The arguments and their use are listed below:</p>
 <ul>
-<li><p><code>sp_faxes_coord</code> is the species coordinates matrix. This dataframe gathers only axis of the functional space you have chosen based on <strong>step 4</strong>.</p></li>
-<li><p><code>asb_sp_w</code> is the matrix linking species and assemblages they belong to (summarized in <strong>step 1</strong>).</p></li>
-<li><p><code>ind_vect</code> is a vector with names of diversity functional indices to compute.</p></li>
-<li><p><code>scaling</code> is a logical value indicating whether indices should be scaled between 0 and 1. If scaling is to be done, this argument must be set to <code>TRUE</code>.</p></li>
-<li><p><code>check_input</code> is a recurrent argument in the <code>mFD</code> package. It defines whether inputs should be checked before computation or not. Possible error messages will thus be more understandable for the user than R error messages (<strong>Recommendation:</strong> set it as <code>TRUE</code>).</p></li>
-<li><p><code>details_returned</code> is used if the user wants to store information that are used in graphical functions. If the user wants to plot FD indices, then <code>details_returned</code> must be set to <code>TRUE</code>.</p></li>
+<li><p><code>sp_faxes_coord</code> is the species coordinates matrix.
+This dataframe gathers only axis of the functional space you have chosen
+based on <strong>step 4</strong>.</p></li>
+<li><p><code>asb_sp_w</code> is the matrix linking species and
+assemblages they belong to (summarized in <strong>step
+1</strong>).</p></li>
+<li><p><code>ind_vect</code> is a vector with names of diversity
+functional indices to compute.</p></li>
+<li><p><code>scaling</code> is a logical value indicating whether
+indices should be scaled between 0 and 1. If scaling is to be done, this
+argument must be set to <code>TRUE</code>.</p></li>
+<li><p><code>check_input</code> is a recurrent argument in the
+<code>mFD</code> package. It defines whether inputs should be checked
+before computation or not. Possible error messages will thus be more
+understandable for the user than R error messages
+(<strong>Recommendation:</strong> set it as <code>TRUE</code>).</p></li>
+<li><p><code>details_returned</code> is used if the user wants to store
+information that are used in graphical functions. If the user wants to
+plot FD indices, then <code>details_returned</code> must be set to
+<code>TRUE</code>.</p></li>
 </ul>
 <p><br /></p>
-<p><strong>N.B.</strong> <strong>Use lowercase letters to enter FD indices names</strong></p>
+<p><strong>N.B.</strong> <strong>Use lowercase letters to enter FD
+indices names</strong></p>
 <p><br /></p>
 <p>The function has two main outputs:</p>
 <ul>
-<li>a <strong><code>data.frame</code> gathering indices values in each assemblage</strong> (for <code>FIde</code> values, there are as many columns as there are axes to the studied functional space).</li>
+<li>a <strong><code>data.frame</code> gathering indices values in each
+assemblage</strong> (for <code>FIde</code> values, there are as many
+columns as there are axes to the studied functional space).</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2953,7 +3364,12 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 </div>
 <p><br /></p>
 <ul>
-<li>a <strong>details list</strong> of <code>data.frames</code> and <code>lists</code> gathering information such as coordinates of centroids, distances and identity of the nearest neighbour, distances to the centroid, etc. The user does not have to directly use it but it will be useful if FD indices are then plotted. It can be retrieved through:</li>
+<li>a <strong>details list</strong> of <code>data.frames</code> and
+<code>lists</code> gathering information such as coordinates of
+centroids, distances and identity of the nearest neighbour, distances to
+the centroid, etc. The user does not have to directly use it but it will
+be useful if FD indices are then plotted. It can be retrieved
+through:</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2963,7 +3379,8 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 </div>
 </div>
 <p><br /></p>
-<p>Then, you can plot functional indices using the <code>mFD::alpha.multidim.plot()</code> for up to two assemblages:</p>
+<p>Then, you can plot functional indices using the
+<code>mFD::alpha.multidim.plot()</code> for up to two assemblages:</p>
 <p><br /></p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -2983,23 +3400,53 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 </div>
 </div>
 <p><br /></p>
-<p>This function has a lot of arguments: most of them are graphical arguments allowing the user to chose colors, shapes, sizes, scales, etc. This tutorial only presents main arguments. To learn about the use of graphical arguments, check the function help file. The main arguments of this function are listed below:</p>
+<p>This function has a lot of arguments: most of them are graphical
+arguments allowing the user to chose colors, shapes, sizes, scales, etc.
+This tutorial only presents main arguments. To learn about the use of
+graphical arguments, check the function help file. The main arguments of
+this function are listed below:</p>
 <ul>
-<li><code>output_alpha_fd_multidim</code> is the output of the `<code>mFD::alpha.fd.multidim()</code> function.</li>
-<li><code>plot_asb_nm</code> is a vector gathering name(s) of assemblage(s) to plot.</li>
-<li><code>ind_vect</code> is a vector gathering FD indices to plot. Plots are available for <code>FDis</code>, <code>FIde</code>, <code>FEve</code>, <code>FRic</code>, <code>FDiv</code>, <code>FOri</code>, <code>FSpe</code>, and <code>FNND.</code></li>
-<li><code>faxes</code> is a vector containing names of axes to plot. You can only plot from two to four axes labels for graphical reasons.</li>
-<li><code>faxes_nm</code> is a vector with axes labels if the user ants different axes labels than <code>faxes</code> ones.</li>
-<li><code>range_faxes</code> is a vector with minimum and maximum values for axes. If <code>range_faxes = c(NA, NA)</code>, the range is computed according to the range of values among all axes, all axes having thus the same range. To have a fair representation of species positions in all plots, all axes must have the same range.</li>
-<li><code>plot_sp_nm</code> is a vector containing species names to plot. If <code>NULL</code>, then no name is plotted.</li>
-<li><code>check_input</code> is a recurrent argument in <code>mFD</code>. It defines whether inputs should be checked before computation or not. Possible error messages will thus be more understandable for the user than R error messages (<strong>Recommendation:</strong> set it as <code>TRUE</code>.</li>
-<li>size, color, fill, and shape arguments for each component of the graphs <em>i.e.</em> species of the global pool, species of the studied assemblage(s), vertices, centroids and segments. If you have to plot two assemblages, then inputs should be formatted as follow: <code>c(pool = ..., asb1 = ..., asb2 = ...)</code> for inputs used for global pool and studied assemblages and <code>c(asb1 = ..., asb2 = ...)</code> for inputs used for studied assemblages only.</li>
+<li><code>output_alpha_fd_multidim</code> is the output of the
+`<code>mFD::alpha.fd.multidim()</code> function.</li>
+<li><code>plot_asb_nm</code> is a vector gathering name(s) of
+assemblage(s) to plot.</li>
+<li><code>ind_vect</code> is a vector gathering FD indices to plot.
+Plots are available for <code>FDis</code>, <code>FIde</code>,
+<code>FEve</code>, <code>FRic</code>, <code>FDiv</code>,
+<code>FOri</code>, <code>FSpe</code>, and <code>FNND.</code></li>
+<li><code>faxes</code> is a vector containing names of axes to plot. You
+can only plot from two to four axes labels for graphical reasons.</li>
+<li><code>faxes_nm</code> is a vector with axes labels if the user ants
+different axes labels than <code>faxes</code> ones.</li>
+<li><code>range_faxes</code> is a vector with minimum and maximum values
+for axes. If <code>range_faxes = c(NA, NA)</code>, the range is computed
+according to the range of values among all axes, all axes having thus
+the same range. To have a fair representation of species positions in
+all plots, all axes must have the same range.</li>
+<li><code>plot_sp_nm</code> is a vector containing species names to
+plot. If <code>NULL</code>, then no name is plotted.</li>
+<li><code>check_input</code> is a recurrent argument in
+<code>mFD</code>. It defines whether inputs should be checked before
+computation or not. Possible error messages will thus be more
+understandable for the user than R error messages
+(<strong>Recommendation:</strong> set it as <code>TRUE</code>.</li>
+<li>size, color, fill, and shape arguments for each component of the
+graphs <em>i.e.</em> species of the global pool, species of the studied
+assemblage(s), vertices, centroids and segments. If you have to plot two
+assemblages, then inputs should be formatted as follow:
+<code>c(pool = ..., asb1 = ..., asb2 = ...)</code> for inputs used for
+global pool and studied assemblages and
+<code>c(asb1 = ..., asb2 = ...)</code> for inputs used for studied
+assemblages only.</li>
 </ul>
 <p><br /></p>
-<p>Then, using these arguments, here are the output plots for the <strong>fruits &amp; baskets</strong> dataset:</p>
+<p>Then, using these arguments, here are the output plots for the
+<strong>fruits &amp; baskets</strong> dataset:</p>
 <p><br /></p>
 <ul>
-<li><code>FRic</code> representation: the colored shapes reflect the convex-hull of the studied assemblages and the white shape reflects the convex-hull of the global pool of species:</li>
+<li><code>FRic</code> representation: the colored shapes reflect the
+convex-hull of the studied assemblages and the white shape reflects the
+convex-hull of the global pool of species:</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -3010,7 +3457,12 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 <p><img src="practice_files/figure-html5/unnamed-chunk-21-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
-<li><code>FDiv</code> representation: the gravity centers of <strong>vertices</strong> (i.e. species with the most extreme functional traits) of each assemblages are plotted as a square and a triangle. The two colored circles represent the mean distance of species to the gravity center for each assemblage. Species of each assemblage have different size given their relative weight into the assemblage.</li>
+<li><code>FDiv</code> representation: the gravity centers of
+<strong>vertices</strong> (i.e. species with the most extreme functional
+traits) of each assemblages are plotted as a square and a triangle. The
+two colored circles represent the mean distance of species to the
+gravity center for each assemblage. Species of each assemblage have
+different size given their relative weight into the assemblage.</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -3021,7 +3473,11 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 <p><img src="practice_files/figure-html5/unnamed-chunk-22-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
-<li><code>FSpe</code> representation: colored traits represent distances of each species from a given assemblage to the center of gravity of the global pool (i.e center of the functional space). the center of gravity is plotted with a purple diamond. Species of each assemblage have different size given their relative weight into the assemblage.</li>
+<li><code>FSpe</code> representation: colored traits represent distances
+of each species from a given assemblage to the center of gravity of the
+global pool (i.e center of the functional space). the center of gravity
+is plotted with a purple diamond. Species of each assemblage have
+different size given their relative weight into the assemblage.</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -3032,7 +3488,12 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 <p><img src="practice_files/figure-html5/unnamed-chunk-23-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
-<li><code>FDis</code> representation: colored traits represent distances of each species from a given assemblage to the center of gravity of species of the assemblage (defined by FIde values). The center of gravity of each assemblage is plotted using a square and a triangle. Species of each assemblage havedifferent size given their relative weight into the assemblage.</li>
+<li><code>FDis</code> representation: colored traits represent distances
+of each species from a given assemblage to the center of gravity of
+species of the assemblage (defined by FIde values). The center of
+gravity of each assemblage is plotted using a square and a triangle.
+Species of each assemblage havedifferent size given their relative
+weight into the assemblage.</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -3043,7 +3504,10 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 <p><img src="practice_files/figure-html5/unnamed-chunk-24-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
-<li><code>FIde</code> representation:colored lines refer to the weighted average position of species of each assemblage along each axis. Species of each assemblage have different size given their relative weight into the assemblage.</li>
+<li><code>FIde</code> representation:colored lines refer to the weighted
+average position of species of each assemblage along each axis. Species
+of each assemblage have different size given their relative weight into
+the assemblage.</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -3053,15 +3517,44 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 </div>
 <p><img src="practice_files/figure-html5/unnamed-chunk-25-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
-<p><strong>N.B.</strong> Using the <code>mFD</code> package, you can plot more than two assemblages but not with the <code>alpha.multidim.plot()</code> function. There are several specific functions for each step of the plot: build the background of the plot (<code>background.plot()</code>), plot the pool of species you are working on (<code>pool.plot()</code>), plot species from the studied assemblages (<code>species.plot()</code>) function and lastly plot the wanted metric using related function (<code>fric.plot()</code>, <code>fdiv.plot()</code>, <code>fide.plot()</code>,<code>fdis.plot()</code>, <code>feve.plot()</code>, <code>fnnd.plot()</code>, <code>fori.plot()</code>, <code>fspe.plot()</code>). Plots for different axes combination can be gathered into a single plot using the <code>panels.to.patchwork()</code> function.</p>
+<p><strong>N.B.</strong> Using the <code>mFD</code> package, you can
+plot more than two assemblages but not with the
+<code>alpha.multidim.plot()</code> function. There are several specific
+functions for each step of the plot: build the background of the plot
+(<code>background.plot()</code>), plot the pool of species you are
+working on (<code>pool.plot()</code>), plot species from the studied
+assemblages (<code>species.plot()</code>) function and lastly plot the
+wanted metric using related function (<code>fric.plot()</code>,
+<code>fdiv.plot()</code>,
+<code>fide.plot()</code>,<code>fdis.plot()</code>,
+<code>feve.plot()</code>, <code>fnnd.plot()</code>,
+<code>fori.plot()</code>, <code>fspe.plot()</code>). Plots for different
+axes combination can be gathered into a single plot using the
+<code>panels.to.patchwork()</code> function.</p>
 <p><br/></p>
-<h2 id="computing-and-plotting-beta-fd-indices">2.2. Computing and plotting beta FD indices</h2>
+<h2 id="computing-and-plotting-beta-fd-indices">2.2. Computing and
+plotting beta FD indices</h2>
 <p><br/></p>
-<p><strong>N.B.</strong> Some Mac OS X 10.15 may encounter some issues with the beta_*() functions.</p>
-<p><code>mFD</code> package allows you to compute beta diversity indices for each assemblage pairs following <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12021">Villeger <em>et al.</em> 2013</a>. For that we will use the <code>mFD::beta.fd.multidim()</code> function. This function can compute two families of functional beta diversity indices, either <strong>Jaccard</strong> or <strong>Sorensen</strong>.</p>
-<p>In this example, we will use Jaccard index. For each assemblages pair, the dissimilarity index is decomposed into two additive components: <strong>turnover</strong> and <strong>nestedness-resultant</strong>.</p>
-<p><strong>NB</strong> The <strong>turnover</strong> component is the highest if there is no shared traits combination between the two assemblages. The <strong>nestedness</strong> component is the highest if one assemblage hosts a small subset of the functional strategies present in the other.</p>
-<p>The <code>mFD::beta.fd.multidim()</code> function has the main following arguments:</p>
+<p><strong>N.B.</strong> Some Mac OS X 10.15 may encounter some issues
+with the beta_*() functions.</p>
+<p><code>mFD</code> package allows you to compute beta diversity indices
+for each assemblage pairs following <a
+href="https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12021">Villeger
+<em>et al.</em> 2013</a>. For that we will use the
+<code>mFD::beta.fd.multidim()</code> function. This function can compute
+two families of functional beta diversity indices, either
+<strong>Jaccard</strong> or <strong>Sorensen</strong>.</p>
+<p>In this example, we will use Jaccard index. For each assemblages
+pair, the dissimilarity index is decomposed into two additive
+components: <strong>turnover</strong> and
+<strong>nestedness-resultant</strong>.</p>
+<p><strong>NB</strong> The <strong>turnover</strong> component is the
+highest if there is no shared traits combination between the two
+assemblages. The <strong>nestedness</strong> component is the highest if
+one assemblage hosts a small subset of the functional strategies present
+in the other.</p>
+<p>The <code>mFD::beta.fd.multidim()</code> function has the main
+following arguments:</p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -3075,17 +3568,32 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 </div>
 </div>
 <ul>
-<li><p><code>sp_faxes_coord</code> is the species coordinates matrix. This dataframe gathers <strong>only</strong> axis of the functional space you have chosen based on <strong>step 4</strong>.</p></li>
-<li><p><code>asb_sp_occ</code> is the matrix of occurrence (coded as 0/1) of species assemblages (summarized in <strong>step 1</strong>).</p></li>
-<li><p><code>check_input</code> is a recurrent argument in the <code>mFD</code> package. It defines whether inputs should be checked before computation or not. Possible error messages will thus be more understandable for the user than R error messages (<strong>Recommendation:</strong> set it as <code>TRUE</code>.</p></li>
-<li><p><code>beta_family</code> a character string for the type of beta-diversity index to compute, it can either be <code>Jaccard</code> or <code>Sorensen</code>.</p></li>
-<li><p><code>details_returned</code> is a logical value indicating whether details of outputs must be stored. It should be stored if you plan to use the graphical function to illustrate beta diversity indices thereafter.</p></li>
-<li><p>There are also other arguments for parallelisation options. Check the function help file for more explanation.</p></li>
+<li><p><code>sp_faxes_coord</code> is the species coordinates matrix.
+This dataframe gathers <strong>only</strong> axis of the functional
+space you have chosen based on <strong>step 4</strong>.</p></li>
+<li><p><code>asb_sp_occ</code> is the matrix of occurrence (coded as
+0/1) of species assemblages (summarized in <strong>step
+1</strong>).</p></li>
+<li><p><code>check_input</code> is a recurrent argument in the
+<code>mFD</code> package. It defines whether inputs should be checked
+before computation or not. Possible error messages will thus be more
+understandable for the user than R error messages
+(<strong>Recommendation:</strong> set it as <code>TRUE</code>.</p></li>
+<li><p><code>beta_family</code> a character string for the type of
+beta-diversity index to compute, it can either be <code>Jaccard</code>
+or <code>Sorensen</code>.</p></li>
+<li><p><code>details_returned</code> is a logical value indicating
+whether details of outputs must be stored. It should be stored if you
+plan to use the graphical function to illustrate beta diversity indices
+thereafter.</p></li>
+<li><p>There are also other arguments for parallelisation options. Check
+the function help file for more explanation.</p></li>
 </ul>
 <p><br /></p>
 <p>The function returns a list containing:</p>
 <ul>
-<li>a dist object with beta indices values for each pair of assemblages:</li>
+<li>a dist object with beta indices values for each pair of
+assemblages:</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -3094,68 +3602,108 @@ basket_10 -0.05375867 -0.005743348 -0.05649324  0.041191011</code></pre>
 </code></pre>
 </div>
 <pre><code>$jac_diss
-              basket_1     basket_2     basket_3     basket_4
-basket_2  0.000000e+00                                       
-basket_3  0.000000e+00 0.000000e+00                          
-basket_4  9.654002e-01 9.654002e-01 9.654002e-01             
-basket_5  9.654002e-01 9.654002e-01 9.654002e-01 2.071138e-15
-basket_6  8.701848e-01 8.701848e-01 8.701848e-01 9.972695e-01
-basket_7  8.701848e-01 8.701848e-01 8.701848e-01 9.972695e-01
-basket_8  9.797030e-01 9.797030e-01 9.797030e-01 1.000000e+00
-basket_9  9.797030e-01 9.797030e-01 9.797030e-01 1.000000e+00
-basket_10 9.151338e-01 9.151338e-01 9.151338e-01 9.303584e-01
-              basket_5     basket_6     basket_7     basket_8
-basket_2                                                     
-basket_3                                                     
-basket_4                                                     
-basket_5                                                     
-basket_6  9.972695e-01                                       
-basket_7  9.972695e-01 0.000000e+00                          
-basket_8  1.000000e+00 1.000000e+00 1.000000e+00             
-basket_9  1.000000e+00 1.000000e+00 1.000000e+00 0.000000e+00
-basket_10 9.303584e-01 9.983508e-01 9.983508e-01 9.702788e-01
-              basket_9
-basket_2              
-basket_3              
-basket_4              
-basket_5              
-basket_6              
-basket_7              
-basket_8              
-basket_9              
-basket_10 9.702788e-01
+                         basket_1                basket_2
+basket_2  0.000000000000003920303                        
+basket_3  0.000000000000003920303 0.000000000000003920303
+basket_4  0.965400206424420814777 0.965400206424420814777
+basket_5  0.965400206424420814777 0.965400206424420814777
+basket_6  0.870184755044386526457 0.870184755044386526457
+basket_7  0.870184755044386526457 0.870184755044386526457
+basket_8  0.979702953159125145000 0.979702953159125145000
+basket_9  0.979702953159125145000 0.979702953159125145000
+basket_10 0.915133773514873127830 0.915133773514873127830
+                         basket_3                basket_4
+basket_2                                                 
+basket_3                                                 
+basket_4  0.965400206424420814777                        
+basket_5  0.965400206424420814777 0.000000000000000000000
+basket_6  0.870184755044386526457 0.997269536316045868141
+basket_7  0.870184755044386526457 0.997269536316045868141
+basket_8  0.979702953159125145000 1.000000000000000000000
+basket_9  0.979702953159125145000 1.000000000000000000000
+basket_10 0.915133773514873127830 0.930358372861637583640
+                         basket_5                basket_6
+basket_2                                                 
+basket_3                                                 
+basket_4                                                 
+basket_5                                                 
+basket_6  0.997269536316045868141                        
+basket_7  0.997269536316045868141 0.000000000000000000000
+basket_8  1.000000000000000000000 1.000000000000000000000
+basket_9  1.000000000000000000000 1.000000000000000000000
+basket_10 0.930358372861637583640 0.998350846096365041049
+                         basket_7                basket_8
+basket_2                                                 
+basket_3                                                 
+basket_4                                                 
+basket_5                                                 
+basket_6                                                 
+basket_7                                                 
+basket_8  1.000000000000000000000                        
+basket_9  1.000000000000000000000 0.000000000000000000000
+basket_10 0.998350846096365041049 0.970278802983695509710
+                         basket_9
+basket_2                         
+basket_3                         
+basket_4                         
+basket_5                         
+basket_6                         
+basket_7                         
+basket_8                         
+basket_9                         
+basket_10 0.970278802983695509710
 
 $jac_turn
-              basket_1     basket_2     basket_3     basket_4
-basket_2  0.000000e+00                                       
-basket_3  0.000000e+00 0.000000e+00                          
-basket_4  4.320333e-01 4.320333e-01 4.320333e-01             
-basket_5  4.320333e-01 4.320333e-01 4.320333e-01 2.071138e-15
-basket_6  8.627528e-01 8.627528e-01 8.627528e-01 9.723344e-01
-basket_7  8.627528e-01 8.627528e-01 8.627528e-01 9.723344e-01
-basket_8  9.425331e-01 9.425331e-01 9.425331e-01 1.000000e+00
-basket_9  9.425331e-01 9.425331e-01 9.425331e-01 1.000000e+00
-basket_10 5.990146e-01 5.990146e-01 5.990146e-01 8.385233e-01
-              basket_5     basket_6     basket_7     basket_8
-basket_2                                                     
-basket_3                                                     
-basket_4                                                     
-basket_5                                                     
-basket_6  9.723344e-01                                       
-basket_7  9.723344e-01 0.000000e+00                          
-basket_8  1.000000e+00 1.000000e+00 1.000000e+00             
-basket_9  1.000000e+00 1.000000e+00 1.000000e+00 0.000000e+00
-basket_10 8.385233e-01 9.944208e-01 9.944208e-01 9.638833e-01
-              basket_9
-basket_2              
-basket_3              
-basket_4              
-basket_5              
-basket_6              
-basket_7              
-basket_8              
-basket_9              
-basket_10 9.638833e-01
+                         basket_1                basket_2
+basket_2  0.000000000000003920303                        
+basket_3  0.000000000000003920303 0.000000000000003920303
+basket_4  0.432033262678977625360 0.432033262678977625360
+basket_5  0.432033262678977625360 0.432033262678977625360
+basket_6  0.862752798793204322969 0.862752798793204322969
+basket_7  0.862752798793204322969 0.862752798793204322969
+basket_8  0.942533114646075143028 0.942533114646075143028
+basket_9  0.942533114646075143028 0.942533114646075143028
+basket_10 0.599014624719159005650 0.599014624719159005650
+                         basket_3                basket_4
+basket_2                                                 
+basket_3                                                 
+basket_4  0.432033262678977625360                        
+basket_5  0.432033262678977625360 0.000000000000000000000
+basket_6  0.862752798793204322969 0.972334352959841607955
+basket_7  0.862752798793204322969 0.972334352959841607955
+basket_8  0.942533114646075143028 1.000000000000000000000
+basket_9  0.942533114646075143028 1.000000000000000000000
+basket_10 0.599014624719159005650 0.838523319805481226474
+                         basket_5                basket_6
+basket_2                                                 
+basket_3                                                 
+basket_4                                                 
+basket_5                                                 
+basket_6  0.972334352959841607955                        
+basket_7  0.972334352959841607955 0.000000000000000000000
+basket_8  1.000000000000000000000 1.000000000000000000000
+basket_9  1.000000000000000000000 1.000000000000000000000
+basket_10 0.838523319805481226474 0.994420813909867584712
+                         basket_7                basket_8
+basket_2                                                 
+basket_3                                                 
+basket_4                                                 
+basket_5                                                 
+basket_6                                                 
+basket_7                                                 
+basket_8  1.000000000000000000000                        
+basket_9  1.000000000000000000000 0.000000000000000000000
+basket_10 0.994420813909867584712 0.963883258730821701477
+                         basket_9
+basket_2                         
+basket_3                         
+basket_4                         
+basket_5                         
+basket_6                         
+basket_7                         
+basket_8                         
+basket_9                         
+basket_10 0.963883258730821701477
 
 $jac_nest
              basket_1    basket_2    basket_3    basket_4    basket_5
@@ -3180,7 +3728,8 @@ basket_9  0.000000000 0.000000000 0.000000000
 basket_10 0.003930032 0.003930032 0.006395544 0.006395544</code></pre>
 </div>
 <ul>
-<li>a list containing details such as inputs, vertices of the global pool and of each assemblage and FRic values for each assemblage</li>
+<li>a list containing details such as inputs, vertices of the global
+pool and of each assemblage and FRic values for each assemblage</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -3319,7 +3868,8 @@ $asb_vertices$basket_10
 [6] &quot;strawberry&quot;</code></pre>
 </div>
 <ul>
-<li>a vector containing the <code>FRic</code> value for each assemblage retrieved through the <code>details_beta</code> list:</li>
+<li>a vector containing the <code>FRic</code> value for each assemblage
+retrieved through the <code>details_beta</code> list:</li>
 </ul>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
@@ -3334,7 +3884,9 @@ $asb_vertices$basket_10
 </div>
 <p><br /></p>
 <ul>
-<li>a list of vectors containing names of species being vertices of the convex hull for each assemblage retrieved through the <code>details_beta</code> list:</li>
+<li>a list of vectors containing names of species being vertices of the
+convex hull for each assemblage retrieved through the
+<code>details_beta</code> list:</li>
 </ul>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -3381,8 +3933,14 @@ $basket_10
 [1] &quot;grape&quot;      &quot;melon&quot;      &quot;plum&quot;       &quot;apricot&quot;    &quot;grapefruit&quot;
 [6] &quot;strawberry&quot;</code></pre>
 </div>
-<p>Then, the package allows the user to illustrate functional beta-diversity indices for a pair of assemblages in a multidimensional space using the <code>mFD::beta.multidim.plot()</code> function. The output of this function is a figure showing the overlap between convex hulls shaping each of the two species assemblages.</p>
-<p>The plotting function has a large number of arguments, allowing the user to chose graphical options. Only main arguments are listed below:</p>
+<p>Then, the package allows the user to illustrate functional
+beta-diversity indices for a pair of assemblages in a multidimensional
+space using the <code>mFD::beta.multidim.plot()</code> function. The
+output of this function is a figure showing the overlap between convex
+hulls shaping each of the two species assemblages.</p>
+<p>The plotting function has a large number of arguments, allowing the
+user to chose graphical options. Only main arguments are listed
+below:</p>
 <em>Code</em>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -3400,18 +3958,51 @@ $basket_10
 </div>
 </div>
 <ul>
-<li><p><code>output_beta_fd_multidim</code> is the output of the <code>mFD::beta.fd.multidim()</code> function retrieved before as <code>beta_fd_indices</code>.</p></li>
-<li><p><code>plot_asb_nm</code> is a vector containing the name of the two assemblages to plot. Here plots of indices will be shown for <em>basket_1</em> and <em>basket_4</em>.</p></li>
-<li><p><code>beta_family</code> refers to the family of the plotted index. It must be the same as the family chosen to compute beta functional indices values with the <code>mFD::beta.fd.multidim()</code> function.</p></li>
-<li><p><code>plot_sp_nm</code> is a vector containing the names of species the user want to plot, if any. If no the user does not want to plot any species name, then this argument must be set up to <code>NULL</code>. Here, <em>apple</em>, <em>cherry</em> and <em>lemon</em> will be plotted on the graph.</p></li>
-<li><p><code>faxes</code> is a vector containing the names of the functional axes of the plotted functional space. Here, the figure will be plotted for <em>PC1</em>, <em>PC2</em> and <em>PC3</em>. This function allows you to plot between two and four axes for graphical reasons.</p></li>
-<li><p><code>name_file</code> is a character string with the name of the file to save the figure (without extension). If the user does not want to save the file and only display it, this argument must be set up to <code>NULL</code>.</p></li>
-<li><p><code>faxes_nm</code> is a vector containing the axes labels for the figure if the user wants to set up different labels than those contained in <code>faxes</code>.</p></li>
-<li><p><code>range_faxes</code> is a vector with minimum and maximum values of functional axes. To have a fair representation of the position of species in all plots, axes should have the same range. If the user wants the range to be computed according to the range of values among all axes, this argument must be set up to <code>c(NA, NA)</code>.</p></li>
-<li><p><code>check_input</code> is a recurrent argument in the <code>mFD</code> package. It defines whether inputs should be checked before computation or not. Possible error messages will thus be more understandable for the user than R error messages (<strong>Recommendation:</strong> set it as <code>TRUE</code>)</p></li>
-<li><p>Others arguments to set up colors, shapes, sizes and, text fonts are also available. For more information about them, read the function help file.</p></li>
+<li><p><code>output_beta_fd_multidim</code> is the output of the
+<code>mFD::beta.fd.multidim()</code> function retrieved before as
+<code>beta_fd_indices</code>.</p></li>
+<li><p><code>plot_asb_nm</code> is a vector containing the name of the
+two assemblages to plot. Here plots of indices will be shown for
+<em>basket_1</em> and <em>basket_4</em>.</p></li>
+<li><p><code>beta_family</code> refers to the family of the plotted
+index. It must be the same as the family chosen to compute beta
+functional indices values with the <code>mFD::beta.fd.multidim()</code>
+function.</p></li>
+<li><p><code>plot_sp_nm</code> is a vector containing the names of
+species the user want to plot, if any. If no the user does not want to
+plot any species name, then this argument must be set up to
+<code>NULL</code>. Here, <em>apple</em>, <em>cherry</em> and
+<em>lemon</em> will be plotted on the graph.</p></li>
+<li><p><code>faxes</code> is a vector containing the names of the
+functional axes of the plotted functional space. Here, the figure will
+be plotted for <em>PC1</em>, <em>PC2</em> and <em>PC3</em>. This
+function allows you to plot between two and four axes for graphical
+reasons.</p></li>
+<li><p><code>name_file</code> is a character string with the name of the
+file to save the figure (without extension). If the user does not want
+to save the file and only display it, this argument must be set up to
+<code>NULL</code>.</p></li>
+<li><p><code>faxes_nm</code> is a vector containing the axes labels for
+the figure if the user wants to set up different labels than those
+contained in <code>faxes</code>.</p></li>
+<li><p><code>range_faxes</code> is a vector with minimum and maximum
+values of functional axes. To have a fair representation of the position
+of species in all plots, axes should have the same range. If the user
+wants the range to be computed according to the range of values among
+all axes, this argument must be set up to
+<code>c(NA, NA)</code>.</p></li>
+<li><p><code>check_input</code> is a recurrent argument in the
+<code>mFD</code> package. It defines whether inputs should be checked
+before computation or not. Possible error messages will thus be more
+understandable for the user than R error messages
+(<strong>Recommendation:</strong> set it as <code>TRUE</code>)</p></li>
+<li><p>Others arguments to set up colors, shapes, sizes and, text fonts
+are also available. For more information about them, read the function
+help file.</p></li>
 </ul>
-<p>Then, the function returns each graph for each functional axes combination and also a multipanel plot with all combinations of axes and the graph caption. Here is the multipanel for the fruits exaample:</p>
+<p>Then, the function returns each graph for each functional axes
+combination and also a multipanel plot with all combinations of axes and
+the graph caption. Here is the multipanel for the fruits exaample:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>beta_plot_fruits</span><span class='op'>$</span><span class='st'>"patchwork"</span>
@@ -3419,11 +4010,433 @@ $basket_10
 </div>
 <p><img src="practice_files/figure-html5/unnamed-chunk-32-1.png" width="1536" style="display: block; margin: auto;" /></p>
 </div>
-<p>For each assemblage, the associated convex hull is plotted in a different colour and indices values are printed on the right corner of the plot. Vertices of the convex hull of a given assemblage can be plotted with a different symbol such as in this example. Species of all assemblages are plotted with gray cross and the associated convex hull is plotted in white.</p>
+<p>For each assemblage, the associated convex hull is plotted in a
+different colour and indices values are printed on the right corner of
+the plot. Vertices of the convex hull of a given assemblage can be
+plotted with a different symbol such as in this example. Species of all
+assemblages are plotted with gray cross and the associated convex hull
+is plotted in white.</p>
 <p><br/></p>
 <h1 id="part-3.-functional-rarity">Part 3. Functional rarity</h1>
-<p><br/></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>In this part we’ll be using our built functional space to compute
+functional originality indices. The questions we’ll answer are:</p>
+<ul>
+<li>What are functionally distinct fruits compared to all fruits
+together?</li>
+<li>Are some of these fruits distinct at regional scale but not when
+looking at specific baskets?</li>
+</ul>
+<h2
+id="components-of-functional-rarity-trait-originality-and-rarity">3.1
+Components of functional rarity: trait originality and rarity</h2>
+<p>Functional originality indices (also named functional rarity indices)
+measures how different are the trait of a target species compared to
+other ones among a set. Their idea is analogous to the rarity concept in
+terms of abundance: some species are rare because they show low
+abundance, some are common because of their high abundance. Well,
+functionally original species are original because they display trait
+values distant from most other species.</p>
+<p>The indices were initially proposed as complimentary facets: one for
+“classical” rarity and one for trait “rarity” (= originality) <a
+href="https://doi.org/10.1016/j.tree.2017.02.002">Violle <em>et al.</em>
+2017</a>. With this framework, a species could be either rare or common,
+with either original or common traits. All combinations are possible.
+For example a species can be rare in abundance but have common traits. A
+species could also be common in abundance but original in terms of
+traits.</p>
+<p>Violle <em>et al.</em> (<a
+href="https://doi.org/10.1016/j.tree.2017.02.002">2014</a>) further
+declined the framework along two spatial scales, local and regional. The
+local scale is scale of the site or the assemblage, where species
+interact directly. The regional scale is the species pools scale,
+containing all species occurring in a given set of assemblages.</p>
+<p>This initial framework thus contained 16 different possibilities
+between the different kinds of rarity (trait or abundance) and the
+spatial scales.</p>
+<p>More recent studies tend to focus only on the trait originality axis
+and that’s the one we’ll be studying here.</p>
+<h2 id="different-indices-of-functional-originality">3.2 Different
+indices of functional originality</h2>
+<p>One specificity of functional originality indices is that we compute
+them on a species basis and not per sites. This means that for each
+species we will get one value.</p>
+<p>The two proposed indices of functional originality are
+<strong>functional distinctiveness</strong> (<em>Di</em>) and
+<strong>functional uniqueness</strong> (<em>Ui</em>). They were
+initially envisioned at different spatial scales, with functional
+distinctiveness computed at local scale (and considering abundance)
+while functional uniqueness was to be computed at regional scales
+(without considering abundances).</p>
+<figure>
+<img src="img/di_ui_scheme.jpg"
+alt="  Scheme showing how Distinctiveness (Di) and Uniqueness (Ui) are computed" />
+<figcaption
+aria-hidden="true"><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>
+ Scheme showing how Distinctiveness (Di) and Uniqueness (Ui) are
+computed</figcaption>
+</figure>
+<p><strong>Functional distinctiveness</strong> is the mean of
+dissimilarity of the focal species to all the other species of the set
+of interest. It can be abundance-weighted if needed.</p>
+<p><strong>Functional uniqueness</strong> is the smallest dissimilarity
+that exists between the focal species and the all other species in the
+set. It does not consider the abundance of any species.</p>
+<h2 id="computing-functional-originality">3.3 Computing functional
+originality</h2>
+<p>To compute functional originality indices we will two object: a
+functional dissimilarity matrix and a site-species matrix. We will be
+reusing the ones we defined in part 1 for that.</p>
+<p>Because the <code>funrar</code> package follows strictly the
+framework defined by Violle <em>et al.</em> (2017), we have to consider
+the spatial scale at which we compute distinctiveness and
+uniqueness.</p>
+<h3 id="at-regional-scale">3.3.1 At regional scale</h3>
+<p>At regional scale, we can compute distinctiveness using the
+<code>distinctiveness_global()</code> function. The first argument
+should be a functional dissimilarity matrix and the second argument
+gives the name of the output column.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://rekyt.github.io/funrar/'>"funrar"</a></span><span class='op'>)</span>
+
+<span class='va'>sp_di</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/distinctiveness_global.html'>distinctiveness_global</a></span><span class='op'>(</span><span class='va'>sp_dist_fruits</span>, di_name <span class='op'>=</span> <span class='st'>"distinctiveness"</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>sp_di</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>     species distinctiveness
+1      apple       0.2930460
+2    apricot       0.3421360
+3     banana       0.4972814
+4    currant       0.4496738
+5 blackberry       0.4272436
+6  blueberry       0.4264538</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>sp_di</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 25  2</code></pre>
+</div>
+<p>We get one value of distinctiveness per species. It only considers
+the functional dissimilarity of all species in the dissimilarity matrix
+without considering their spatial distributions. We get one value of
+distinctiveness per species.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>sp_di</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>sp_di</span><span class='op'>$</span><span class='va'>distinctiveness</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, by <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>sp_di</span>, <span class='va'>distinctiveness</span> <span class='op'>&gt;=</span> <span class='fl'>0.48</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>When looking at the most distinct fruits we see that banana, litchi,
+and pineapple, are the most distinct from their characteristics.</p>
+<p>For the choice or dissimilarity matrix we can use the raw
+dissimilarity matrix computed directly on raw traits values among
+species, as we did here. Another option would be to compute a new
+functional dissimilarity matrix based on the selected functional axes.
+One advantage of the latter is that it already takes into account the
+correlation between traits.</p>
+<p>Let’s recompute regional functional distinctiveness based on the four
+selected functional axes. Because the space comes from a PCA, we can
+directly use euclidean distance.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>new_dissim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/dist.html'>dist</a></span><span class='op'>(</span><span class='va'>sp_faxes_coord_fruits</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PC1"</span>, <span class='st'>"PC2"</span>, <span class='st'>"PC3"</span>, <span class='st'>"PC4"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
+
+<span class='va'>sp_di_alt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/distinctiveness_global.html'>distinctiveness_global</a></span><span class='op'>(</span><span class='va'>new_dissim</span>, di_name <span class='op'>=</span> <span class='st'>"alt_di"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>We can now compare both distinctiveness values.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_all_di</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>sp_di</span>, <span class='va'>sp_di_alt</span>, by <span class='op'>=</span> <span class='st'>"species"</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>sp_all_di</span><span class='op'>$</span><span class='va'>distinctiveness</span>, <span class='va'>sp_all_di</span><span class='op'>$</span><span class='va'>alt_di</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="practice_files/figure-html5/di-comparison-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span><span class='op'>(</span><span class='va'>sp_all_di</span><span class='op'>$</span><span class='va'>distinctiveness</span>, <span class='va'>sp_all_di</span><span class='op'>$</span><span class='va'>alt_di</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    Pearson&#39;s product-moment correlation
+
+data:  sp_all_di$distinctiveness and sp_all_di$alt_di
+t = 17.91, df = 23, p-value = 0.000000000000005281
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.9232161 0.9851024
+sample estimates:
+      cor 
+0.9659697 </code></pre>
+</div>
+<p>Both seems very correlated, so in our case using either one should be
+fine. However, it can be better to use dissimilarity based on a reduced
+number of well-defined axes because: (1) there are more interpretable
+thanks to the multivariate analysis, (2) the first one contain de most
+information, (3) they explicitly take into account potentially strong
+correlations between provided traits. We’ll stick here with raw
+dissimilarity for the sake of simplicity.</p>
+<p>To compute uniqueness at regional scale we also need the regional
+level functional dissimilarity matrix with the <code>uniqueness()</code>
+function, and the site-species matrix:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/uniqueness.html'>uniqueness</a></span><span class='op'>(</span>
+  pres_matrix <span class='op'>=</span> <span class='va'>baskets_fruits_weights</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>sp_dist_fruits</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>sp_ui</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>sp_ui</span><span class='op'>$</span><span class='va'>Ui</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, by <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>sp_ui</span>, <span class='va'>Ui</span> <span class='op'>&gt;=</span> <span class='fl'>0.21</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Note that we have to transform the dissimilarity object
+<code>sp_dist_fruits</code> into a matrix explicitly so that the
+function <code>uniqueness()</code> works.</p>
+<p>Based on these results we see that banana, passion fruit, and
+pineapple are the most isolated fruits in the functional space. Meaning
+that they have the most distant nearest neighbors.</p>
+<p>So we see that some species can be regionally distinct and regionally
+unique (banana and pineapple), while some can be not so regionally
+distinct but regionally unique (passion fruit).</p>
+<h3 id="at-local-scale">3.3.2 At local scale</h3>
+<p>At local scale we can use similar logic but we will obtain one value
+per species per site.</p>
+<p>For distinctiveness we can use the <code>distinctiveness()</code>
+function:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_local_di</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/distinctiveness.html'>distinctiveness</a></span><span class='op'>(</span>
+  <span class='va'>baskets_fruits_weights</span>, <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>sp_dist_fruits</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='va'>sp_local_di</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code>             apple apricot    banana currant blackberry blueberry
+basket_1 0.1977721      NA 0.4642749      NA         NA        NA
+basket_2 0.2852373      NA 0.5243089      NA         NA        NA
+basket_3 0.2902663      NA 0.5219277      NA         NA        NA
+basket_4 0.1136474      NA        NA      NA         NA        NA
+basket_5 0.1393697      NA        NA      NA         NA        NA
+basket_6 0.4138809      NA 0.3063492      NA         NA        NA</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>sp_local_di</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>baskets_fruits_weights</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] TRUE</code></pre>
+</div>
+<p><strong>Note</strong>: because we provided a site-species matrix that
+contained “abundance” values (here the weights of the fruits in our
+baskets), the <code>distinctiveness()</code> is going to use them in its
+computation. If we want it not to consider abundances we need to convert
+the site-species matrix into a presence-absence matrix.</p>
+<p>We get exactly the same number of sites and species as provided in
+the lists of baskets. Looking at the first column we see that the
+distinctiveness of apple varies a lot. Let’s see if can see how much it
+varies and why.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_local_di</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code> basket_1  basket_2  basket_3  basket_4  basket_5  basket_6  basket_7 
+0.1977721 0.2852373 0.2902663 0.1136474 0.1393697 0.4138809 0.3861698 
+ basket_8  basket_9 basket_10 
+       NA        NA 0.2313228 </code></pre>
+</div>
+<p>It varies from around 0.11 in basket 4 to up to 0.41 in basket 6. We
+can lookup the composition of these baskets to understand why:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>baskets_fruits_weights</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>6</span><span class='op'>)</span>,<span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code>         apple apricot banana currant blackberry blueberry cherry
+basket_4   300       0      0       0          0         0      0
+basket_6   100       0    200       0          0         0      0
+         grape grapefruit kiwifruit lemon lime litchi mango melon
+basket_4     0          0       100   100    0      0     0     0
+basket_6     0          0         0     0  200    200   500     0
+         orange passion_fruit peach pear pineapple plum raspberry
+basket_4    400             0   300  400         0  200         0
+basket_6    100             0     0    0       500    0         0
+         strawberry tangerine water_melon
+basket_4          0       200           0
+basket_6          0         0         200</code></pre>
+</div>
+<p>We can see that basket 4 contains fruits of similar size, origin and
+sweetness of apples: peach, pear, plums. This decreases the local
+distinctiveness of apples. While basket 6 contains more tropical fruits
+that are quite different in terms of size and sugar from apples.</p>
+<p>To compute uniqueness at the site scale, we must use a more complex
+expression as it was not envisioned for local computation:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>basket_ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span>
+  <span class='va'>baskets_fruits_weights</span>, <span class='fl'>1</span>,
+  <span class='kw'>function</span><span class='op'>(</span><span class='va'>single_site</span>, <span class='va'>dist_m</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>single_site</span> <span class='op'>=</span> <span class='va'>single_site</span><span class='op'>[</span><span class='va'>single_site</span> <span class='op'>&gt;</span> <span class='fl'>0</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>single_site</span><span class='op'>)</span><span class='op'>]</span>
+    <span class='fu'><a href='https://rekyt.github.io/funrar/reference/uniqueness.html'>uniqueness</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>single_site</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>dist_m</span><span class='op'>)</span>
+  <span class='op'>}</span>, dist_m <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>sp_dist_fruits</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>basket_ui</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$basket_1
+        species          Ui
+1         apple 0.008791209
+2        banana 0.375274725
+3        cherry 0.233379121
+4         lemon 0.199587912
+5         melon 0.190796703
+6 passion_fruit 0.414148352
+7          pear 0.008791209
+8    strawberry 0.190796703</code></pre>
+</div>
+<p>As we had to manually build the function to compute the local
+uniqueness the results are strangely formatted.</p>
+<p>We provide here a function that can help them to be more easily
+read:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>basket_ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>basket_ui</span><span class='op'>)</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>single_basket</span> <span class='op'>=</span> <span class='va'>basket_ui</span><span class='op'>[[</span><span class='va'>x</span><span class='op'>]</span><span class='op'>]</span>
+  <span class='va'>single_basket</span><span class='op'>$</span><span class='va'>site</span> <span class='op'>=</span> <span class='va'>x</span>
+  
+  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>single_basket</span><span class='op'>)</span>
+<span class='op'>}</span><span class='op'>)</span>
+
+<span class='va'>basket_ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>rbind</span>, <span class='va'>basket_ui</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>]</span>
+</code></pre>
+</div>
+</div>
+<p>Then we can again look at the apple to see how its uniqueness varies
+across baskets.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>basket_ui</span>, <span class='va'>species</span> <span class='op'>==</span> <span class='st'>"apple"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>        site species          Ui
+1   basket_1   apple 0.008791209
+9   basket_2   apple 0.008791209
+17  basket_3   apple 0.008791209
+25  basket_4   apple 0.008791209
+33  basket_5   apple 0.008791209
+41  basket_6   apple 0.117170330
+49  basket_7   apple 0.117170330
+73 basket_10   apple 0.008791209</code></pre>
+</div>
+<p>We see that apple have the same uniqueness everywhere but in baskets
+6 and 7. This means that it has the same nearest neighbor (in functional
+space) across all of these baskets. But that its closest neighbor is
+further away in baskets 6 and 7.</p>
+<h2 id="plotting-functional-originality">3.4 Plotting functional
+originality</h2>
+<p><code>funrar</code> does not come with visualization functions so
+that you can use whatever tool you prefer to plot the metrics. Here we
+are going to use <code>ggplot2</code> visualize the results. However,
+feel free to use anything plotting packages you would like. If you’re
+not fluent in <code>ggplot2</code> don’t worry this section will mostly
+be about interpreting the figures rather than commenting on code.</p>
+<p>We already saw in part 1 how to visualize the functional space using
+the pre-made functions of <code>mFD</code>. Here we will use our own
+functions to be able to color species in function of their functional
+originality.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Make a summary data.frame</span>
+<span class='va'>sp_coord_di_ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>sp_faxes_coord_fruits</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>sp_coord_di_ui</span><span class='op'>$</span><span class='va'>species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sp_coord_di_ui</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sp_coord_di_ui</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='cn'>NULL</span>
+<span class='va'>sp_coord_di_ui</span> <span class='op'>&lt;-</span> <span class='va'>sp_coord_di_ui</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>]</span>
+<span class='va'>sp_coord_di_ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>sp_coord_di_ui</span>, <span class='va'>sp_di</span>, by <span class='op'>=</span> <span class='st'>"species"</span><span class='op'>)</span>
+<span class='va'>sp_coord_di_ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>sp_coord_di_ui</span>, <span class='va'>sp_ui</span>, by <span class='op'>=</span> <span class='st'>"species"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span>
+
+<span class='va'>plot_reg_distinctiveness</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>sp_coord_di_ui</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>PC1</span>, <span class='va'>PC2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_hline</a></span><span class='op'>(</span>yintercept <span class='op'>=</span> <span class='fl'>0</span>, linetype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept <span class='op'>=</span> <span class='fl'>0</span>, linetype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='va'>distinctiveness</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>ggrepel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>species</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_color_viridis_c</a></span><span class='op'>(</span><span class='st'>"Functional\nDistinctiveness"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>aspect.ratio <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='va'>plot_reg_uniqueness</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>sp_coord_di_ui</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>PC1</span>, <span class='va'>PC2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_hline</a></span><span class='op'>(</span>yintercept <span class='op'>=</span> <span class='fl'>0</span>, linetype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept <span class='op'>=</span> <span class='fl'>0</span>, linetype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='va'>Ui</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>ggrepel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>species</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_color_viridis_c</a></span><span class='op'>(</span><span class='st'>"Functional\nUniqueness"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>aspect.ratio <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='fu'>patchwork</span><span class='fu'>::</span><span class='fu'><a href='https://patchwork.data-imaginist.com/reference/wrap_plots.html'>wrap_plots</a></span><span class='op'>(</span><span class='va'>plot_reg_distinctiveness</span>, <span class='va'>plot_reg_uniqueness</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="practice_files/figure-html5/funrar-plot-di-ui-regional-1.png" width="624" /></p>
+</div>
+<p>We can clearly see that, by definition, most functionally distinct
+species are on the edges of the functional space (pineapple, litchi,
+mango). If we compare both plots, we realize that functional
+distinctiveness doesn’t always come with functional uniqueness. One
+strange observation is that passion-fruit has a very functional
+uniqueness even though it seems quite in the middle of the points. This
+is a consequence of using the raw trait dissimilarity matrix instead of
+the projected axes. We’re are here visualizing the position of passion
+fruit in a 2D space while it should be considered in a 5D space, so it
+may seem close to other points in 2D while it is further away in
+reality.</p>
+<p>As was done with <code>mFD</code> to correlate the functional axes
+with species’ traits we can correlate functional distinctiveness to
+specific traits in order to see which traits are mainly driving
+distinctiveness.</p>
+<p>XXX</p>
+<p>Regarding local level functional originality indices, the
+visualization can be more difficult to grasp and depends highly on the
+question. Would you rather focus on visualizing the functional
+distinctiveness of one species across communities? Compare the
+distribution of functional distinctiveness values across
+communities?</p>
+<p>One idea to keep in mind is that averaging functional distinctiveness
+per community is exactly equal to computing functional dispersion.
+Functional originality is computed on a species basis, so we should be
+aware that if we are rather interested by community properties than we
+can compute functional diversity metrics which are much more
+appropriate.</p>
+<p>If we take again our example of the apple we can see to what extent
+its functional distinctiveness varies across baskets compared to
+lemon.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>local_di_ap</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>sp_local_di</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>11</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>local_di_ap</span><span class='op'>$</span><span class='va'>basket</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>local_di_ap</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>You can of course then compute relationship between environmental
+covariates and functional originality values. Because we don’t have any
+covariable in our fruit baskets we will stop the plotting session
+here.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
