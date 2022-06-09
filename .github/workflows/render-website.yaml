@@ -18,6 +18,9 @@ jobs:
         run: |
           install.packages("rmarkdown")
           install.packages("distill")
+          install.packages("fontawesome")
+          install.packages("funrar")
+          install.packages("mFD")
         shell: Rscript {0}
 
       - name: Render Site
