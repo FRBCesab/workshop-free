@@ -2104,7 +2104,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <i class="fa fa-home" aria-hidden="true"></i>
 </a>
 <a href="instructions.html">Instructions</a>
-<a href="courses.html">Courses</a>
+<a href="">Courses</a>
 <a href="practice.html">Practice</a>
 <a href="resources.html">Resources</a>
 <a href="https://github.com/frbcesab/workshop-free/">
@@ -2156,16 +2156,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <ol type="1">
 <li>Download <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i> at:<br/> <a href="https://cran.r-project.org/">https://cran.r-project.org/</a></li>
 </ol>
-<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Click on <em>Download R for Windows</em> <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Click on <em>base</em> <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Click on <em>Download R 4.1.3 for Windows</em> <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Open <em>R-4.1.3-win.exe</em> and follow instructions</p>
+<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Click on <em>Download R for Windows</em> <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Click on <em>base</em> <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Click on <em>Download R 4.2.0 for Windows</em> <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Open <em>R-4.2.0-win.exe</em> and follow instructions</p>
 <p><br/></p>
 <ol start="2" type="1">
 <li>Download <strong><code>RStudio Desktop</code></strong> at:<br/> <a href="https://www.rstudio.com/products/rstudio/download/#download">https://www.rstudio.com/products/rstudio/download/#download</a></li>
 </ol>
-<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Download the version for Windows 10/11 (the <strong>.exe</strong> and not the <strong>.zip</strong>) <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Open <em>RStudio-2022.02.1-461.exe</em> and follow instructions <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Check if <strong><code>RStudio</code></strong> has found <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>. Launch <strong><code>RStudio</code></strong> and run:</p>
+<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Download the version for Windows 10/11 (the <strong>.exe</strong> and not the <strong>.zip</strong>) <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Open <em>RStudio-2022.02.3-492.exe</em> and follow instructions <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Check if <strong><code>RStudio</code></strong> has found <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i>. Launch <strong><code>RStudio</code></strong> and run:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>R.version.string</span>
-<span class='co'>## [1] "R version 4.1.3 (2022-03-10)"</span>
+<span class='co'>## [1] "R version 4.2.0 (2022-04-22)"</span>
 </code></pre>
 </div>
 </div>
@@ -2173,7 +2173,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <ol start="3" type="1">
 <li>Download <strong><code>git</code></strong> at:<br/> <a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a></li>
 </ol>
-<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Download the 64-bit version for Windows <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Open <em>Git-2.35.1-64-bit.exe</em> and follow instructions <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Check if <strong><code>RStudio</code></strong> has found <strong><code>git</code></strong>. Launch <strong><code>RStudio</code></strong> and run:</p>
+<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Download the 64-bit version for Windows <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Open <em>Git-2.36.1-64-bit.exe</em> and follow instructions <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Check if <strong><code>RStudio</code></strong> has found <strong><code>git</code></strong>. Launch <strong><code>RStudio</code></strong> and run:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Sys.which.html'>Sys.which</a></span><span class='op'>(</span><span class='st'>"git"</span><span class='op'>)</span>
@@ -2183,23 +2183,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p><br/></p>
 <ol start="4" type="1">
-<li>Download <strong><code>Rtools4.0</code></strong> at:<br/> <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html">https://cran.r-project.org/bin/windows/Rtools/rtools40.html</a></li>
+<li>Download <strong><code>Rtools4.2</code></strong> at:<br/> <a href="https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html">https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html</a></li>
 </ol>
-<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Download the 64-bit version for Windows <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Open <em>rtools40-x86_64.exe</em> and follow instructions</p>
-<p>The installation of <strong><code>Rtools4.0</code></strong> is optional, but this software is required to install packages (from sources) containing compiled code (C/C++/Fortran). <strong><code>Rtools4.0</code></strong> contains in particular the utility <code>make</code>.</p>
-<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Once <strong><code>Rtools4.0</code></strong> is installed, you need to tell <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i> where to find <strong><code>Rtools4.0</code></strong> utilities. Open <strong><code>RStudio</code></strong> and run:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"PATH='${RTOOLS40_HOME}\\usr\\bin;${PATH}'\r\n"</span>, file <span class='op'>=</span> <span class='st'>"~/.Renviron"</span>, append <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</code></pre>
-</div>
-</div>
-<p>An hidden file <code>.Renviron</code> has been created (or modified) in you personal folder and contains the line <code>PATH='${RTOOLS40_HOME}\usr\bin;${PATH}'</code> (the path to <strong><code>Rtools4</code></strong>). At each start <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i> will read this file.</p>
+<p>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Download the 64-bit version for Windows <br/>      <i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>   Open <em>rtools42-5253-5107</em> and follow instructions</p>
+<p>The installation of <strong><code>Rtools4.2</code></strong> is optional, but this software is required to install packages (from sources) containing compiled code (C/C++/Fortran). <strong><code>Rtools4.2</code></strong> contains in particular the utility <code>make</code>.</p>
 <p>Restart <strong><code>RStudio</code></strong> and check that <i class="fab fa-r-project" role="presentation" aria-label="r-project icon"></i> find the utility <code>make</code>:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Sys.which.html'>Sys.which</a></span><span class='op'>(</span><span class='st'>"make"</span><span class='op'>)</span>
-<span class='co'>## "C:/rtools40/usr/bin/make.exe"</span>
+<span class='co'>## "C:/rtools42/usr/bin/make.exe"</span>
 </code></pre>
 </div>
 </div>
@@ -2244,7 +2236,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span id="cb2-3"><a href="#cb2-3"></a></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="co">## Check installation ----</span></span>
 <span id="cb2-5"><a href="#cb2-5"></a><span class="ex">brew</span> --version</span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">## Homebrew 3.4.7</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">## Homebrew 3.5.1-24-ga3d14ff</span></span>
 <span id="cb2-7"><a href="#cb2-7"></a></span>
 <span id="cb2-8"><a href="#cb2-8"></a><span class="co">## Update repositories (list of available software) ----</span></span>
 <span id="cb2-9"><a href="#cb2-9"></a><span class="ex">brew</span> update</span></code></pre></div>
@@ -2268,7 +2260,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>R.version.string</span>
-<span class='co'>## "R version 4.1.3 (2022-03-10)"</span>
+<span class='co'>## "R version 4.2.0 (2022-04-22)"</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/Sys.which.html'>Sys.which</a></span><span class='op'>(</span><span class='st'>"git"</span><span class='op'>)</span>
 <span class='co'>##            git</span>
@@ -2311,7 +2303,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>First check your version of Ubuntu in a terminal:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">## Check Ubuntu version ----</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="fu">cat</span> /etc/issue</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co">## Ubuntu 20.04 LTS</span></span></code></pre></div>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">## Ubuntu 22.04 LTS</span></span></code></pre></div>
 <p><br/></p>
 <table>
 <caption>Table 1. List of CRAN repositories for different versions of Ubuntu</caption>
@@ -2369,7 +2361,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span id="cb7-5"><a href="#cb7-5"></a><span class="fu">sudo</span> apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9</span>
 <span id="cb7-6"><a href="#cb7-6"></a></span>
 <span id="cb7-7"><a href="#cb7-7"></a><span class="co">## Add CRAN repository to APT repositories list ----</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="fu">sudo</span> add-apt-repository <span class="st">&#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39;</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="fu">sudo</span> add-apt-repository <span class="st">&#39;deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/&#39;</span></span>
 <span id="cb7-9"><a href="#cb7-9"></a></span>
 <span id="cb7-10"><a href="#cb7-10"></a><span class="co">## Update packages list ----</span></span>
 <span id="cb7-11"><a href="#cb7-11"></a><span class="fu">sudo</span> apt update</span>
@@ -2386,19 +2378,24 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">## Install wget utility ----</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="fu">sudo</span> apt install wget</span>
 <span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co">## Download RStudio Desktop installer (Ubuntu &gt;= 18.04) ----</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">wget</span> https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2022.02.1-461-amd64.deb</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">## Download RStudio Desktop installer (Ubuntu 22.04) ----</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">wget</span> https://download1.rstudio.org/desktop/jammy/amd64/rstudio-2022.02.3-492-amd64.deb</span>
 <span id="cb8-6"><a href="#cb8-6"></a></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co">## Download RStudio Desktop installer (Ubuntu 16.04 only) ----</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co"># wget https://download1.rstudio.org/desktop/xenial/amd64/rstudio-1.4.1106-amd64.deb</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">## Download RStudio Desktop installer (Ubuntu &gt;= 18.04) ----</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co"># wget https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2022.02.1-461-amd64.deb</span></span>
 <span id="cb8-9"><a href="#cb8-9"></a></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="co">## Install RStudio Desktop ----</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="fu">sudo</span> dpkg -i rstudio-2022.02.1-461-amd64.deb</span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="co"># sudo dpkg -i rstudio-1.4.1106-amd64.deb</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="co">## Remove installer ----</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="fu">rm</span> rstudio-2022.02.1-461-amd64.deb</span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="co"># rm rstudio-1.4.1106-amd64.deb</span></span></code></pre></div>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">## Download RStudio Desktop installer (Ubuntu 16.04 only) ----</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># wget https://download1.rstudio.org/desktop/xenial/amd64/rstudio-1.4.1106-amd64.deb</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">## Install RStudio Desktop ----</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="fu">sudo</span> dpkg -i rstudio-2022.02.3-492-amd64.deb</span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co"># sudo dpkg -i rstudio-2022.02.1-461-amd64.deb</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co"># sudo dpkg -i rstudio-1.4.1106-amd64.deb</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="co">## Remove installer ----</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="fu">rm</span> rstudio-2022.02.3-492-amd64.deb</span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="co"># rm rstudio-2022.02.1-461-amd64.deb</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="co"># rm rstudio-1.4.1106-amd64.deb</span></span></code></pre></div>
 <p><br/></p>
 <p>Now let’s install <strong><code>git</code></strong>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">sudo</span> apt install git</span></code></pre></div>
@@ -2409,7 +2406,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>R.version.string</span>
-<span class='co'>## "R version 4.1.3 (2022-03-10)"</span>
+<span class='co'>## "R version 4.2.0 (2022-04-22)"</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/Sys.which.html'>Sys.which</a></span><span class='op'>(</span><span class='st'>"git"</span><span class='op'>)</span>
 <span class='co'>##            git</span>
@@ -2514,11 +2511,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>## CRAN packages ----</span>
-<span class='va'>pkgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"funrar"</span>, <span class='st'>"mFD"</span>, <span class='st'>"remotes"</span>, <span class='st'>"sf"</span>, <span class='st'>"terra"</span><span class='op'>)</span>
+<span class='va'>pkgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"funrar"</span>, <span class='st'>"mFD"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='va'>pkgs</span><span class='op'>)</span>
-
-<span class='co'>## GitHub packages ----</span>
-<span class='fu'>remotes</span><span class='fu'>::</span><span class='fu'>install_github</span><span class='op'>(</span><span class='st'>"frbcesab/funbiogeo"</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
