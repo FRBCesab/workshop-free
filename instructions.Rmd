@@ -42,9 +42,9 @@ Click on _Download R for Windows_
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Click on _base_
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Click on _Download R 4.1.3 for Windows_
+Click on _Download R 4.2.0 for Windows_
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Open _R-4.1.3-win.exe_ and follow instructions
+Open _R-4.2.0-win.exe_ and follow instructions
 
 
 
@@ -58,14 +58,14 @@ Open _R-4.1.3-win.exe_ and follow instructions
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Download the version for Windows 10/11 (the **.exe** and not the **.zip**)
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Open _RStudio-2022.02.1-461.exe_ and follow instructions
+Open _RStudio-2022.02.3-492.exe_ and follow instructions
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Check if **`RStudio`** has found `r fontawesome::fa_i("r-project")`. 
 Launch **`RStudio`** and run:
 
 ```{r echo=TRUE, eval=FALSE}
 R.version.string
-## [1] "R version 4.1.3 (2022-03-10)"
+## [1] "R version 4.2.0 (2022-04-22)"
 ```
 
 
@@ -79,7 +79,7 @@ R.version.string
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Download the 64-bit version for Windows
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Open _Git-2.35.1-64-bit.exe_ and follow instructions
+Open _Git-2.36.1-64-bit.exe_ and follow instructions
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Check if **`RStudio`** has found **`git`**.
 Launch **`RStudio`** and run:
@@ -94,37 +94,23 @@ Sys.which("git")
 
 
 
-4. Download **`Rtools4.0`** at:<br/>
-[https://cran.r-project.org/bin/windows/Rtools/rtools40.html](https://cran.r-project.org/bin/windows/Rtools/rtools40.html)
+4. Download **`Rtools4.2`** at:<br/>
+[https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
 Download the 64-bit version for Windows
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Open _rtools40-x86_64.exe_ and follow instructions
+Open _rtools42-5253-5107_ and follow instructions
 
-The installation of **`Rtools4.0`** is optional, but this software is required
+The installation of **`Rtools4.2`** is optional, but this software is required
 to install packages (from sources) containing compiled code (C/C++/Fortran). 
-**`Rtools4.0`** contains in particular the utility `make`.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Once **`Rtools4.0`** is installed, you need to tell `r fontawesome::fa_i("r-project")` 
-where to find **`Rtools4.0`** utilities.
-Open **`RStudio`** and run:
-
-
-```{r echo=TRUE, eval=FALSE}
-cat("PATH='${RTOOLS40_HOME}\\usr\\bin;${PATH}'\r\n", file = "~/.Renviron", append = TRUE)
-```
-
-An hidden file `.Renviron` has been created (or modified) in you personal folder
-and contains the line `PATH='${RTOOLS40_HOME}\usr\bin;${PATH}'` (the path to **`Rtools4`**). 
-At each start `r fontawesome::fa_i("r-project")` will read this file.
+**`Rtools4.2`** contains in particular the utility `make`.
 
 Restart **`RStudio`** and check that `r fontawesome::fa_i("r-project")` find the utility `make`:
 
 ```{r echo=TRUE, eval=FALSE}
 Sys.which("make")
-## "C:/rtools40/usr/bin/make.exe"
+## "C:/rtools42/usr/bin/make.exe"
 ```
 
 Now you can install packages from sources:
@@ -198,7 +184,7 @@ Then you can install **`Homebrew`**:
 
 ## Check installation ----
 brew --version
-## Homebrew 3.4.7
+## Homebrew 3.5.1-24-ga3d14ff
 
 ## Update repositories (list of available software) ----
 brew update
@@ -229,7 +215,7 @@ Open **`RStudio`** and check your installation:
 
 ```{r echo=TRUE, eval=FALSE}
 R.version.string
-## "R version 4.1.3 (2022-03-10)"
+## "R version 4.2.0 (2022-04-22)"
 
 Sys.which("git")
 ##            git
@@ -300,7 +286,7 @@ First check your version of Ubuntu in a terminal:
 ```sh
 ## Check Ubuntu version ----
 cat /etc/issue
-## Ubuntu 20.04 LTS
+## Ubuntu 22.04 LTS
 ```
 
 <br/>
@@ -328,7 +314,7 @@ sudo apt install software-properties-common
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 
 ## Add CRAN repository to APT repositories list ----
-sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
+sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/'
 
 ## Update packages list ----
 sudo apt update
@@ -356,18 +342,23 @@ Alternatively, you can install **`RStudio Desktop`** from the terminal:
 ## Install wget utility ----
 sudo apt install wget
 
+## Download RStudio Desktop installer (Ubuntu 22.04) ----
+wget https://download1.rstudio.org/desktop/jammy/amd64/rstudio-2022.02.3-492-amd64.deb
+
 ## Download RStudio Desktop installer (Ubuntu >= 18.04) ----
-wget https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2022.02.1-461-amd64.deb
+# wget https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2022.02.1-461-amd64.deb
 
 ## Download RStudio Desktop installer (Ubuntu 16.04 only) ----
 # wget https://download1.rstudio.org/desktop/xenial/amd64/rstudio-1.4.1106-amd64.deb
 
 ## Install RStudio Desktop ----
-sudo dpkg -i rstudio-2022.02.1-461-amd64.deb
+sudo dpkg -i rstudio-2022.02.3-492-amd64.deb
+# sudo dpkg -i rstudio-2022.02.1-461-amd64.deb
 # sudo dpkg -i rstudio-1.4.1106-amd64.deb
 
 ## Remove installer ----
-rm rstudio-2022.02.1-461-amd64.deb
+rm rstudio-2022.02.3-492-amd64.deb
+# rm rstudio-2022.02.1-461-amd64.deb
 # rm rstudio-1.4.1106-amd64.deb
 ```
 
@@ -393,7 +384,7 @@ Open **`RStudio`** and check your installation:
 
 ```{r echo=TRUE, eval=FALSE}
 R.version.string
-## "R version 4.1.3 (2022-03-10)"
+## "R version 4.2.0 (2022-04-22)"
 
 Sys.which("git")
 ##            git
@@ -621,11 +612,8 @@ You will need to install the following R packages:
 
 ```{r echo=TRUE, eval=FALSE}
 ## CRAN packages ----
-pkgs <- c("funrar", "mFD", "remotes", "sf", "terra")
+pkgs <- c("funrar", "mFD")
 install.packages(pkgs)
-
-## GitHub packages ----
-remotes::install_github("frbcesab/funbiogeo")
 ```
 
 

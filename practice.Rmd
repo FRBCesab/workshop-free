@@ -15,7 +15,7 @@ output:
 
 This tutorial describes the basic workflow showing how to compute step by step
 functional diversity (FD) indices in a multidimensional space. It is divided in 
-four parts:
+three parts:
 
 1. Computing trait-based distances and the multidimensional functional space 
 2. Using the [`mFD`](https://github.com/CmlMagneville/mFD) package to compute 
@@ -25,15 +25,12 @@ FD alpha and beta indices and plot them
 functional rarity indices 
 ([Violle _et al._ 2017](https://doi.org/10.1016/j.tree.2017.02.002),
 [Grenié _et al._ 2017](https://doi.org/10.1111%2Fddi.12629))
-4. Using the [`funbiogeo`](https://github.com/frbcesab/funbiogeo) package to 
-help build workflows for functional biogeography 
-([Violle _et al._ 2014](https://doi.org/10.1073/pnas.1415442111))
 
 
 <br />
 
 
-**N.B.** You can chose to do Part 2, Part 3 and Part 4 in the order that you want but 
+**N.B.** You can chose to do Part 2 and Part 3 in the order that you want but 
 Part 1 has to be realized first.
 
 
@@ -51,11 +48,8 @@ If not already done, please install the following R packages:
 
 ```{r echo=TRUE, eval=FALSE}
 ## CRAN packages ----
-pkgs <- c("funrar", "mFD", "remotes", "sf", "terra")
+pkgs <- c("funrar", "mFD")
 install.packages(pkgs)
-
-## GitHub packages ----
-remotes::install_github("frbcesab/funbiogeo")
 ```
 
 

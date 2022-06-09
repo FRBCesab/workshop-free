@@ -1,4 +1,4 @@
-name: "rdatatoolbox"
+name: "funrar"
 title: "Functional Rarity and Diversity in Ecology"
 description: |
   Functional Rarity and Diversity Workshop
@@ -17,7 +17,7 @@ navbar:
     - text: "Instructions"
       href: instructions.html
     - text: "Courses"
-      href: courses.html
+      href: ""
     - text: "Practice"
       href: practice.html
     - text: "Resources"

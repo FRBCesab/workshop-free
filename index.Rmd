@@ -31,7 +31,6 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 <img src="https://www.r-project.org/logo/Rlogo.png" style="height:120px; width:160px; padding:20px;"/>
-<img src="https://raw.githubusercontent.com/FRBCesab/funbiogeo/main/man/figures/funbiogeo-sticker.png" style="height:120px; width:110px; padding:20px;"/>
 <img src="https://raw.githubusercontent.com/CmlMagneville/mFD/main/man/figures/hexasticker_mFD.png" style="height:120px; width:110px; padding:20px;"/>
 
 
@@ -44,7 +43,7 @@ The objective of this workshop, co-organized by the
 and the working group
 [FREE](https://www.fondationbiodiversite.fr/en/the-frb-in-action/programs-and-projects/le-cesab/free/) 
 is to give a general introduction to functional ecology. During the practice session,
-participants will learn to calculate various functional rarity and diversity index and to map them
+participants will learn to calculate various functional rarity and diversity index.
 
 
 <br />
@@ -62,12 +61,12 @@ Welcome coffee and icebreaker
 **09:00 – 12:30**
 
 &nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Introduction to functional ecology (~ 30 min)
+Introduction to functional ecology (traits, distance metrics, functional space) (~ 45 min)
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Type of traits, distance metrics, functional space, etc. (~ 30 min)
+Break and questions (~ 15 min)
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;`r fontawesome::fa_i("caret-right")` &nbsp;
-Practice using the R packages [mFD](https://github.com/CmlMagneville/mFD), 
-[funrar](https://github.com/rekyt/funrar), and [funbiogeo](https://github.com/frbcesab/funbiogeo) (~ 2h30)
+Practice using the R packages [mFD](https://github.com/CmlMagneville/mFD) and
+[funrar](https://github.com/rekyt/funrar) (~ 2h30)
 
 **12:30 – 14:00**
 
