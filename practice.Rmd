@@ -626,7 +626,7 @@ axis**:
 <br />
 
 *Code*
-```{r}
+```{r, fig.height = 7, fig.width = 12, fig.align = "center"}
 big_plot <- mFD::funct.space.plot(
   sp_faxes_coord  = sp_faxes_coord_fruits[ , c("PC1", "PC2", "PC3", "PC4")],
   faxes           = c("PC1", "PC2", "PC3", "PC4"),
@@ -777,7 +777,7 @@ up to two assemblages:
 <br />
 
 *Code*
-```{r, results = "hide",  fig.show = 'hide', message = FALSE}
+```{r, results = "hide",  fig.show = 'hide', message = FALSE, fig.height = 7, fig.width = 12, fig.align = "center"}
 plots_alpha <- mFD::alpha.multidim.plot(
   output_alpha_fd_multidim = alpha_fd_indices_fruits,
   plot_asb_nm              = c("basket_1", "basket_5"),
@@ -1013,7 +1013,7 @@ The plotting function has a large number of arguments, allowing the user to
 chose graphical options. Only main arguments are listed below:
 
 *Code*
-```{r, results = "hide", warning = FALSE}
+```{r, results = "hide", warning = FALSE, fig.height = 7, fig.width = 12, fig.align = "center"}
 beta_plot_fruits <- mFD::beta.multidim.plot(
   output_beta_fd_multidim = beta_fd_indices_fruits,
   plot_asb_nm             = c("basket_1", "basket_4"),
