@@ -35,7 +35,7 @@ Part 1 has to be realized first.
 
 
 <br />
-  
+
   
 # Prerequisites
 
@@ -660,6 +660,7 @@ The `mFD::alpha.fd.multidim()` function allows computing alpha and beta FD indic
 
 ## 2.1. Computing and plotting alpha FD indices
 
+
 <br />
 
 
@@ -699,6 +700,11 @@ Using the `alpha.fd.multidim()` function, you can compute up to nine alpha FD in
   * `FOri` **Functional Originality**: the weighted mean distance to the nearest
   species from the global species pool.
 
+<br />
+
+**A cheat sheet on alpha FD indices is available [here](biblio/FD_alpha_full.pdf)**
+
+<br />
 
 In this Practice we will only compute five of them.
 The function is used as follow:
