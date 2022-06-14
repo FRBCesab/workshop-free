@@ -439,7 +439,7 @@ the multidimensional space. Thus, the closer species are to the 1:1 line,
 the better distances in the functional space fit trait-based ones.
 * on the second row, the y-axis shows the raw deviation of species distances in
 the functional space compared to trait-based distances. Thus, the raw deviation
-reflects the distance to the 1:1 line.
+reflects the distance to the horizontal line.
 * on the third row (bottom), the y-axis shows the absolute or squared deviation of the
 ("scaled") distance in the functional space. It is the deviation that is taken
 into account for computing the quality metric.
