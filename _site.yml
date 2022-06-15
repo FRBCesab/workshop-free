@@ -20,7 +20,7 @@ navbar:
       menu:
       - text: "Sébastien Villéger talk"
         href: ""
-      - text: "Matthias Grénié talk"
+      - text: "Matthias Grenié talk"
         href: "course_pres/functional_rarity_concepts_and_principles.pdf"
     - text: "Practice"
       href: practice.html
