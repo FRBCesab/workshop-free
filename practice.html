@@ -2162,12 +2162,19 @@ Courses
 </ul></li>
 <li><a href="#part-3.-functional-rarity">Part 3. Functional rarity</a><ul>
 <li><a href="#components-of-functional-rarity-trait-originality-and-rarity">3.1 Components of functional rarity: trait originality and rarity</a></li>
-<li><a href="#different-indices-of-functional-originality">3.2 Different indices of functional originality</a></li>
-<li><a href="#computing-functional-originality">3.3 Computing functional originality</a><ul>
-<li><a href="#at-regional-scale">3.3.1 At regional scale</a></li>
-<li><a href="#at-local-scale">3.3.2 At local scale</a></li>
+<li><a href="#different-indices-of-functional-rarity">3.2 Different indices of functional rarity</a><ul>
+<li><a href="#functional-originality-indices">3.2.1 Functional originality indices</a></li>
+<li><a href="#rarity-indices-indices">3.2.1 Rarity indices indices</a></li>
 </ul></li>
-<li><a href="#plotting-functional-originality">3.4 Plotting functional originality</a></li>
+<li><a href="#computing-functional-rarity">3.3 Computing functional rarity</a><ul>
+<li><a href="#functional-originality-at-regional-scale">3.3.1 Functional originality at regional scale</a></li>
+<li><a href="#functional-originality-at-local-scale">3.3.2 Functional originality at local scale</a></li>
+<li><a href="#rarity-indices">3.3.3 Rarity indices</a></li>
+</ul></li>
+<li><a href="#plotting-functional-rarity">3.4 Plotting functional rarity</a><ul>
+<li><a href="#plotting-functional-originality">3.4.1 Plotting functional originality</a></li>
+<li><a href="#plotting-rarity">3.4.2 Plotting rarity</a></li>
+</ul></li>
 <li><a href="#corrections">Corrections</a></li>
 <li><a href="#reuse">Reuse</a></li>
 <li><a href="#citation">Citation</a></li>
@@ -3480,19 +3487,23 @@ $basket_10
 <p>The indices were initially proposed as complimentary facets: one for “classical” rarity and one for trait “rarity” (= originality) <a href="https://doi.org/10.1016/j.tree.2017.02.002">Violle <em>et al.</em> 2017</a>. With this framework, a species could be either rare or common, with either original or common traits. All combinations are possible. For example a species can be rare in abundance but have common traits. A species could also be common in abundance but original in terms of traits.</p>
 <p>Violle <em>et al.</em> (<a href="https://doi.org/10.1016/j.tree.2017.02.002">2014</a>) further declined the framework along two spatial scales, local and regional. The local scale is scale of the site or the assemblage, where species interact directly. The regional scale is the species pools scale, containing all species occurring in a given set of assemblages.</p>
 <p>This initial framework thus contained 16 different possibilities between the different kinds of rarity (trait or abundance) and the spatial scales.</p>
-<p>More recent studies tend to focus only on the trait originality axis and that’s the one we’ll be studying here.</p>
-<h2 id="different-indices-of-functional-originality">3.2 Different indices of functional originality</h2>
-<p>One specificity of functional originality indices is that we compute them on a species basis and not per sites. This means that for each species we will get one value.</p>
+<h2 id="different-indices-of-functional-rarity">3.2 Different indices of functional rarity</h2>
+<p>One specificity of functional rarity indices is that we compute them on a species basis and not per sites. This means that for each species we will get one value.</p>
+<h3 id="functional-originality-indices">3.2.1 Functional originality indices</h3>
 <p>The two proposed indices of functional originality are <strong>functional distinctiveness</strong> (<em>Di</em>) and <strong>functional uniqueness</strong> (<em>Ui</em>). They were initially envisioned at different spatial scales, with functional distinctiveness computed at local scale (and considering abundance) while functional uniqueness was to be computed at regional scales (without considering abundances).</p>
 <figure>
 <img src="img/di_ui_scheme.jpg" alt="" /><figcaption><i class="fa fa-caret-right" role="presentation" aria-label="caret-right icon"></i>  Scheme showing how Distinctiveness (Di) and Uniqueness (Ui) are computed</figcaption>
 </figure>
 <p><strong>Functional distinctiveness</strong> is the mean of dissimilarity of the focal species to all the other species of the set of interest. It can be abundance-weighted if needed.</p>
 <p><strong>Functional uniqueness</strong> is the smallest dissimilarity that exists between the focal species and the all other species in the set. It does not consider the abundance of any species.</p>
-<h2 id="computing-functional-originality">3.3 Computing functional originality</h2>
-<p>To compute functional originality indices we will two object: a functional dissimilarity matrix and a site-species matrix. We will be reusing the ones we defined in part 1 for that.</p>
+<h3 id="rarity-indices-indices">3.2.1 Rarity indices indices</h3>
+<p>The two proposed indices of rarity are <strong>scarcity</strong> (<em>Si</em>) and <strong>restrictedness</strong>. They are envisioned at different spatial scales because scarcity is directly computed from local species relative abundance while restrictedness is computed at regional scales considering all sites a species can occupy.</p>
+<p><strong>Scarcity</strong> is proportional to the relative abundance of the species. It gets close to one when the species is (relatively) rare and close to 0 when its dominant.</p>
+<p><strong>Restrictedness</strong> is 1 minus the ratio of sites a species occupy over the total number of sites.</p>
+<h2 id="computing-functional-rarity">3.3 Computing functional rarity</h2>
+<p>To compute functional rarity indices we will use two object: a functional dissimilarity matrix and a site-species matrix. We will be reusing the ones we defined in part 1 for that.</p>
 <p>Because the <code>funrar</code> package follows strictly the framework defined by Violle <em>et al.</em> (2017), we have to consider the spatial scale at which we compute distinctiveness and uniqueness.</p>
-<h3 id="at-regional-scale">3.3.1 At regional scale</h3>
+<h3 id="functional-originality-at-regional-scale">3.3.1 Functional originality at regional scale</h3>
 <p>At regional scale, we can compute distinctiveness using the <code>distinctiveness_global()</code> function. The first argument should be a functional dissimilarity matrix and the second argument gives the name of the output column.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -3582,7 +3593,7 @@ sample estimates:
 <p>Note that we have to transform the dissimilarity object <code>sp_dist_fruits</code> into a matrix explicitly so that the function <code>uniqueness()</code> works.</p>
 <p>Based on these results we see that banana, passion fruit, and pineapple are the most isolated fruits in the functional space. Meaning that they have the most distant nearest neighbors.</p>
 <p>So we see that some species can be regionally distinct and regionally unique (banana and pineapple), while some can be not so regionally distinct but regionally unique (passion fruit).</p>
-<h3 id="at-local-scale">3.3.2 At local scale</h3>
+<h3 id="functional-originality-at-local-scale">3.3.2 Functional originality at local scale</h3>
 <p>At local scale we can use similar logic but we will obtain one value per species per site.</p>
 <p>For distinctiveness we can use the <code>distinctiveness()</code> function:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -3696,8 +3707,123 @@ basket_6          0         0         200</code></pre>
 73 basket_10   apple 0.008791209</code></pre>
 </div>
 <p>We see that apple have the same uniqueness everywhere but in baskets 6 and 7. This means that it has the same nearest neighbor (in functional space) across all of these baskets. But that its closest neighbor is further away in baskets 6 and 7.</p>
-<h2 id="plotting-functional-originality">3.4 Plotting functional originality</h2>
+<h3 id="rarity-indices">3.3.3 Rarity indices</h3>
+<p>Because rarity indices included in this framework are directly tied to specific spatial scales, we will compute them only at their respective spatial scales.</p>
+<p>Similarly to functional originality indices, the functions to compute rarity indices follow their names. So we can use the <code>scarcity()</code> function to compute scarcity:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>si</span> <span class='op'>=</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/scarcity.html'>scarcity</a></span><span class='op'>(</span><span class='va'>baskets_fruits_weights</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Because scarcity needs relative abundances we get prompted by a message asking us to check if our data is relative. We will use <code>make_relative()</code> to transform the site-species matrix to a relative abundance matrix.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>rel_weights</span> <span class='op'>=</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/make_relative.html'>make_relative</a></span><span class='op'>(</span><span class='va'>baskets_fruits_weights</span><span class='op'>)</span>
+
+<span class='va'>si</span> <span class='op'>=</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/scarcity.html'>scarcity</a></span><span class='op'>(</span><span class='va'>rel_weights</span><span class='op'>)</span>
+
+<span class='va'>si</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code>             apple apricot    banana currant
+basket_1 0.3298770      NA 0.7578583      NA
+basket_2 0.5743492      NA 0.3298770      NA
+basket_3 0.5743492      NA 0.2500000      NA
+basket_4 0.4352753      NA        NA      NA</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>si</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>     apple           apricot           banana          currant      
+ Min.   :0.3299   Min.   :0.5743   Min.   :0.2500   Min.   :0.5743  
+ 1st Qu.:0.4212   1st Qu.:0.5743   1st Qu.:0.3299   1st Qu.:0.6202  
+ Median :0.5743   Median :0.5743   Median :0.5743   Median :0.6661  
+ Mean   :0.5479   Mean   :0.5743   Mean   :0.4973   Mean   :0.6661  
+ 3rd Qu.:0.6202   3rd Qu.:0.5743   3rd Qu.:0.5743   3rd Qu.:0.7120  
+ Max.   :0.7579   Max.   :0.5743   Max.   :0.7579   Max.   :0.7579  
+ NA&#39;s   :2        NA&#39;s   :9        NA&#39;s   :5        NA&#39;s   :8       
+   blackberry       blueberry          cherry           grape       
+ Min.   :0.4353   Min.   :0.5743   Min.   :0.5000   Min.   :0.3299  
+ 1st Qu.:0.5159   1st Qu.:0.6202   1st Qu.:0.5000   1st Qu.:0.3826  
+ Median :0.5966   Median :0.6661   Median :0.5743   Median :0.4353  
+ Mean   :0.5966   Mean   :0.6661   Mean   :0.5984   Mean   :0.4465  
+ 3rd Qu.:0.6772   3rd Qu.:0.7120   3rd Qu.:0.6598   3rd Qu.:0.5048  
+ Max.   :0.7579   Max.   :0.7579   Max.   :0.7579   Max.   :0.5743  
+ NA&#39;s   :8        NA&#39;s   :8        NA&#39;s   :5        NA&#39;s   :7       
+   grapefruit       kiwifruit          lemon             lime       
+ Min.   :0.4353   Min.   :0.4353   Min.   :0.4353   Min.   :0.5743  
+ 1st Qu.:0.4353   1st Qu.:0.5159   1st Qu.:0.5048   1st Qu.:0.5743  
+ Median :0.4353   Median :0.5966   Median :0.7579   Median :0.5743  
+ Mean   :0.4353   Mean   :0.5966   Mean   :0.6395   Mean   :0.5743  
+ 3rd Qu.:0.4353   3rd Qu.:0.6772   3rd Qu.:0.7579   3rd Qu.:0.5743  
+ Max.   :0.4353   Max.   :0.7579   Max.   :0.7579   Max.   :0.5743  
+ NA&#39;s   :9        NA&#39;s   :8        NA&#39;s   :3        NA&#39;s   :8       
+     litchi           mango            melon            orange      
+ Min.   :0.5743   Min.   :0.2500   Min.   :0.2500   Min.   :0.3299  
+ 1st Qu.:0.6202   1st Qu.:0.3311   1st Qu.:0.3099   1st Qu.:0.4089  
+ Median :0.6661   Median :0.4122   Median :0.3299   Median :0.5966  
+ Mean   :0.6661   Mean   :0.4122   Mean   :0.3710   Mean   :0.5702  
+ 3rd Qu.:0.7120   3rd Qu.:0.4933   3rd Qu.:0.3910   3rd Qu.:0.7579  
+ Max.   :0.7579   Max.   :0.5743   Max.   :0.5743   Max.   :0.7579  
+ NA&#39;s   :8        NA&#39;s   :8        NA&#39;s   :6        NA&#39;s   :6       
+ passion_fruit        peach             pear          pineapple   
+ Min.   :0.7579   Min.   :0.4353   Min.   :0.1895   Min.   :0.25  
+ 1st Qu.:0.7579   1st Qu.:0.4353   1st Qu.:0.3562   1st Qu.:0.25  
+ Median :0.7579   Median :0.4353   Median :0.5048   Median :0.25  
+ Mean   :0.7579   Mean   :0.4353   Mean   :0.4463   Mean   :0.25  
+ 3rd Qu.:0.7579   3rd Qu.:0.4353   3rd Qu.:0.5743   3rd Qu.:0.25  
+ Max.   :0.7579   Max.   :0.4353   Max.   :0.5743   Max.   :0.25  
+ NA&#39;s   :7        NA&#39;s   :8        NA&#39;s   :4        NA&#39;s   :8     
+      plum          raspberry        strawberry       tangerine     
+ Min.   :0.5743   Min.   :0.2500   Min.   :0.3299   Min.   :0.5743  
+ 1st Qu.:0.5743   1st Qu.:0.2700   1st Qu.:0.3724   1st Qu.:0.6202  
+ Median :0.5743   Median :0.2899   Median :0.5000   Median :0.6661  
+ Mean   :0.6028   Mean   :0.2899   Mean   :0.4863   Mean   :0.6661  
+ 3rd Qu.:0.6171   3rd Qu.:0.3099   3rd Qu.:0.5000   3rd Qu.:0.7120  
+ Max.   :0.6598   Max.   :0.3299   Max.   :0.7579   Max.   :0.7579  
+ NA&#39;s   :7        NA&#39;s   :8        NA&#39;s   :4        NA&#39;s   :8       
+  water_melon    
+ Min.   :0.1895  
+ 1st Qu.:0.2857  
+ Median :0.3819  
+ Mean   :0.3819  
+ 3rd Qu.:0.4781  
+ Max.   :0.5743  
+ NA&#39;s   :8       </code></pre>
+</div>
+<p>We obtain an object in a similar shape as the site-species matrix with local scarcity values for each species at each site. It gives <code>NA</code> for species that are absent.</p>
+<p>To compute restrictedness we can use the <code>restrictedness()</code> function.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ri</span> <span class='op'>=</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/restrictedness.html'>restrictedness</a></span><span class='op'>(</span><span class='va'>baskets_fruits_weights</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ri</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>     species  Ri
+1      apple 0.2
+2    apricot 0.9
+3     banana 0.5
+4    currant 0.8
+5 blackberry 0.8
+6  blueberry 0.8</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>ri</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>   species                Ri      
+ Length:25          Min.   :0.20  
+ Class :character   1st Qu.:0.60  
+ Mode  :character   Median :0.80  
+                    Mean   :0.68  
+                    3rd Qu.:0.80  
+                    Max.   :0.90  </code></pre>
+</div>
+<p>This time, because it’s a regional index it outputs one value per species as shown in the <code>Ri</code> column.</p>
+<h2 id="plotting-functional-rarity">3.4 Plotting functional rarity</h2>
 <p><code>funrar</code> does not come with visualization functions so that you can use whatever tool you prefer to plot the metrics. Here we are going to use <code>ggplot2</code> visualize the results. However, feel free to use anything plotting packages you would like. If you’re not fluent in <code>ggplot2</code> don’t worry this section will mostly be about interpreting the figures rather than commenting on code.</p>
+<h3 id="plotting-functional-originality">3.4.1 Plotting functional originality</h3>
 <p>We already saw in part 1 how to visualize the functional space using the pre-made functions of <code>mFD</code>. Here we will use our own functions to be able to color species in function of their functional originality.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -3740,7 +3866,6 @@ basket_6          0         0         200</code></pre>
 </div>
 <p>We can clearly see that, by definition, most functionally distinct species are on the edges of the functional space (pineapple, litchi, mango). If we compare both plots, we realize that functional distinctiveness doesn’t always come with functional uniqueness. One strange observation is that passion-fruit has a very functional uniqueness even though it seems quite in the middle of the points. This is a consequence of using the raw trait dissimilarity matrix instead of the projected axes. We’re are here visualizing the position of passion fruit in a 2D space while it should be considered in a 5D space, so it may seem close to other points in 2D while it is further away in reality.</p>
 <p>As was done with <code>mFD</code> to correlate the functional axes with species’ traits we can correlate functional distinctiveness to specific traits in order to see which traits are mainly driving distinctiveness.</p>
-<p>XXX</p>
 <p>Regarding local level functional originality indices, the visualization can be more difficult to grasp and depends highly on the question. Would you rather focus on visualizing the functional distinctiveness of one species across communities? Compare the distribution of functional distinctiveness values across communities?</p>
 <p>One idea to keep in mind is that averaging functional distinctiveness per community is exactly equal to computing functional dispersion. Functional originality is computed on a species basis, so we should be aware that if we are rather interested by community properties than we can compute functional diversity metrics which are much more appropriate.</p>
 <p>If we take again our example of the apple we can see to what extent its functional distinctiveness varies across baskets compared to lemon.</p>
@@ -3752,13 +3877,91 @@ basket_6          0         0         200</code></pre>
 </div>
 </div>
 <p>You can of course then compute relationship between environmental covariates and functional originality values. Because we don’t have any covariable in our fruit baskets we will stop the plotting session here.</p>
+<h3 id="plotting-rarity">3.4.2 Plotting rarity</h3>
+<p>We can plot also the rarity indices we computed and compared them to the functional rarity indices.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_di_ri</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>sp_di</span>, <span class='va'>ri</span>, by <span class='op'>=</span> <span class='st'>"species"</span><span class='op'>)</span>
+<span class='va'>sp_di_ri_ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>sp_di_ri</span>, <span class='va'>sp_ui</span>, by <span class='op'>=</span> <span class='st'>"species"</span><span class='op'>)</span>
+
+<span class='va'>plot_dist_ri_reg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>sp_di_ri</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>distinctiveness</span>, <span class='va'>Ri</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>ggrepel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>species</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Functional Distinctiveness"</span>, y <span class='op'>=</span> <span class='st'>"Geographical Restrictedness"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>aspect.ratio <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='va'>plot_dist_ri_reg</span>
+</code></pre>
+</div>
+<p><img src="practice_files/figure-html5/funrar-plot-reg,%20options-1.png" width="624" /></p>
+</div>
+<p>On this visualization we can clearly see that pineapple is overall the most distinct species while being quite restricted in terms of baskets. On the other hand, apple is the most functionally common and regionally widespread fruit (low restrictedness).</p>
+<p>We can produce similar plot with functional uniqueness:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plot_ui_ri_reg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>sp_di_ri_ui</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>Ui</span>, <span class='va'>Ri</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>ggrepel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>species</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Functional Uniqueness"</span>, y <span class='op'>=</span> <span class='st'>"Geographical Restrictedness"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>aspect.ratio <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='va'>plot_ui_ri_reg</span>
+</code></pre>
+</div>
+<p><img src="practice_files/figure-html5/funrar-plot-reg-ui,%20options-1.png" width="624" /></p>
+</div>
+<p>We observe a rather similar plot for functional uniqueness than for functional distinctiveness.</p>
+<p>We can also try to plot local scale measurements. We first convert the full matrix of indices into easier to work with data frames through the <code>matrix_to_stack()</code> function.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sp_local_di_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/matrix_to_stack.html'>matrix_to_stack</a></span><span class='op'>(</span>
+  <span class='va'>sp_local_di</span>, value_col <span class='op'>=</span> <span class='st'>"local_di"</span>, row_to_col <span class='op'>=</span> <span class='st'>"basket"</span>,
+  col_to_col <span class='op'>=</span> <span class='st'>"species"</span>
+<span class='op'>)</span>
+<span class='va'>sp_local_si_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rekyt.github.io/funrar/reference/matrix_to_stack.html'>matrix_to_stack</a></span><span class='op'>(</span>
+  <span class='va'>si</span>, value_col <span class='op'>=</span> <span class='st'>"local_si"</span>, row_to_col <span class='op'>=</span> <span class='st'>"basket"</span>, col_to_col <span class='op'>=</span> <span class='st'>"species"</span>
+<span class='op'>)</span>
+
+<span class='va'>sp_local_di_si</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span>
+  <span class='va'>sp_local_di_df</span>, <span class='va'>sp_local_si_df</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"basket"</span>, <span class='st'>"species"</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>sp_local_di_si</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>    basket       species  local_di  local_si
+1 basket_1         apple 0.1977721 0.3298770
+2 basket_1        banana 0.4642749 0.7578583
+3 basket_1        cherry 0.3491350 0.6597540
+4 basket_1         lemon 0.3042315 0.5743492
+5 basket_1         melon 0.3334516 0.5743492
+6 basket_1 passion_fruit 0.4899472 0.7578583</code></pre>
+</div>
+<p>Now that we have properly formatted data we can make our local plot.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plot_local_di_si</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>sp_local_di_si</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>local_di</span>, <span class='va'>local_si</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Functional Distinctiveness"</span>, y <span class='op'>=</span> <span class='st'>"Scarcity"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>aspect.ratio <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='va'>plot_local_di_si</span>
+</code></pre>
+</div>
+<p><img src="practice_files/figure-html5/funrar-plot-local-1.png" width="624" /></p>
+</div>
+<p>There seems to be no correlation between functional distinctiveness and scarcity. So locally rare fruits are not necessarily distinct.</p>
+<p>That plot concludes our plotting section on functional rarity indices.</p>
 <h2 id="corrections" class="appendix">Corrections</h2>
 <p>If you see mistakes or want to suggest changes, please <a href="https://github.com/frbcesab/workshop-free/issues">Create an issue</a> on the source repository.</p>
 <h2 id="reuse" class="appendix">Reuse</h2>
 <p>The material of this website is licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Source code is available at <a href="https://github.com/frbcesab/workshop-free/" class="uri">https://github.com/frbcesab/workshop-free/</a>.</p>
 <h2 id="citation" class="appendix">Citation</h2>
 <p>Casajus N, Grenié M, Magneville C &amp; Villéger S (2022) Workshop FRB-CESAB &amp; FREE Working Group: Functional Rarity and Diversity in Ecology.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
