@@ -1126,15 +1126,14 @@ in a given set of assemblages.
 This initial framework thus contained 16 different possibilities between
 the different kinds of rarity (trait or abundance) and the spatial scales.
 
-More recent studies tend to focus only on the trait originality axis and that's
-the one we'll be studying here.
 
+## 3.2 Different indices of functional rarity
 
-## 3.2 Different indices of functional originality
-
-One specificity of functional originality indices is that we compute them
+One specificity of functional rarity indices is that we compute them
 on a species basis and not per sites. This means that for each species we will
 get one value.
+
+### 3.2.1 Functional originality indices
 
 The two proposed indices of functional originality are
 **functional distinctiveness** (*Di*) and **functional uniqueness** (*Ui*).
@@ -1153,15 +1152,29 @@ abundance-weighted if needed.
 the focal species and the all other species in the set. It does not consider
 the abundance of any species.
 
+### 3.2.1 Rarity indices indices
 
-## 3.3 Computing functional originality
+The two proposed indices of rarity are **scarcity** (*Si*) and
+**restrictedness**. They are envisioned at different spatial scales because
+scarcity is directly computed from local species relative abundance while
+restrictedness is computed at regional scales considering all sites a species
+can occupy.
 
-To compute functional originality indices we will two object: a functional dissimilarity matrix and a site-species matrix. We will be reusing the ones
+**Scarcity** is proportional to the relative abundance of the species. It gets
+close to one when the species is (relatively) rare and close to 0 when its
+dominant.
+
+**Restrictedness** is 1 minus the ratio of sites a species occupy over the total
+number of sites.
+
+## 3.3 Computing functional rarity
+
+To compute functional rarity indices we will use two object: a functional dissimilarity matrix and a site-species matrix. We will be reusing the ones
 we defined in part 1 for that.
 
 Because the `funrar` package follows strictly the framework defined by Violle _et al._ (2017), we have to consider the spatial scale at which we compute distinctiveness and uniqueness.
 
-### 3.3.1 At regional scale
+### 3.3.1 Functional originality at regional scale
 
 At regional scale, we can compute distinctiveness using the `distinctiveness_global()` function. The first argument should be a functional
 dissimilarity matrix and the second argument gives
@@ -1252,7 +1265,7 @@ So we see that some species can be regionally distinct and regionally unique
 regionally unique (passion fruit).
 
 
-### 3.3.2 At local scale
+### 3.3.2 Functional originality at local scale
 
 At local scale we can use similar logic but we will obtain one value per species
 per site.
@@ -1334,13 +1347,58 @@ This means that it has the same nearest neighbor (in functional space) across
 all of these baskets. But that its closest neighbor is further away in baskets
 6 and 7.
 
-## 3.4 Plotting functional originality
+
+### 3.3.3 Rarity indices
+
+Because rarity indices included in this framework are directly tied to specific
+spatial scales, we will compute them only at their respective spatial scales.
+
+Similarly to functional originality indices, the functions to compute rarity
+indices follow their names. So we can use the `scarcity()` function to compute
+scarcity:
+
+```{r scarcity}
+si = scarcity(baskets_fruits_weights)
+```
+Because scarcity needs relative abundances we get prompted by a message asking
+us to check if our data is relative. We will use `make_relative()` to transform
+the site-species matrix to a relative abundance matrix.
+
+```{r scarcity-working}
+rel_weights = make_relative(baskets_fruits_weights)
+
+si = scarcity(rel_weights)
+
+si[1:4, 1:4]
+summary(si)
+```
+
+We obtain an object in a similar shape as the site-species matrix with local
+scarcity values for each species at each site. It gives `NA` for species that
+are absent.
+
+To compute restrictedness we can use the `restrictedness()` function.
+
+```{r restrictedness}
+ri = restrictedness(baskets_fruits_weights)
+
+head(ri)
+
+summary(ri)
+```
+
+This time, because it's a regional index it outputs one value per species as
+shown in the `Ri` column.
+
+## 3.4 Plotting functional rarity
 
 `funrar` does not come with visualization functions so that you can use whatever
 tool you prefer to plot the metrics. Here we are going to use `ggplot2`
 visualize the results. However, feel free to use anything plotting packages
 you would like. If you're not fluent in `ggplot2` don't worry this section will
 mostly be about interpreting the figures rather than commenting on code.
+
+### 3.4.1 Plotting functional originality
 
 We already saw in part 1 how to visualize the functional space using
 the pre-made functions of `mFD`. Here we will use our own functions to be able
@@ -1396,8 +1454,6 @@ As was done with `mFD` to correlate the functional axes with species' traits we
 can correlate functional distinctiveness to specific traits in order to see
 which traits are mainly driving distinctiveness.
 
-XXX
-
 Regarding local level functional originality indices, the visualization can be
 more difficult to grasp and depends highly on the question. Would you rather
 focus on visualizing the functional distinctiveness of one species across
@@ -1422,9 +1478,79 @@ You can of course then compute relationship between environmental covariates and
 functional originality values. Because we don't have any covariable in our fruit
 baskets we will stop the plotting session here.
 
+### 3.4.2 Plotting rarity
 
+We can plot also the rarity indices we computed and compared them to the 
+functional rarity indices.
 
+```{r funrar-plot-reg, options}
+sp_di_ri <- merge(sp_di, ri, by = "species")
+sp_di_ri_ui <- merge(sp_di_ri, sp_ui, by = "species")
 
+plot_dist_ri_reg <- ggplot(sp_di_ri, aes(distinctiveness, Ri)) +
+  geom_point() +
+  ggrepel::geom_text_repel(aes(label = species)) +
+  labs(x = "Functional Distinctiveness", y = "Geographical Restrictedness") +
+  theme_bw() +
+  theme(aspect.ratio = 1)
+
+plot_dist_ri_reg
+```
+On this visualization we can clearly see that pineapple is overall the most
+distinct species while being quite restricted in terms of baskets. On the other
+hand, apple is the most functionally common and regionally widespread fruit
+(low restrictedness).
+
+We can produce similar plot with functional uniqueness:
+
+```{r funrar-plot-reg-ui, options}
+plot_ui_ri_reg <- ggplot(sp_di_ri_ui, aes(Ui, Ri)) +
+  geom_point() +
+  ggrepel::geom_text_repel(aes(label = species)) +
+  labs(x = "Functional Uniqueness", y = "Geographical Restrictedness") +
+  theme_bw() +
+  theme(aspect.ratio = 1)
+
+plot_ui_ri_reg
+```
+We observe a rather similar plot for functional uniqueness than for
+functional distinctiveness.
+
+We can also try to plot local scale measurements. We first convert the full
+matrix of indices into easier to work with data frames through
+the `matrix_to_stack()` function.
+
+```{r funrar-data-local}
+sp_local_di_df <- matrix_to_stack(
+  sp_local_di, value_col = "local_di", row_to_col = "basket",
+  col_to_col = "species"
+)
+sp_local_si_df <- matrix_to_stack(
+  si, value_col = "local_si", row_to_col = "basket", col_to_col = "species"
+)
+
+sp_local_di_si <- merge(
+  sp_local_di_df, sp_local_si_df, by = c("basket", "species")
+)
+
+head(sp_local_di_si)
+```
+
+Now that we have properly formatted data we can make our local plot.
+
+```{r funrar-plot-local}
+plot_local_di_si <- ggplot(sp_local_di_si, aes(local_di, local_si)) +
+  geom_point(alpha = 1/3) +
+  labs(x = "Functional Distinctiveness", y = "Scarcity") +
+  theme_bw() +
+  theme(aspect.ratio = 1)
+
+plot_local_di_si
+```
+There seems to be no correlation between functional distinctiveness
+and scarcity. So locally rare fruits are not necessarily distinct.
+
+That plot concludes our plotting section on functional rarity indices.
 
 ## Corrections {.appendix}
 
