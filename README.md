@@ -26,5 +26,5 @@ and is available at: **https://frbcesab.github.io/workshop-free/**
 This material is licensed under Creative Commons Attribution 
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
-> Casajus N, Grénié M, Magneville C & Villéger S (2022) 
+> Casajus N, Grenié M, Magneville C & Villéger S (2022) 
 Workshop FRB-CESAB & FREE Working Group: Functional Rarity and Diversity in Ecology. 
