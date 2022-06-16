@@ -16,10 +16,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 **Recommended papers**
 
-- Grenié M, Denelle P, Tucker CM, Munoz F & Violle C (2017) funrar: An R package 
-to characterize functional rarity. **_Diversity and Distributions_**, 23, 1365-1371.
-<br/>DOI: [10.1111/ddi.12629](https://doi.org/10.1111/ddi.12629)
-&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/grenie-2017.pdf)
+On Functional Diversity and Functional Spaces
+
   
 - Magneville C, Loiseau N, Albouy C, Casajus N, Claverie T, Escalas A, 
 Leprieur F, Maire E, Mouillot D & Villéger S (2022) mFD: an R package to 
@@ -44,6 +42,36 @@ diversity indices for a multifaceted framework in functional ecology.
 **_Ecology_**, 89, 2290-2301.
 <br/>DOI: [10.1890/07-1206.1](https://doi.org/10.1890/07-1206.1)
 &nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/villeger-2008.pdf)
+
+- Mouillot, D., Villéger, S., Parravicini, V., Kulbicki, M.,
+Arias-González, J.E., Bender, M., Chabanet, P., Floeter, S.R., Friedlander, A.,
+Vigliola, L., Bellwood, D.R., 2014. Functional over-redundancy and high
+functional vulnerability in global fish faunas on tropical reefs. **_PNAS_**
+111, 13757–13762.
+<br/>DOI: [10.1073/pnas.1317625111](10.1073/pnas.1317625111)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/mouillot-2014.pdf)
+
+On Functional beta-diversity
+
+- Villéger, S., Grenouillet, G. and Brosse, S. (2013),
+Decomposing functional β-diversity. **_Global Ecology and Biogeography_**,
+22: 671-681. <br/>DOI: [10.1111/geb.12021](https://doi.org/10.1111/geb.12021)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/villeger-2013.pdf)
+
+
+On Functional Rarity
+
+- Grenié M, Denelle P, Tucker CM, Munoz F & Violle C (2017) funrar: An R package 
+to characterize functional rarity. **_Diversity and Distributions_**, 23, 1365-1371.
+<br/>DOI: [10.1111/ddi.12629](https://doi.org/10.1111/ddi.12629)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/grenie-2017.pdf)
+- Violle, C., Thuiller, W., Mouquet, N., Munoz, F., Kraft, N.J.B., Cadotte,
+M.W., Livingstone, S.W., Mouillot, D., 2017.
+Functional Rarity: The Ecology of Outliers.
+**_Trends in Ecology & Evolution_** 32, 356–367.
+<br/>DOI: [10.1016/j.tree.2017.02.002](https://doi.org/10.1016/j.tree.2017.02.002)
+&nbsp;[`r fontawesome::fa_i("file-pdf")`](biblio/violle-2017.pdf)
+
 
 
 ## Corrections {.appendix}
