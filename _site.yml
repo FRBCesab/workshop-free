@@ -19,7 +19,7 @@ navbar:
     - text: "Courses"
       menu:
       - text: "Sébastien Villéger talk"
-        href: ""
+        href: "course_pres/CESAB_FD.pdf"
       - text: "Matthias Grenié talk"
         href: "course_pres/functional_rarity_concepts_and_principles.pdf"
     - text: "Practice"
